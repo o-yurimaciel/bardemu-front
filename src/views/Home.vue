@@ -20,27 +20,9 @@
 </template>
 
 <script>
-import { bardemu } from '../services'
 
 export default {
-  data() {
-    return {
-      products: [],
-    }
-  },
-  mounted() {
-    this.getProductList()
-  },
-  methods: {
-    getProductList() {
-      bardemu.get('/product').then((res) => {
-        this.products = res.data.products
-        console.log(res)
-      }).catch((e) => {
-        console.log(e.response)
-      })
-    }
-  }
+  
 }
 </script>
 

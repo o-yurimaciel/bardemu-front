@@ -13,18 +13,36 @@
     >
       <v-list>
         <v-list-item
-          v-for="([icon, text], i) in items"
-          :key="i"
+          v-for="item in items"
+          :key="item.title"
           link
+          :to="item.to"
         >
           <v-list-item-icon>
-            <v-icon color="#e41c38">{{ icon }}</v-icon>
+            <v-icon color="#e41c38">{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
             <v-list-item-title>
               <span class="navigation-menu">
-                {{ text }}
+                {{ item.title }}
+              </span>
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <hr style="color:#e41c38 ">
+        <v-list-item
+          link
+          to="/painel"
+        >
+          <v-list-item-icon>
+            <v-icon color="#e41c38">mdi-cog</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>
+              <span class="navigation-menu">
+                Painel
               </span>
             </v-list-item-title>
           </v-list-item-content>
@@ -38,11 +56,11 @@
   export default {
     data: () => ({
       items: [
-        ['mdi-home', 'Inicio'],
-        ['mdi-food', 'Cardápio'],
-        ['mdi-cart', 'Carrinho'],
-        ['mdi-whatsapp', 'WhatsApp'],
-        ['mdi-instagram', 'Instagram'],
+        { icon: 'mdi-home', title: 'Inicio', to: '/' },
+        { icon: 'mdi-food', title: 'Cardápio', to: '/' },
+        { icon: 'mdi-cart', title: 'Carrinho', to: '/' },
+        { icon: 'mdi-whatsapp', title: 'WhatsApp', to: '/' },
+        { icon: 'mdi-instagram', title: 'Instagram', to: '/' },
       ],
     }),
   }

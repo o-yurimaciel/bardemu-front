@@ -7,7 +7,7 @@
         </v-col>
         <v-col class="pa-0">
           <Header />
-          <v-col class="pa-0">
+          <v-col class="pa-0" style="min-height: 100vh">
             <router-view></router-view>
           </v-col>
         </v-col>
