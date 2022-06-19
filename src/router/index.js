@@ -4,6 +4,8 @@ import Home from '../views/Home.vue'
 import Painel from '../views/Painel.vue'
 import Product from '../views/Product.vue'
 import ProductItem from '../views/ProductItem.vue'
+import Categories from '../views/Categories.vue'
+import CategoryItem from '../views/CategoryItem.vue'
 
 Vue.use(VueRouter)
 
@@ -25,6 +27,15 @@ const routes = [
     path: '/produto/:id',
     name: 'product-item',
     component: ProductItem
+  }, {
+    path: '/categorias',
+    name: 'categories',
+    component: Categories
+  },
+  {
+    path: '/categoria/:id',
+    name: 'category-item',
+    component: CategoryItem
   }
 ]
 

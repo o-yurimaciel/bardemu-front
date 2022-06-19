@@ -41,7 +41,7 @@ export default {
         { 
           description: 'Categorias', 
           src: 'https://pulpo.work/wp-content/uploads/2018/04/checklist-para-o-vendedor-aumentar-fechamento-994x480.png',
-          to: '/categories' 
+          to: '/categorias' 
         }
       ]
     }

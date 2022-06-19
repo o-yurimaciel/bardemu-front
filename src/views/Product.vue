@@ -88,7 +88,6 @@ export default {
       this.$router.push(`/produto/${product._id}`)
     },
     addProduct() {
-      console.log('addProduct')
       this.$router.push({
         name: 'product-item'
       })
