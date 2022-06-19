@@ -36,7 +36,7 @@ export default {
         { 
           description: 'Produtos', 
           src: 'https://img.olhardigital.com.br/wp-content/uploads/2021/04/Junk-Food.jpg',
-          to: '/product'
+          to: '/produtos'
         },
         { 
           description: 'Categorias', 
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     sendProduct() {
-      axios.post('https://bardemu-backend.herokuapp.com/product', {
+      axios.post('https://bardemu-backend.herokuapp.com/produtos', {
         name: this.productName,
         price: this.price
       }).then((res) => {

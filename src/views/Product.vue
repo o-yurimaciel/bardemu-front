@@ -3,12 +3,12 @@
     <v-col offset="1" cols="10" class="pa-0 pt-5">
       <v-row no-gutters class="d-flex justify-space-between">
         <v-col class="pa-0 d-flex flex-column">
-          <h1>Produtos</h1>
           <v-breadcrumbs
             class="pa-0"
             :items="items"
             divider="/"
           ></v-breadcrumbs>
+          <h1>Produtos</h1>
         </v-col>
         <v-btn 
         color="green"
@@ -22,16 +22,20 @@
           <v-col cols="3" class="pa-0 pa-2" v-for="product in products" :key="product._id">
             <v-card
               class="mx-auto"
+              width="300"
             >
               <v-img
                 height="200"
-                src="https://fermello.com.br/wp-content/themes/consultix/images/no-image-found-360x260.png"
+                :src="product.image ? product.image : 'https://fermello.com.br/wp-content/themes/consultix/images/no-image-found-360x260.png'"
               ></v-img>
 
               <v-card-title>{{product.name}}</v-card-title>
 
-              <v-card-text>
-                <div>{{product.description ? product.description : ''}}</div>
+              <v-card-text v-if="product.description">
+                <div>{{product.description}}</div>
+              </v-card-text>
+
+              <v-card-text v-if="product.price">
                 <div>R$ {{product.price}}</div>
               </v-card-text>
 
@@ -42,12 +46,14 @@
                   <v-btn
                     color="green"
                     text
+                    @click="editProduct(product)"
                   >
                     Editar
                   </v-btn>
                   <v-btn
                     color="red"
                     text
+                    @click="deleteProduct(product)"
                   >
                     Remover
                   </v-btn>
@@ -78,8 +84,26 @@ export default {
     this.getProductList()
   },
   methods: {
+    editProduct(product) {
+      this.$router.push(`/produto/${product._id}`)
+    },
     addProduct() {
-      console.log('a')
+      console.log('addProduct')
+      this.$router.push({
+        name: 'product-item'
+      })
+    },
+    deleteProduct(product) {
+      bardemu.delete('/product', {
+        data: {
+          _id: product._id
+        }
+      }).then((res) => {
+        console.log(res)
+        this.getProductList()
+      }).catch((e) => {
+        console.log(e)
+      })
     },
     getProductList() {
       bardemu.get('/product').then((res) => {

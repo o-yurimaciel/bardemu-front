@@ -18,12 +18,11 @@ const routes = [
     component: Painel
   },
   {
-    path: '/product',
+    path: '/produtos',
     component: Product
   },
   {
-    path: '/product-item',
-    props: true,
+    path: '/produto/:id',
     name: 'product-item',
     component: ProductItem
   }
