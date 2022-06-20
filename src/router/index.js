@@ -7,6 +7,7 @@ import ProductItem from '../views/ProductItem.vue'
 import Categories from '../views/Categories.vue'
 import CategoryItem from '../views/CategoryItem.vue'
 import Menu from '../views/Menu.vue'
+import Cart from '../views/Cart.vue'
 
 Vue.use(VueRouter)
 
@@ -41,6 +42,11 @@ const routes = [
     path: '/categoria/:id',
     name: 'category-item',
     component: CategoryItem
+  },
+  {
+    path: '/carrinho',
+    name: 'cart',
+    component: Cart
   }
 ]
 

@@ -62,7 +62,7 @@ import { EventBus } from '../EventBus'
       items: [
         { icon: 'mdi-home', title: 'Inicio', to: '/' },
         { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
-        { icon: 'mdi-cart', title: 'Carrinho (0)', to: '/' },
+        { icon: 'mdi-cart', title: 'Carrinho (0)', to: '/carrinho' },
       ],
     }),
     computed: {

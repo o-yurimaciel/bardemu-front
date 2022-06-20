@@ -77,7 +77,8 @@ export default {
   data() {
     return {
       items: [
-        { text: 'Home', href: '/' }
+        { text: 'Home', href: '/' },
+        { text: 'Carrinho', href: '/carrinho' }
       ],
       categories: [],
       products: [],
