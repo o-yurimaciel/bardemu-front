@@ -30,7 +30,7 @@
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <hr style="color:#e41c38 ">
+        <hr style="opacity: 0.2;">
         <v-list-item
           link
           to="/painel"
@@ -63,8 +63,6 @@ import { EventBus } from '../EventBus'
         { icon: 'mdi-home', title: 'Inicio', to: '/' },
         { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
         { icon: 'mdi-cart', title: 'Carrinho (0)', to: '/' },
-        { icon: 'mdi-whatsapp', title: 'WhatsApp', to: '/' },
-        { icon: 'mdi-instagram', title: 'Instagram', to: '/' },
       ],
     }),
     computed: {
@@ -79,7 +77,6 @@ import { EventBus } from '../EventBus'
     },
     methods: {
       currency(value) {
-        console.log(this.$options.filters.currency(value))
         return this.$options.filters.currency(value) ? this.$options.filters.currency(value) : "R$ 0,00"
       },
       syncCart(cart) {

@@ -1,6 +1,11 @@
 <template>
   <v-container class="pa-0 ma-0">
     <v-col offset="1" class="pa-0 pt-5 d-flex flex-column">
+      <v-breadcrumbs
+        class="pa-0"
+        :items="items"
+        divider="/"
+      ></v-breadcrumbs>
       <h1>
         {{edit ? `Editar Produto "${oldName}"` : 'Criar Produto' }}
       </h1>
@@ -8,6 +13,7 @@
         <v-col cols="4" class="pa-0">
           <v-form v-model="isFormValid" @submit.prevent>
             <v-col class="pa-0">
+
               <label for="category">Categoria</label>
               <v-select
               outlined
@@ -46,13 +52,13 @@
             </v-col>
             <v-col class="pa-0">
               <label for="name">Preço</label>
-              <v-text-field
+              <v-currency-field
               v-model="product.price"
               outlined
               rounded
               id="description"
               >
-              </v-text-field>
+              </v-currency-field>
             </v-col>
             <v-col class="pa-0">
               <label for="name">Foto</label>
@@ -75,18 +81,28 @@
         <v-col cols="8" class="pa-0 d-flex flex-grow-0 justify-center">
             <v-card
               class="mx-auto"
+              min-width="200"
               max-height="400"
             >
               <v-img
                 height="200"
+                max-width="400"
                 :src="product.image ? product.image : 'https://fermello.com.br/wp-content/themes/consultix/images/no-image-found-360x260.png'"
               ></v-img>
               <v-card-title>{{product.name}}</v-card-title>
-              <v-card-text v-if="product.description">
-                <div>{{product.description}}</div>
+              <v-card-text>
+                <div>
+                  <span class="product-description" style="fontSize: 1em" v-if="product.description">
+                    {{product.description}}
+                  </span>
+                </div>
               </v-card-text>
-              <v-card-text v-if="product.price">
-                <div>{{product.price | currency}}</div>
+              <v-card-text>
+                <div>
+                  <span class="product-price">
+                    {{product.price ? product.price : '0' | currency}}
+                  </span>
+                </div>
               </v-card-text>
             </v-card>
         </v-col>
@@ -110,7 +126,12 @@ export default {
         price: 0,
         image: null
       },
-      oldName: ""
+      oldName: "",
+      items: [
+        { text: 'Home', href: '/' },
+        { text: 'Painel', href: '/painel' },
+        { text: 'Produtos', href: '/produtos' },
+      ]
     }
   },
   mounted() {

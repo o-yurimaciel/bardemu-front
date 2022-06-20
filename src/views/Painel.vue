@@ -1,7 +1,12 @@
 <template>
   <v-container class="pa-0 ma-0">
-    <v-col offset="1" class="pa-0 d-flex flex-column">
-      <v-row no-gutters class="pt-10">
+    <v-col offset="1" class="pa-0 d-flex flex-column pt-10">
+      <v-breadcrumbs
+        class="pa-0"
+        :items="breadcrumb"
+        divider="/"
+      ></v-breadcrumbs>
+      <v-row no-gutters class="pt-15">
         <v-col cols="3" class="pa-0" v-for="item in items" :key="item.description">
           <v-card class="mx-auto mr-2" :to="item.to">
             <v-img
@@ -43,6 +48,9 @@ export default {
           src: 'https://pulpo.work/wp-content/uploads/2018/04/checklist-para-o-vendedor-aumentar-fechamento-994x480.png',
           to: '/categorias' 
         }
+      ],
+      breadcrumb: [
+        { text: 'Home', href: '/' }
       ]
     }
   },

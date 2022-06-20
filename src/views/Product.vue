@@ -22,7 +22,10 @@
           <v-col cols="3" class="pa-0 pa-2" v-for="product in products" :key="product._id">
             <v-card
               class="mx-auto"
-              width="300"
+              min-width="200"
+              title="Editar Produto"
+              height="100%"
+              @click="editProduct(product)"
             >
               <v-img
                 height="200"
@@ -31,34 +34,31 @@
 
               <v-card-title>{{product.name}}</v-card-title>
 
-              <v-card-text v-if="product.description">
-                <div>{{product.description}}</div>
+              <v-card-text>
+                <div>
+                  <span class="product-description" style="fontSize: 1em" v-if="product.description">
+                    {{product.description}}
+                  </span>
+                </div>
               </v-card-text>
 
-              <v-card-text v-if="product.price">
-                <div>{{product.price | currency}}</div>
+              <v-card-text>
+                <div>
+                  <span v-if="product.price" class="product-price" style="fontSize: 1.2em">
+                    {{product.price | currency}}
+                  </span>
+                </div>
               </v-card-text>
-
-              <v-divider class="mx-4"></v-divider>
-
-              <v-card-actions>
-                <v-row no-gutters class="d-flex justify-end">
-                  <v-btn
-                    color="green"
-                    text
-                    @click="editProduct(product)"
-                  >
-                    Editar
-                  </v-btn>
-                  <v-btn
-                    color="red"
-                    text
-                    @click="deleteProduct(product)"
-                  >
-                    Remover
-                  </v-btn>
-                </v-row>
-              </v-card-actions>
+              <v-btn
+                color="red"
+                style="position: absolute;top:5px;right:5px;z-index: 100"
+                @click="deleteProduct(product)"
+                title="Excluir produto"
+              >
+                <v-icon style="color: #fff">
+                  mdi-delete
+                </v-icon>
+              </v-btn>
             </v-card>
           </v-col>
         </v-row>

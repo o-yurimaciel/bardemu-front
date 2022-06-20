@@ -1,6 +1,11 @@
 <template>
   <v-container class="pa-0 ma-0">
     <v-col offset="1" class="pa-0 pt-5 d-flex flex-column">
+      <v-breadcrumbs
+        class="pa-0"
+        :items="items"
+        divider="/"
+      ></v-breadcrumbs>
       <h1>
         {{edit ? `Editar Categoria "${oldName}"` : 'Criar Categoria' }}
       </h1>
@@ -55,7 +60,12 @@ export default {
         name: "",
         order: 1
       },
-      oldName: ""
+      oldName: "",
+      items: [
+        { text: 'Home', href: '/' },
+        { text: 'Painel', href: '/painel' },
+        { text: 'Categorias', href: '/categorias' }
+      ]
     }
   },
   mounted() {

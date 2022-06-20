@@ -24,14 +24,14 @@ export default {
 <style scoped>
 .desc {
   font-family: 'Aladin';
-  font-size: 2.2em;
+  font-size: 2em;
   color: #fff;
   margin-left: 10px;
 }
 
 header {
   width: 100%;
-  padding: 15px 0 15px 0;
+  padding: 10px 0 10px 0;
   background-color: #fff;
   display: flex;
   align-content: center;
