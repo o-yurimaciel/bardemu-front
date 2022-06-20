@@ -36,7 +36,7 @@
               </v-card-text>
 
               <v-card-text v-if="product.price">
-                <div>R$ {{product.price}}</div>
+                <div>{{product.price | currency}}</div>
               </v-card-text>
 
               <v-divider class="mx-4"></v-divider>

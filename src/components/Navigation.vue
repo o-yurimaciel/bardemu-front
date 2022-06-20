@@ -78,6 +78,10 @@ import { EventBus } from '../EventBus'
       })
     },
     methods: {
+      currency(value) {
+        console.log(this.$options.filters.currency(value))
+        return this.$options.filters.currency(value) ? this.$options.filters.currency(value) : "R$ 0,00"
+      },
       syncCart(cart) {
         if(cart) {
           this.cartQuantity = 0
@@ -85,7 +89,6 @@ import { EventBus } from '../EventBus'
 
           const currentCart = cart ? cart : []
           currentCart.filter((product) => {
-            console.log('navigation product', product)
             this.cartQuantity = this.cartQuantity + product.quantity
             this.cartTotalValue = this.cartTotalValue + product.price * product.quantity
           })
@@ -94,7 +97,7 @@ import { EventBus } from '../EventBus'
           this.cartTotalValue = 0
         }
 
-        this.items[2].title = `Carrinho (${this.cartQuantity}) - R$${this.cartTotalValue}`
+        this.items[2].title = `Carrinho (${this.cartQuantity}) - ${this.currency(this.cartTotalValue)}`
       } 
     },
     watch: {

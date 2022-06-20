@@ -35,7 +35,7 @@
                     <v-col class="pa-0 d-flex align-center">
                       <v-row no-gutters class="d-flex align-center justify-space-between">
                         <v-col cols="9" class="pa-0">
-                          <span class="product-price">R$ {{product.price}}</span>
+                          <span class="product-price">{{product.price | currency}}</span>
                         </v-col>
                         <v-col class="pa-0 d-flex justify-end">
                             <v-row no-gutters class="d-flex justify-space-between align-center">
