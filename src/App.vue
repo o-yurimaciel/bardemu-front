@@ -7,7 +7,15 @@
         </v-col>
         <v-col class="pa-0">
           <Header />
-          <v-col class="pa-0" style="min-height: 100vh">
+          <v-col class="pa-0 content" style="min-height: 100vh">
+            <v-alert 
+            v-if="alert" 
+            style="position: absolute"
+            max-width="400px"
+            :type="alert.type"
+            class="alert">
+              {{alert.message}}
+            </v-alert>
             <router-view></router-view>
           </v-col>
         </v-col>
@@ -19,15 +27,43 @@
 <script>
 import Header from './components/Header.vue'
 import Navigation from './components/Navigation.vue'
+const EventBus = require('../src/EventBus').EventBus
 
 export default {
   components: {
     Header,
     Navigation
+  },
+  data() {
+    return {
+      alert: false
+    }
+  },
+  mounted() {
+    const cart = localStorage.getItem('bardemuCart')
+    this.$store.commit('setCart', JSON.parse(cart))
+    
+    EventBus.$on('alert', (alert) => {
+      this.alert = false
+      this.alert = alert
+      setTimeout(() => {
+        this.alert = false
+      }, 3000);
+    })
   }
 }
 </script>
 
 <style>
 @import url('../src/assets/fonts.css');
+
+.content {
+  position: relative;
+}
+
+.alert {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
 </style>

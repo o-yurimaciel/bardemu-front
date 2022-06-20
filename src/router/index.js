@@ -6,6 +6,7 @@ import Product from '../views/Product.vue'
 import ProductItem from '../views/ProductItem.vue'
 import Categories from '../views/Categories.vue'
 import CategoryItem from '../views/CategoryItem.vue'
+import Menu from '../views/Menu.vue'
 
 Vue.use(VueRouter)
 
@@ -14,6 +15,10 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/menu',
+    component: Menu
   },
   {
     path: '/painel',

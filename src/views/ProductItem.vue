@@ -8,6 +8,23 @@
         <v-col cols="4" class="pa-0">
           <v-form v-model="isFormValid" @submit.prevent>
             <v-col class="pa-0">
+              <label for="category">Categoria</label>
+              <v-select
+              outlined
+              :items="categories"
+              rounded
+              @change="changeCategory"
+              id="category"
+              >
+              <template slot="selection" slot-scope="data">
+                <span style="#000">{{data.item.name}}</span>
+              </template>
+              <template slot="item" slot-scope="data">
+                <span style="color: #000">{{data.item.name}}</span>
+              </template>
+              </v-select>
+            </v-col>
+            <v-col class="pa-0">
               <label for="name">Nome</label>
               <v-text-field
               outlined
@@ -86,6 +103,7 @@ export default {
       id: "",
       edit: false,
       isFormValid: false,
+      categories: [],
       product: {
         name: "",
         description: "",
@@ -96,6 +114,8 @@ export default {
     }
   },
   mounted() {
+    this.getCategories()
+
     if(this.$router.history.current.params.id) {
       this.id = this.$router.history.current.params.id
       this.edit = true
@@ -103,6 +123,17 @@ export default {
     }
   },
   methods: {
+    changeCategory(e) {
+      this.product.category = e.name
+    },
+    getCategories() {
+      bardemu.get('/category').then((res) => {
+        console.log(res)
+        this.categories = res.data
+      }).catch((e) => {
+        console.log(e.response)
+      })
+    },
     createProduct() {
       console.log(this.product)
       bardemu.post('/product', this.product).then((res) => {
@@ -113,6 +144,7 @@ export default {
       }))
     },
     updateProduct() {
+      console.log(this.product)
       bardemu.put('/product', this.product, {
         params: {
           _id: this.id

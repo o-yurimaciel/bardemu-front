@@ -11,6 +11,7 @@
         <v-btn
         class="btn-cardapio"
         style="height: 80px; width: 180px"
+        to="/menu"
         >
           <span class="cardapio">Cardápio</span>
         </v-btn>

@@ -53,16 +53,29 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
   export default {
     data: () => ({
       items: [
         { icon: 'mdi-home', title: 'Inicio', to: '/' },
-        { icon: 'mdi-food', title: 'Cardápio', to: '/' },
-        { icon: 'mdi-cart', title: 'Carrinho', to: '/' },
+        { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
+        { icon: 'mdi-cart', title: 'Carrinho (0)', to: '/' },
         { icon: 'mdi-whatsapp', title: 'WhatsApp', to: '/' },
         { icon: 'mdi-instagram', title: 'Instagram', to: '/' },
       ],
     }),
+    computed: {
+      ...mapGetters({
+        cart: 'getCart'
+      })
+    },
+    watch: {
+      cart() {
+        if(this.cart && this.cart.length && this.cart.length > 0) {
+          this.items[2].title = `Carrinho (${this.cart.length})`
+        }
+      }
+    }
   }
 </script>
 
