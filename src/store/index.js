@@ -6,12 +6,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    cart: []
+    cart: [],
+    cartTotalValue: ''
   },
   mutations: {
     setCart(state, cart) {
       state.cart = cart
-    }
+    },
   },
   getters: {
     getCart(state) {
@@ -22,26 +23,49 @@ export default new Vuex.Store({
     addToCart(context, item) {
       let cart = this.state.cart ? this.state.cart : []
 
-      let exist = cart ? cart.some((product) => product._id === item._id) : false
+      console.log('addItem', item)
 
-      if(exist) {
-        cart.filter((product, index) => {
-          if(product._id === item._id) {
-            cart[index].quantity = cart[index].quantity + 1
-            cart.push(cart[index])
-          }
-        })
-        context.commit('setCart', cart)
-      } else {
-        item.quantity = 1
+      if(item.quantity === 1) {
         cart.push(item)
         context.dispatch('openAlert', {
           message: `"${item.name}" foi adicionado ao carrinho`,
           type: 'success'
         })
         context.commit('setCart', cart)
+      } else {
+        cart.filter((product, index) => {
+          if(product._id === item._id) {
+            cart[index].quantity = item.quantity
+            context.commit('setCart', cart)
+            context.dispatch('openAlert', {
+              message: `"${cart[index].name}" foi adicionado ao carrinho`,
+              type: 'success'
+            })
+            EventBus.$emit('update-cart', cart)
+          }
+        })
       }
-      
+      localStorage.setItem('bardemuCart', JSON.stringify(cart))
+    },
+    removeToCart(context, item) {
+      let cart = this.state.cart ? this.state.cart : []
+
+      context.dispatch('openAlert', {
+        message: `"${item.name}" foi removido do carrinho`,
+        type: 'success'
+      })
+
+      cart.filter((product, index) => {
+        if(product._id === item._id) {
+          if(item.quantity <= 0) {
+            cart.splice(index, 1)
+            context.commit('setCart', cart)
+          } else {
+            context.commit('setCart', cart)
+            EventBus.$emit('update-cart', cart)
+          }
+        }
+      })
       localStorage.setItem('bardemuCart', JSON.stringify(cart))
     },
     openAlert(context, alert) {

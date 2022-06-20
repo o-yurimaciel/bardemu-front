@@ -1,5 +1,10 @@
-const array1 = [
-  { b: 3 } 
+let array1 = [
+  { b: '3' },
+  { b: '5' }
 ]
 
-console.log(array1.indexOf(3))
+array1.splice(0, 1)
+
+
+
+console.log(array1)

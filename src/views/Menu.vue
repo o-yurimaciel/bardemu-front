@@ -20,7 +20,7 @@
               {{category.name}}
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <v-col class="pa-0 pb-3" v-for="product in list" :key="product.id">
+              <v-col class="pa-0 pb-3" v-for="(product) in list" :key="product.id">
                 <v-row no-gutters>
                   <v-col cols="2" class="pa-0">
                     <img class="product-img" :src="product.image" width="100" height="100%" alt="">
@@ -38,11 +38,12 @@
                           <span class="product-price">R$ {{product.price}}</span>
                         </v-col>
                         <v-col class="pa-0 d-flex justify-end">
-                          <v-row no-gutters class="d-flex justify-space-between align-center">
+                            <v-row no-gutters class="d-flex justify-space-between align-center">
                             <v-icon 
                             color="red"
                             title="Remover do carrinho"
                             size="30" 
+                            :disabled="!product.quantity || product.quantity == 0"
                             @click="removeItem(product)">
                               mdi-minus
                             </v-icon>
@@ -89,6 +90,7 @@ export default {
     })
   },
   async mounted() {
+    console.log(this.cart)
     await this.getCategories()
     await this.getProductList()
   },
@@ -99,27 +101,24 @@ export default {
   },
   methods: {
     concatCart() {
-      if(this.cart && this.cart.length > 0) {
-        this.cart.map((item) => {
-          this.products.map((product, index) => {
-            if(product._id === item._id) {
-              this.products[index].quantity = item.quantity ? item.quantity : 1
-              this.$forceUpdate()
-            }
-          })
+      const currentCart = this.cart ? this.cart : []
+      currentCart.map((item) => {
+        this.products.map((product, index) => {
+          if(product._id === item._id) {
+            this.products[index].quantity = item.quantity ? item.quantity : 0
+            this.$forceUpdate()
+          }
         })
-      }
+      })
     },
     getCartQuantity(id) {
-      if(this.cart && this.cart.length > 0) {
-        const result = this.cart.filter((product) => product._id === id)
-        if(result.quantity) {
-          return result.quantity
-        } else {
-          return 0
-        }
+      const currentCart = this.cart ? this.cart : []
+      const result = currentCart.filter((product) => product._id === id)
+      if(result && result.quantity) {
+        return result.quantity
+      } else {
+        return 0
       }
-      return 0
     },
     getCategories() {
       bardemu.get('/category')
@@ -143,12 +142,16 @@ export default {
       this.list = this.products.filter((product) => product.category === categoryName)
     },
     addItem(item) {
-      this.$store.dispatch('addToCart', item)
+      item.quantity = item.quantity ? item.quantity + 1 : 1
+      this.$store.dispatch('addToCart', item).then(() => {
+        this.$forceUpdate()
+      })
     },
     removeItem(item) {
-      this.$store.dispatch('openAlert', {
-        message: `"${item.name}" foi removido do carrinho`,
-        type: 'success'
+      console.log('deks', item)
+      item.quantity--
+      this.$store.dispatch('removeToCart', item).then(() => {
+        this.$forceUpdate()
       })
     }
   }

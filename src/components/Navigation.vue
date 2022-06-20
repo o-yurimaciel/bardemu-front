@@ -54,8 +54,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { EventBus } from '../EventBus'
   export default {
     data: () => ({
+      cartQuantity: 0,
+      cartTotalValue: 0,
       items: [
         { icon: 'mdi-home', title: 'Inicio', to: '/' },
         { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
@@ -69,11 +72,34 @@ import { mapGetters } from 'vuex'
         cart: 'getCart'
       })
     },
-    watch: {
-      cart() {
-        if(this.cart && this.cart.length && this.cart.length > 0) {
-          this.items[2].title = `Carrinho (${this.cart.length})`
+    mounted() {
+      EventBus.$on('update-cart', (cart) => {
+        this.syncCart(cart)
+      })
+    },
+    methods: {
+      syncCart(cart) {
+        if(cart) {
+          this.cartQuantity = 0
+          this.cartTotalValue = 0
+
+          const currentCart = cart ? cart : []
+          currentCart.filter((product) => {
+            console.log('navigation product', product)
+            this.cartQuantity = this.cartQuantity + product.quantity
+            this.cartTotalValue = this.cartTotalValue + product.price * product.quantity
+          })
+        } else {
+          this.cartQuantity = 0
+          this.cartTotalValue = 0
         }
+
+        this.items[2].title = `Carrinho (${this.cartQuantity}) - R$${this.cartTotalValue}`
+      } 
+    },
+    watch: {
+      cart(cart) {
+        this.syncCart(cart)
       }
     }
   }
