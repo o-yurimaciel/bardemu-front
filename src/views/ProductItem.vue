@@ -11,15 +11,16 @@
       </h1>
       <v-row no-gutters class="pt-15">
         <v-col cols="4" class="pa-0">
+          {{product.category}}
           <v-form v-model="isFormValid" @submit.prevent>
             <v-col class="pa-0">
-
               <label for="category">Categoria</label>
               <v-select
               outlined
               :items="categories"
               rounded
-              @change="changeCategory"
+              :value="product.category"
+              v-model="product.category"
               id="category"
               >
               <template slot="selection" slot-scope="data">
@@ -124,7 +125,8 @@ export default {
         name: "",
         description: "",
         price: 0,
-        image: null
+        image: null,
+        category: null
       },
       oldName: "",
       items: [
@@ -144,9 +146,6 @@ export default {
     }
   },
   methods: {
-    changeCategory(e) {
-      this.product.category = e.name
-    },
     getCategories() {
       bardemu.get('/category').then((res) => {
         console.log(res)
@@ -183,6 +182,7 @@ export default {
           _id: this.id
         }
       }).then((res) => {
+        console.log(res)
         this.oldName = res.data.products.name
         this.product = res.data.products
         console.log(res)

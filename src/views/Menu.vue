@@ -149,7 +149,6 @@ export default {
       })
     },
     removeItem(item) {
-      console.log('deks', item)
       item.quantity--
       this.$store.dispatch('removeToCart', item).then(() => {
         this.$forceUpdate()
