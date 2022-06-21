@@ -132,7 +132,7 @@ export default {
     },
     getProductList() {
       bardemu.get('/product').then((res) => {
-        this.products = res.data.products
+        this.products = res.data
         this.concatCart()
         console.log(res)
       }).catch((e) => {

@@ -20,10 +20,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    resetCart(context) {
+      context.commit('setCart', [])
+      localStorage.setItem('bardemuCart', JSON.stringify([]))
+    },
     addToCart(context, item) {
       let cart = this.state.cart ? this.state.cart : []
-
-      console.log('addItem', item)
 
       if(item.quantity === 1) {
         cart.push(item)

@@ -8,7 +8,7 @@
       ></v-breadcrumbs>
       <h1>Carrinho</h1>
       <v-col cols="10" class="pa-0 pt-15 d-flex justify-center" v-if="cart && cart.length > 0">
-        <v-col class="pa-0" cols="8">
+        <v-col class="pa-0" cols="8" v-if="!userData">
           <v-card
           class="mx-auto elevation-1"
           height="100%"
@@ -26,8 +26,13 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-col class="pa-0 pt-3 pl-5 pr-5" style="position: relative" v-for="product in cart" :key="product._id">
-              <v-icon color="red" style="position: absolute; top: 15px; right: 20px;" @click="removeAllItems(product)">mdi-delete</v-icon>
-              <v-row no-gutters class="d-flex align-center">
+              <v-icon 
+              color="red" 
+              style="position: absolute; top: 15px; right: 20px;" 
+              @click="removeAllItems(product)">
+                mdi-delete
+              </v-icon>
+              <v-row no-gutters>
                 <v-col cols="2" class="pa-0">
                   <img :src="product.image" width="100%" height="100%" alt="">
                 </v-col>
@@ -39,12 +44,12 @@
                     <span class="product-description">
                       {{product.description}}
                     </span>
-                    <span class="product-price">
+                    <span class="product-price" style="position: absolute; bottom: 0">
                       {{product.price * product.quantity | currency}}
                     </span>
                   </v-col>
                 </v-col>
-                <v-col class="pa-0">
+                <v-col class="pa-0 my-auto">
                   <v-row no-gutters class="d-flex align-center justify-space-between">
                     <v-icon color="red" @click="removeItem(product)">mdi-minus</v-icon>
                     <span>{{product.quantity}}</span>
@@ -57,16 +62,151 @@
               <v-btn 
               color="red"
               :outlined="false"
+              @click="userData = true"
               >
-                <span style="color: #fff">Finalizar pedido</span>
+                <span style="color: #fff">Continuar</span>
               </v-btn>
               <v-btn
               outlined
               color="#fff"
               @click="goToMenu"
               >
-                <span style="color: red">Continuar comprando</span>
+                <span style="color: red">Voltar ao Cardápio</span>
               </v-btn>
+            </v-col>
+          </v-card>
+        </v-col>
+        <v-col class="pa-0" cols="8" v-else>
+          <v-card
+          class="mx-auto elevation-1"
+          height="100%"
+          width="100%"
+          >
+            <v-card-title>Estamos quase lá.. :)<br>Antes precisamos de alguns dados para concluir o pedido.</v-card-title>
+            <v-col class="pa-0 pa-10">
+              <v-row no-gutters>
+                <v-col cols="6" class="pa-0 mr-2">
+                  <label for="name">Nome</label>
+                  <v-text-field
+                  dense
+                  outlined
+                  rounded
+                  v-model="name"
+                  id="name"
+                  >
+
+                  </v-text-field>
+                </v-col>
+                <v-col cols="4" class="pa-0">
+                  <label for="phone">Telefone</label>
+                  <v-text-field
+                  dense
+                  v-model="phone"
+                  outlined
+                  rounded
+                  id="phone"
+                  >
+
+                  </v-text-field>
+                </v-col>
+                <v-col cols="6" class="pa-0 mr-2">
+                  <label for="name">Endereço</label>
+                  <v-text-field
+                  dense
+                  v-model="address"
+                  outlined
+                  rounded
+                  id="address"
+                  >
+
+                  </v-text-field>
+                </v-col>
+                <v-col cols="2" class="pa-0 mr-2">
+                  <label for="number">Número</label>
+                  <v-text-field
+                  dense
+                  outlined
+                  v-model="addressNumber"
+                  rounded
+                  id="number"
+                  >
+
+                  </v-text-field>
+                </v-col>
+                <v-col cols="3" class="pa-0 mr-2">
+                  <label for="comp">Complemento</label>
+                  <v-text-field
+                  dense
+                  outlined
+                  v-model="addressData"
+                  rounded
+                  id="comp"
+                  >
+
+                  </v-text-field>
+                </v-col>
+                <v-col cols="5" class="pa-0">
+                  <label for="paymentType">Forma de Pagamento</label>
+                  <v-select
+                    outlined
+                    :items="paymentTypes"
+                    rounded
+                    v-model="paymentType"
+                    dense
+                    id="paymentType"
+                    >
+                    </v-select>
+                </v-col>
+                <v-col cols="3" class="pa-0 ml-2" v-if="paymentType === 'Dinheiro'">
+                  <label for="cashChange">Troco</label>
+                  <v-text-field
+                  dense
+                  outlined
+                  v-model="cashChange"
+                  rounded
+                  id="cashChange"
+                  >
+
+                  </v-text-field>
+                </v-col>
+                <v-col cols="3" 
+                class="pa-0 ml-2" 
+                v-if="paymentType === 'Cartão de Débito' || paymentType === 'Cartão de Crédito'">
+                  <label for="flag">Bandeira</label>
+                  <v-select
+                  dense
+                  outlined
+                  v-model="flag"
+                  :items="flagTypes"
+                  rounded
+                  id="flag"
+                  >
+
+                  </v-select>
+                </v-col>
+              </v-row>
+              <v-col class="pa-0">
+                <span>Observação: Após concluir o pedido, será solicitado o envio do Pedido via WhatsApp para confirmação.</span>
+              </v-col>
+              <v-col class="pa-0" v-if="paymentType === 'PIX'">
+                <span>Observação: O pagamento por PIX deve ser combinado com o Restaurante via WhatsApp.</span>
+              </v-col>
+              <v-col class="pa-0 d-flex flex-column mx-auto pt-10">
+              <v-btn 
+                color="red"
+                :outlined="false"
+                @click="send"
+                >
+                  <span style="color: #fff">Concluir pedido</span>
+                </v-btn>
+                <v-btn
+                outlined
+                color="#fff"
+                @click="userData = false"
+                >
+                  <span style="color: red">Voltar</span>
+                </v-btn>
+              </v-col>
             </v-col>
           </v-card>
         </v-col>
@@ -83,10 +223,30 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
+      userData: false,
       items: [
         { text: 'Home', href: '/' },
         { text: 'Cardápio', href: '/menu' }
-      ]
+      ],
+      paymentTypes: [
+        "Dinheiro",
+        "Cartão de Crédito",
+        "Cartão de Débito",
+        "PIX"
+      ],
+      flagTypes: [
+        "Visa",
+        "Mastercard",
+        "Banrisul"
+      ],
+      name: "",
+      phone: "",
+      address: "",
+      addressNumber: "",
+      addressData: "",
+      paymentType: null,
+      cashChange: 0,
+      flag: null
     }
   },
   computed: {
@@ -128,6 +288,21 @@ export default {
       this.$store.dispatch('removeToCart', item).then(() => {
         this.$forceUpdate()
       })
+    },
+    send() {
+      const message = encodeURIComponent(`Olá, ${this.name}! \nObrigado por pedir no BarDeMu Lanches!\n\nEndereço: ${this.address}\nNúmero: ${this.addressNumber}\nComplemento: ${this.addressData}\n\nPedido: ${this.getCartText()}\n\nTotal a pagar: R$${this.getTotalValue().toFixed(2)}\nForma de Pagamento: ${this.paymentType}`)
+      const phone = "555180469344"
+      window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, "_blank")
+      this.$store.dispatch('resetCart')
+    },
+    getCartText() {
+      let text = "";
+      this.cart.forEach((product) => {
+        if(product) {
+          text = text + `\n${product.name} ${product.quantity}x`
+        }
+      })
+      return text
     }
   }
 }

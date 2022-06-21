@@ -183,8 +183,8 @@ export default {
         }
       }).then((res) => {
         console.log(res)
-        this.oldName = res.data.products.name
-        this.product = res.data.products
+        this.oldName = res.data.name
+        this.product = res.data
         console.log(res)
       }).catch((e) => {
         console.log(e.response)
