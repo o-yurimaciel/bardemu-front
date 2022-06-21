@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="pa-0 ma-0">
-    <v-col class="pa-0 pt-5 d-flex flex-column" offset="1">
+    <v-col class="pa-0 pt-10 d-flex flex-column" offset="1">
       <v-breadcrumbs
         class="pa-0"
         :items="items"
@@ -105,6 +105,7 @@
                   outlined
                   rounded
                   id="phone"
+                  v-mask="'+55 (##) #####-####'"
                   >
 
                   </v-text-field>
@@ -186,7 +187,7 @@
                 </v-col>
               </v-row>
               <v-col class="pa-0">
-                <span>Observação: Após concluir o pedido, será solicitado o envio do Pedido via WhatsApp para confirmação.</span>
+                <span>Observação: Após concluir, será solicitado o envio do Pedido via WhatsApp para confirmação.</span>
               </v-col>
               <v-col class="pa-0" v-if="paymentType === 'PIX'">
                 <span>Observação: O pagamento por PIX deve ser combinado com o Restaurante via WhatsApp.</span>
@@ -254,7 +255,32 @@ export default {
       cart: 'getCart'
     })
   },
+  mounted() {
+    this.getClientByStorage()
+  },
   methods: {
+    getClientByStorage() {
+      const client = JSON.parse(localStorage.getItem('bardemuClient'))
+      if(client.name) {
+        this.name = client.name
+      }
+
+      if(client.phone) {
+        this.phone = client.phone
+      }
+
+      if(client.address) {
+        this.address = client.address
+      }
+
+      if(client.addressNumber) {
+        this.addressNumber = client.addressNumber
+      }
+
+      if(client.addressData) {
+        this.addressData = client.addressData
+      }
+    },
     goToMenu() {
       this.$router.push('/menu')
     },
@@ -290,9 +316,16 @@ export default {
       })
     },
     send() {
-      const message = encodeURIComponent(`Olá, ${this.name}! \nObrigado por pedir no BarDeMu Lanches!\n\nEndereço: ${this.address}\nNúmero: ${this.addressNumber}\nComplemento: ${this.addressData}\n\nPedido: ${this.getCartText()}\n\nTotal a pagar: R$${this.getTotalValue().toFixed(2)}\nForma de Pagamento: ${this.paymentType}`)
+      const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido.!\n\nNome:${this.name}\nEndereço: ${this.address}\nNúmero: ${this.addressNumber}\nComplemento: ${this.addressData}\n\nPedido: ${this.getCartText()}\n\nTotal a pagar: R$${this.getTotalValue().toFixed(2)}\nForma de Pagamento: ${this.paymentType}`)
       const phone = "555180469344"
       window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, "_blank")
+      localStorage.setItem('bardemuClient', JSON.stringify({
+        name: this.name,
+        phone: this.phone,
+        address: this.address,
+        addressNumber: this.addressNumber,
+        addressData: this.addressData
+      }))
       this.$store.dispatch('resetCart')
     },
     getCartText() {

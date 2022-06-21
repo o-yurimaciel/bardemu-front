@@ -5,6 +5,7 @@ import router from './router'
 import store from './store'
 import './filters'
 import './plugins/currency-field'
+import './plugins/vue-mask'
 
 Vue.config.productionTip = false
 
