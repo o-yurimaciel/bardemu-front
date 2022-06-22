@@ -10,7 +10,7 @@
         {{edit ? `Editar Produto "${oldName}"` : 'Criar Produto' }}
       </h1>
       <v-row no-gutters class="pt-15">
-        <v-col cols="4" class="pa-0">
+        <v-col lg="4" cols="10" class="pa-0">
           {{product.category}}
           <v-form v-model="isFormValid" @submit.prevent>
             <v-col class="pa-0">
@@ -79,7 +79,7 @@
             </v-col>
           </v-form>
         </v-col>
-        <v-col cols="8" class="pa-0 d-flex flex-grow-0 justify-center">
+        <v-col cols="10" lg="8" class="pa-0 d-flex flex-grow-0 justify-center pt-lg-0 pt-10">
             <v-card
               class="mx-auto"
               min-width="200"

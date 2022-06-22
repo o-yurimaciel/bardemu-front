@@ -26,15 +26,15 @@
                     <img class="product-img" :src="product.image" width="100" height="100%" alt="">
                   </v-col>
                   <v-col offset-lg="1" class="pa-0 d-flex flex-column">
-                    <v-col class="pa-0 d-flex justify-center">
+                    <v-col class="pa-0 d-flex justify-center justify-lg-start">
                       <span class="product-title">{{product.name}}</span>
                     </v-col>
-                    <v-col class="pa-0 d-flex justify-center">
+                    <v-col class="pa-0 d-flex justify-center justify-lg-start">
                       <span class="product-description">{{product.description}}</span>
                     </v-col>
                     <v-col class="pa-0 d-flex align-center pb-10">
                       <v-row no-gutters class="d-flex align-center justify-space-between">
-                        <v-col cols="12" lg="9" class="pa-0 d-flex justify-center">
+                        <v-col cols="12" lg="9" class="pa-0 d-flex justify-center justify-lg-start">
                           <span class="product-price">{{product.price | currency}}</span>
                         </v-col>
                         <v-col class="pa-0 d-flex justify-center justify-lg-end">

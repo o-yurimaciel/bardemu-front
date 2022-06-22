@@ -10,7 +10,7 @@
         {{edit ? `Editar Categoria "${oldName}"` : 'Criar Categoria' }}
       </h1>
       <v-row no-gutters class="pt-15">
-        <v-col cols="4" class="pa-0">
+        <v-col cols="10" lg="4" class="pa-0">
           <v-form v-model="isFormValid" @submit.prevent>
             <v-col class="pa-0">
               <label for="name">Nome</label>

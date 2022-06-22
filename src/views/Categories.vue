@@ -1,8 +1,8 @@
 <template>
   <v-container fluid class="pa-0 ma-0">
-    <v-col offset="1" cols="10" class="pa-0 d-flex justify-center flex-column mx-auto pt-15">
+    <v-col offset="1" cols="10" class="pa-0 d-flex justify-center flex-column mx-auto pt-10">
       <v-row no-gutters>
-        <v-col class="pa-0 d-flex flex-column">
+        <v-col cols="12" class="pa-0 d-flex flex-column">
           <v-breadcrumbs
             class="pa-0"
             :items="items"
@@ -10,34 +10,38 @@
           ></v-breadcrumbs>
           <h1>Categorias</h1>
         </v-col>
-        <v-btn 
-        color="green"
-        class="text-capitalize"
-        >
-          <span @click="addCategory" style="color: #fff">Adicionar Categoria</span>
-        </v-btn>
+        <v-col class="pa-0 d-flex justify-end pt-lg-0 pt-15">
+          <v-btn 
+          color="green"
+          class="text-capitalize"
+          >
+            <span @click="addCategory" style="color: #fff">Adicionar Categoria</span>
+          </v-btn>
+        </v-col>
       </v-row>
-      <v-col cols="6" class="pa-0 mx-auto content">
+      <v-col cols="12" lg="6" class="pa-0 mx-auto content pt-10">
         <table style="width: 100%">
           <tbody v-for="category in categories" :key="category._id">
             <tr style="height: 50px; margin: 20px">
               <th style="text-align: left;">Nome</th>
-              <th style="text-align: left;">Ordem</th>
+              <th style="text-align: center;">Ordem</th>
               <th style="text-align: right">Ações</th>
             </tr>
             <tr>
               <td style="text-align:left">{{category.name}}</td>
-              <td style="text-align:left">{{category.order}}</td>
-              <td style="text-align: right">
+              <td style="text-align:center">{{category.order}}</td>
+              <td style="text-align:right">
                 <v-btn 
                 class="mr-2"
                 color="green"
+                small
                 @click="editCategory(category._id)"
                 >
                   <v-icon color="#FFF">mdi-pencil</v-icon>
                 </v-btn>
                 <v-btn
                 color="red"
+                small
                 @click="deleteCategory(category._id)"
                 >
                   <v-icon color="#fff">mdi-delete</v-icon>

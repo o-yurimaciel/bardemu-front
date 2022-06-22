@@ -2,7 +2,7 @@
   <v-container fluid class="pa-0 ma-0">
     <v-col offset="1" cols="10" class="pa-0 pt-10">
       <v-row no-gutters class="d-flex justify-space-between">
-        <v-col class="pa-0 d-flex flex-column">
+        <v-col cols="12" class="pa-0 d-flex flex-column">
           <v-breadcrumbs
             class="pa-0"
             :items="items"
@@ -10,16 +10,18 @@
           ></v-breadcrumbs>
           <h1>Produtos</h1>
         </v-col>
-        <v-btn 
-        color="green"
-        class="text-capitalize"
-        >
-          <span @click="addProduct" style="color: #fff">Adicionar Produto</span>
-        </v-btn>
+        <v-col class="pa-0 d-flex justify-end pt-lg-0 pt-15">
+          <v-btn 
+          color="green"
+          class="text-capitalize"
+          >
+            <span @click="addProduct" style="color: #fff">Adicionar Produto</span>
+          </v-btn>
+        </v-col>
       </v-row>
       <v-col class="pa-0 pt-10">
         <v-row no-gutters>
-          <v-col cols="3" class="pa-0 pa-2" v-for="product in products" :key="product._id">
+          <v-col cols="12" lg="3" class="pa-0 pa-2" v-for="product in products" :key="product._id">
             <v-card
               class="mx-auto"
               min-width="200"
