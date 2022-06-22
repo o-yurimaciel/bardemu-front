@@ -3,7 +3,7 @@
     <v-col cols="11" class="pa-0">
       <v-row no-gutters class="d-flex align-center justify-space-between ml-5">
         <v-col cols="10" class="pa-0">
-          <span class="desc">BarDeMu Lanches</span>
+          <span class="desc" style="cursor: pointer" title="Voltar ao Início" @click="goToHome">BarDeMu Lanches</span>
         </v-col>
         <v-icon color="#FFF">mdi-account</v-icon>
       </v-row>
@@ -14,6 +14,9 @@
 <script>
 export default {
   methods: {
+    goToHome() {
+      this.$router.push('/')
+    },
     goToPainel() {
       this.$router.push('/painel')
     }

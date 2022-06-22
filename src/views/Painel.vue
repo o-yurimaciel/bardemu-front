@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-0 ma-0">
+  <v-container fluid class="pa-0 ma-0">
     <v-col offset="1" cols="10" class="pa-0 d-flex flex-column pt-10">
       <v-breadcrumbs
         class="pa-0"
@@ -7,7 +7,7 @@
         divider="/"
       ></v-breadcrumbs>
       <v-row no-gutters class="pt-10">
-        <v-col cols="6" class="pa-0 pa-5" v-for="item in items" :key="item.description">
+        <v-col cols="12" lg="6" class="pa-0 pa-5" v-for="item in items" :key="item.description">
           <v-card class="mx-auto mr-2" :to="item.to">
             <v-img
             :src="item.src"
@@ -54,7 +54,7 @@ export default {
         }
       ],
       breadcrumb: [
-        { text: 'Home', href: '/' }
+        { text: 'Início', href: '/' }
       ]
     }
   },

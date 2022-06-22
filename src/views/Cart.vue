@@ -8,7 +8,7 @@
       ></v-breadcrumbs>
       <h1>Carrinho</h1>
       <v-col cols="10" class="pa-0 pt-15 d-flex justify-center" v-if="cart && cart.length > 0">
-        <v-col class="pa-0" cols="8" v-if="!userData">
+        <v-col class="pa-0" cols="12" lg="8" v-if="!userData">
           <v-card
           class="mx-auto elevation-1"
           height="100%"
@@ -24,8 +24,8 @@
                 </span>
               </v-row>
             </v-card-title>
-            <v-divider></v-divider>
-            <v-col class="pa-0 pt-3 pl-5 pr-5" style="position: relative" v-for="product in cart" :key="product._id">
+            <hr style="width: 95%;margin:auto; opacity: 0.2;">
+            <v-col class="pa-0 pt-3 pl-0 pr-0 pl-lg-5 pr-lg-5" style="position: relative" v-for="product in cart" :key="product._id">
               <v-icon 
               color="red" 
               style="position: absolute; top: 15px; right: 20px;" 
@@ -33,23 +33,27 @@
                 mdi-delete
               </v-icon>
               <v-row no-gutters>
-                <v-col cols="2" class="pa-0">
-                  <img :src="product.image" width="100%" height="100%" alt="">
+                <v-col cols="12" lg="2" class="pa-0 d-flex justify-center">
+                  <img :src="product.image" width="100" height="100%" alt="">
                 </v-col>
-                <v-col cols="8" class="pa-0 ml-5">
-                  <v-col class="pa-0 d-flex flex-column">
+                <v-col cols="12" lg="8" class="pa-0 ml-0 ml-lg-5">
+                  <v-col cols="12" class="pa-0 d-flex justify-center justify-lg-start">
                     <span class="product-title">
                       {{product.name}}
                     </span>
+                  </v-col>
+                  <v-col class="pa-0 d-flex justify-center justify-lg-start">
                     <span class="product-description">
                       {{product.description}}
                     </span>
-                    <span class="product-price" style="position: absolute; bottom: 0">
+                  </v-col>
+                  <v-col class="pa-0 d-flex justify-center justify-lg-start">
+                    <span class="product-price">
                       {{product.price * product.quantity | currency}}
                     </span>
                   </v-col>
                 </v-col>
-                <v-col class="pa-0 my-auto">
+                <v-col cols="6" lg="2" class="pa-0 my-auto d-flex justify-end mx-auto">
                   <v-row no-gutters class="d-flex align-center justify-space-between">
                     <v-icon color="red" @click="removeItem(product)">mdi-minus</v-icon>
                     <span>{{product.quantity}}</span>
@@ -57,6 +61,7 @@
                   </v-row>
                 </v-col>
               </v-row>
+              <hr class="mt-5" style="margin:auto; opacity: 0.2">
             </v-col>
             <v-col class="pa-0 pa-5 d-flex flex-column mx-auto pt-10">
               <v-btn 
@@ -82,110 +87,119 @@
           height="100%"
           width="100%"
           >
-            <v-card-title>Estamos quase lá.. :)<br>Antes precisamos de alguns dados para concluir o pedido.</v-card-title>
+            <v-card-title class="text-center mx-auto d-flex justify-center">Estamos quase lá.. :)<br>Antes precisamos confirmar alguns dados para concluir o pedido.</v-card-title>
+            <hr style="width: 90%; margin:auto; opacity: 0.2;">
             <v-col class="pa-0 pa-10">
-              <v-row no-gutters>
-                <v-col cols="6" class="pa-0 mr-2">
-                  <label for="name">Nome</label>
-                  <v-text-field
-                  dense
-                  outlined
-                  rounded
-                  v-model="name"
-                  id="name"
-                  >
-
-                  </v-text-field>
-                </v-col>
-                <v-col cols="4" class="pa-0">
-                  <label for="phone">Telefone</label>
-                  <v-text-field
-                  dense
-                  v-model="phone"
-                  outlined
-                  rounded
-                  id="phone"
-                  v-mask="'+55 (##) #####-####'"
-                  >
-
-                  </v-text-field>
-                </v-col>
-                <v-col cols="6" class="pa-0 mr-2">
-                  <label for="name">Endereço</label>
-                  <v-text-field
-                  dense
-                  v-model="address"
-                  outlined
-                  rounded
-                  id="address"
-                  >
-
-                  </v-text-field>
-                </v-col>
-                <v-col cols="2" class="pa-0 mr-2">
-                  <label for="number">Número</label>
-                  <v-text-field
-                  dense
-                  outlined
-                  v-model="addressNumber"
-                  rounded
-                  id="number"
-                  >
-
-                  </v-text-field>
-                </v-col>
-                <v-col cols="3" class="pa-0 mr-2">
-                  <label for="comp">Complemento</label>
-                  <v-text-field
-                  dense
-                  outlined
-                  v-model="addressData"
-                  rounded
-                  id="comp"
-                  >
-
-                  </v-text-field>
-                </v-col>
-                <v-col cols="5" class="pa-0">
-                  <label for="paymentType">Forma de Pagamento</label>
-                  <v-select
-                    outlined
-                    :items="paymentTypes"
-                    rounded
-                    v-model="paymentType"
+              <v-form v-model="isFormValid" @submit.prevent>
+                <v-row no-gutters>
+                  <v-col cols="6" class="pa-0 mr-2">
+                    <label for="name">Nome</label>
+                    <v-text-field
                     dense
-                    id="paymentType"
+                    outlined
+                    :error="!name"
+                    rounded
+                    v-model="name"
+                    id="name"
                     >
+
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="4" class="pa-0">
+                    <label for="phone">Telefone</label>
+                    <v-text-field
+                    dense
+                    v-model="phone"
+                    outlined
+                    rounded
+                    id="phone"
+                    :error="!phone || phone.length < 19"
+                    v-mask="'+55 (##) #####-####'"
+                    >
+
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="6" class="pa-0 mr-2">
+                    <label for="name">Endereço</label>
+                    <v-text-field
+                    dense
+                    v-model="address"
+                    outlined
+                    :error="!address"
+                    rounded
+                    id="address"
+                    >
+
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="2" class="pa-0 mr-2">
+                    <label for="number">Número</label>
+                    <v-text-field
+                    dense
+                    outlined
+                    v-model="addressNumber"
+                    :error="!addressNumber"
+                    rounded
+                    id="number"
+                    >
+
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="3" class="pa-0 mr-2">
+                    <label for="comp">Complemento</label>
+                    <v-text-field
+                    dense
+                    outlined
+                    v-model="addressData"
+                    :error="!addressData"
+                    rounded
+                    id="comp"
+                    >
+
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="5" class="pa-0">
+                    <label for="paymentType">Forma de Pagamento</label>
+                    <v-select
+                      outlined
+                      :items="paymentTypes"
+                      rounded
+                      v-model="paymentType"
+                      :error="!paymentType"
+                      dense
+                      id="paymentType"
+                      >
+                      </v-select>
+                  </v-col>
+                  <v-col cols="3" class="pa-0 ml-2" v-if="paymentType === 'Dinheiro'">
+                    <label for="cashChange">Troco</label>
+                    <v-currency-field
+                    dense
+                    outlined
+                    v-model="cashChange"
+                    rounded
+                    id="cashChange"
+                    >
+                    </v-currency-field>
+                  </v-col>
+                  <v-col cols="3" 
+                  class="pa-0 ml-2" 
+                  v-if="paymentType === 'Cartão de Débito' || paymentType === 'Cartão de Crédito'">
+                    <label for="flag">Bandeira</label>
+                    <v-select
+                    dense
+                    outlined
+                    v-model="flag"
+                    :items="flagTypes"
+                    :error="!flag"
+                    rounded
+                    id="flag"
+                    >
+
                     </v-select>
-                </v-col>
-                <v-col cols="3" class="pa-0 ml-2" v-if="paymentType === 'Dinheiro'">
-                  <label for="cashChange">Troco</label>
-                  <v-text-field
-                  dense
-                  outlined
-                  v-model="cashChange"
-                  rounded
-                  id="cashChange"
-                  >
-
-                  </v-text-field>
-                </v-col>
-                <v-col cols="3" 
-                class="pa-0 ml-2" 
-                v-if="paymentType === 'Cartão de Débito' || paymentType === 'Cartão de Crédito'">
-                  <label for="flag">Bandeira</label>
-                  <v-select
-                  dense
-                  outlined
-                  v-model="flag"
-                  :items="flagTypes"
-                  rounded
-                  id="flag"
-                  >
-
-                  </v-select>
-                </v-col>
-              </v-row>
+                  </v-col>
+                </v-row>
+              </v-form>
               <v-col class="pa-0">
                 <span>Observação: Após concluir, será solicitado o envio do Pedido via WhatsApp para confirmação.</span>
               </v-col>
@@ -196,6 +210,7 @@
               <v-btn 
                 color="red"
                 :outlined="false"
+                :disabled="!isFormValid"
                 @click="send"
                 >
                   <span style="color: #fff">Concluir pedido</span>
@@ -224,21 +239,24 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
+      isFormValid: false,
       userData: false,
       items: [
-        { text: 'Home', href: '/' },
+        { text: 'Início', href: '/' },
         { text: 'Cardápio', href: '/menu' }
       ],
       paymentTypes: [
         "Dinheiro",
         "Cartão de Crédito",
         "Cartão de Débito",
-        "PIX"
+        "PIX",
+        "Outro"
       ],
       flagTypes: [
         "Visa",
         "Mastercard",
-        "Banrisul"
+        "Banrisul",
+        "Outro"
       ],
       name: "",
       phone: "",
@@ -280,6 +298,8 @@ export default {
       if(client.addressData) {
         this.addressData = client.addressData
       }
+
+      this.$forceUpdate()
     },
     goToMenu() {
       this.$router.push('/menu')
@@ -316,7 +336,7 @@ export default {
       })
     },
     send() {
-      const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido.!\n\nNome:${this.name}\nEndereço: ${this.address}\nNúmero: ${this.addressNumber}\nComplemento: ${this.addressData}\n\nPedido: ${this.getCartText()}\n\nTotal a pagar: R$${this.getTotalValue().toFixed(2)}\nForma de Pagamento: ${this.paymentType}`)
+      const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido.\n\nNome: ${this.name}\nEndereço: ${this.address}\nNúmero: ${this.addressNumber}\nComplemento: ${this.addressData}\n\nPedido: ${this.getCartText()}\n\nTotal a pagar: R$${this.getTotalValue().toFixed(2)}\nForma de Pagamento: ${this.paymentType}${this.getPaymentSubType()}`)
       const phone = "555180469344"
       window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, "_blank")
       localStorage.setItem('bardemuClient', JSON.stringify({
@@ -327,6 +347,15 @@ export default {
         addressData: this.addressData
       }))
       this.$store.dispatch('resetCart')
+    },
+    getPaymentSubType() {
+      switch(this.paymentType) {
+        case "Dinheiro":
+          return `\nTroco: ${this.cashChange}`
+        case "Cartão de Crédito":
+        case "Cartão de Débito":
+          return `\nBandeira: ${this.flag}`
+      }
     },
     getCartText() {
       let text = "";

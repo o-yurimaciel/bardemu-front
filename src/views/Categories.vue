@@ -57,7 +57,7 @@ import { bardemu } from '../services'
     data: () => ({
       categories:[],
       items: [
-        { text: 'Home', href: '/' },
+        { text: 'Início', href: '/' },
         { text: 'Painel', href: '/painel' }
       ]
     }),

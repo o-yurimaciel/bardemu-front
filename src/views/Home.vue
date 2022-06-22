@@ -1,10 +1,10 @@
 <template>
   <v-container fluid class="pa-0 ma-0">
     <div class="overlay" style="z-index: 0">
-      <v-col class="pa-0 d-flex justify-center pt-15">
+      <v-col class="pa-0 d-flex justify-center pt-15 text-center">
         <span class="desc" style="color: #fff; letter-spacing: 5px">Seja bem-vindo ao BarDeMu Lanches!</span>
       </v-col>
-      <v-col class="pa-0 d-flex justify-center">
+      <v-col class="pa-0 d-flex justify-center text-center">
         <span class="desc2" style="color: #fff">ACESSE O NOSSO CARDÁPIO!</span>
       </v-col>
       <v-col class="pa-0 d-flex justify-center pt-5">
@@ -34,7 +34,7 @@ export default {
   height: 100vh;
   background-image: url('../assets/images/bg.jpg');
   background-size: cover;
-  background-position: 136% 55%;
+  background-position: 100% 55%;
 }
 
 .overlay {
@@ -59,7 +59,7 @@ export default {
 
 .desc2 {
   font-family: 'Archivo Black';
-  font-size: 4em;
+  font-size: 2.5em;
 }
 
 .cardapio {

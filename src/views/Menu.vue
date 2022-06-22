@@ -9,7 +9,7 @@
         ></v-breadcrumbs>
         <h1>Cardápio</h1>
       </v-col>
-      <v-col cols="5" class="pa-0 pt-10 d-flex justify-center mx-auto">
+      <v-col cols="11" lg="5" class="pa-0 pt-10 d-flex justify-center mx-auto">
         <v-expansion-panels>
           <v-expansion-panel
             v-for="category in categories"
@@ -22,23 +22,23 @@
             <v-expansion-panel-content>
               <v-col class="pa-0 pb-3" v-for="(product) in list" :key="product.id">
                 <v-row no-gutters>
-                  <v-col cols="2" class="pa-0">
+                  <v-col lg="2" cols="12" class="pa-0 d-flex justify-center">
                     <img class="product-img" :src="product.image" width="100" height="100%" alt="">
                   </v-col>
-                  <v-col offset="1" class="pa-0 d-flex flex-column">
-                    <v-col class="pa-0">
+                  <v-col offset-lg="1" class="pa-0 d-flex flex-column">
+                    <v-col class="pa-0 d-flex justify-center">
                       <span class="product-title">{{product.name}}</span>
                     </v-col>
-                    <v-col class="pa-0">
+                    <v-col class="pa-0 d-flex justify-center">
                       <span class="product-description">{{product.description}}</span>
                     </v-col>
-                    <v-col class="pa-0 d-flex align-center">
+                    <v-col class="pa-0 d-flex align-center pb-10">
                       <v-row no-gutters class="d-flex align-center justify-space-between">
-                        <v-col cols="9" class="pa-0">
+                        <v-col cols="12" lg="9" class="pa-0 d-flex justify-center">
                           <span class="product-price">{{product.price | currency}}</span>
                         </v-col>
-                        <v-col class="pa-0 d-flex justify-end">
-                            <v-row no-gutters class="d-flex justify-space-between align-center">
+                        <v-col class="pa-0 d-flex justify-center justify-lg-end">
+                            <v-row no-gutters class="d-flex justify-lg-space-between align-center">
                             <v-icon 
                             color="red"
                             title="Remover do carrinho"
@@ -77,7 +77,7 @@ export default {
   data() {
     return {
       items: [
-        { text: 'Home', href: '/' },
+        { text: 'Início', href: '/' },
         { text: 'Carrinho', href: '/carrinho' }
       ],
       categories: [],
