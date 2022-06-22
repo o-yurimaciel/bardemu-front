@@ -8,6 +8,7 @@ import Categories from '../views/Categories.vue'
 import CategoryItem from '../views/CategoryItem.vue'
 import Menu from '../views/Menu.vue'
 import Cart from '../views/Cart.vue'
+import Login from '../views/Login.vue'
 
 Vue.use(VueRouter)
 
@@ -16,6 +17,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
   },
   {
     path: '/menu',

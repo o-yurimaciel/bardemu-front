@@ -7,16 +7,31 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     cart: [],
-    cartTotalValue: ''
+    cartTotalValue: '',
+    auth: false,
+    login: ''
   },
   mutations: {
     setCart(state, cart) {
       state.cart = cart
     },
+    setLogin(state, login) {
+      if(login) {
+        localStorage.setItem('bardemuLogin', login)
+      }
+      state.login = login
+    },
+    setAuth(state, auth) {
+      state.auth = auth
+      localStorage.setItem('bardemuAuth', auth)
+    }
   },
   getters: {
     getCart(state) {
       return state.cart
+    },
+    getAuth(state) {
+      return state.auth
     }
   },
   actions: {

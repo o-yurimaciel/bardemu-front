@@ -40,7 +40,10 @@ export default {
     }
   },
   mounted() {
+    const auth = localStorage.getItem('bardemuAuth')
     const cart = localStorage.getItem('bardemuCart')
+
+    this.$store.commit('setAuth', auth === 'false' ? false : true)
     this.$store.commit('setCart', JSON.parse(cart))
     
     EventBus.$on('alert', (alert) => {

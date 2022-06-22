@@ -30,10 +30,11 @@
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <hr style="opacity: 0.2;">
+        <hr v-if="auth" style="opacity: 0.2;">
         <v-list-item
           link
           to="/painel"
+          v-if="auth"
         >
           <v-list-item-icon>
             <v-icon color="#e41c38">mdi-cog</v-icon>
@@ -67,7 +68,8 @@ import { EventBus } from '../EventBus'
     }),
     computed: {
       ...mapGetters({
-        cart: 'getCart'
+        cart: 'getCart',
+        auth: 'getAuth'
       })
     },
     mounted() {
