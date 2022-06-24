@@ -11,7 +11,6 @@
       </h1>
       <v-row no-gutters class="pt-15">
         <v-col lg="4" cols="10" class="pa-0">
-          {{product.category}}
           <v-form v-model="isFormValid" @submit.prevent>
             <v-col class="pa-0">
               <label for="category">Categoria</label>
@@ -23,12 +22,6 @@
               v-model="product.category"
               id="category"
               >
-              <template slot="selection" slot-scope="data">
-                <span style="#000">{{data.item.name}}</span>
-              </template>
-              <template slot="item" slot-scope="data">
-                <span style="color: #000">{{data.item.name}}</span>
-              </template>
               </v-select>
             </v-col>
             <v-col class="pa-0">
@@ -82,8 +75,10 @@
         <v-col cols="10" lg="8" class="pa-0 d-flex flex-grow-0 justify-center pt-lg-0 pt-10">
             <v-card
               class="mx-auto"
-              min-width="200"
+              min-width="400"
+              max-width="400"
               max-height="400"
+              min-height="400"
             >
               <v-img
                 height="200"
@@ -149,9 +144,16 @@ export default {
     getCategories() {
       bardemu.get('/category').then((res) => {
         console.log(res)
-        this.categories = res.data
+        const data = res.data
+        data.filter((category) => {
+          this.categories.push(category.name)
+        })
       }).catch((e) => {
         console.log(e.response)
+        this.$store.dispatch('openAlert', {
+          message: 'Erro ao consultar lista de Categorias',
+          type: 'error'
+        })
       })
     },
     createProduct() {
@@ -159,12 +161,19 @@ export default {
       bardemu.post('/product', this.product).then((res) => {
         console.log(res)
         this.$router.push('/produtos')
+        this.$store.dispatch('openAlert', {
+          message: 'Produto criado!',
+          type: 'success'
+        })
       }).catch((e =>  {
+        this.$store.dispatch('openAlert', {
+          message: 'Erro ao criar o produto',
+          type: 'error'
+        })
         console.log(e.response)
       }))
     },
     updateProduct() {
-      console.log(this.product)
       bardemu.put('/product', this.product, {
         params: {
           _id: this.id
@@ -172,7 +181,15 @@ export default {
       }).then((res) => {
         console.log(res)
         this.$router.push('/produtos')
+        this.$store.dispatch('openAlert', {
+          message: 'Produto atualizado!',
+          type: 'success'
+        })
       }).catch((e) => {
+        this.$store.dispatch('openAlert', {
+          message: 'Erro ao atualizar Produto',
+          type: 'error'
+        })
         console.log(e.response)
       })
     },
@@ -187,6 +204,10 @@ export default {
         this.product = res.data
         console.log(res)
       }).catch((e) => {
+        this.$store.dispatch('openAlert', {
+          message: 'Erro ao consultar Produto',
+          type: 'error'
+        })
         console.log(e.response)
       })
     },

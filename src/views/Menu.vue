@@ -9,7 +9,7 @@
         ></v-breadcrumbs>
         <h1>Cardápio</h1>
       </v-col>
-      <v-col cols="11" lg="5" class="pa-0 pt-10 d-flex justify-center mx-auto">
+      <v-col cols="10" lg="5" class="pa-0 pt-10 d-flex justify-center mx-auto">
         <v-expansion-panels>
           <v-expansion-panel
             v-for="category in categories"
@@ -20,42 +20,27 @@
               {{category.name}}
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <v-col class="pa-0 pb-3" v-for="(product) in list" :key="product.id">
+              <v-col class="pa-0 pb-5" 
+              v-for="(product) in list" 
+              :key="product.id" 
+              style="cursor: pointer"
+              title="Ver produto"
+              @click="openProduct(product)">
                 <v-row no-gutters>
-                  <v-col lg="2" cols="12" class="pa-0 d-flex justify-center">
-                    <img class="product-img" :src="product.image" width="100" height="100%" alt="">
+                  <v-col lg="2" cols="12" class="pa-0 d-flex justify-center align-center">
+                    <img class="product-img elevation-2" :src="product.image">
                   </v-col>
-                  <v-col offset-lg="1" class="pa-0 d-flex flex-column">
-                    <v-col class="pa-0 d-flex justify-center justify-lg-start">
+                  <v-col offset-lg="1" class="pa-0 d-flex flex-column align-center">
+                    <v-col class="pa-0 pt-4 pt-lg-0 d-flex justify-center justify-lg-start text-center text-lg-left">
                       <span class="product-title">{{product.name}}</span>
                     </v-col>
-                    <v-col class="pa-0 d-flex justify-center justify-lg-start">
+                    <v-col class="pa-0 pt-4 pt-lg-0 d-flex justify-center justify-lg-start text-center text-lg-left">
                       <span class="product-description">{{product.description}}</span>
                     </v-col>
-                    <v-col class="pa-0 d-flex align-center pb-10">
+                    <v-col class="pa-0 d-flex align-center pt-4 pt-lg-0">
                       <v-row no-gutters class="d-flex align-center justify-space-between">
                         <v-col cols="12" lg="9" class="pa-0 d-flex justify-center justify-lg-start">
                           <span class="product-price">{{product.price | currency}}</span>
-                        </v-col>
-                        <v-col class="pa-0 d-flex justify-center justify-lg-end">
-                            <v-row no-gutters class="d-flex justify-lg-space-between align-center">
-                            <v-icon 
-                            color="red"
-                            title="Remover do carrinho"
-                            size="30" 
-                            :disabled="!product.quantity || product.quantity == 0"
-                            @click="removeItem(product)">
-                              mdi-minus
-                            </v-icon>
-                            <span>{{product.quantity ? product.quantity : 0}}</span>
-                            <v-icon 
-                            size="30"
-                            title="Adicionar ao carrinho"
-                            color="green" 
-                            @click="addItem(product)">
-                              mdi-plus
-                            </v-icon>
-                          </v-row>
                         </v-col>
                       </v-row>
                     </v-col>
@@ -142,17 +127,8 @@ export default {
     getList(categoryName) {
       this.list = this.products.filter((product) => product.category === categoryName)
     },
-    addItem(item) {
-      item.quantity = item.quantity ? item.quantity + 1 : 1
-      this.$store.dispatch('addToCart', item).then(() => {
-        this.$forceUpdate()
-      })
-    },
-    removeItem(item) {
-      item.quantity--
-      this.$store.dispatch('removeToCart', item).then(() => {
-        this.$forceUpdate()
-      })
+    openProduct(product) {
+      console.log('product', product)
     }
   }
 }
@@ -160,9 +136,13 @@ export default {
 
 <style>
 .product-img {
-  padding: 2px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  border-radius: 5px;
+  height: 100%;
+  max-height: 100px;
+  width: 100px;
+  max-width: 200px;
+  max-height: 100px;
+  min-height: 100px;
 }
 
 .product-title {
@@ -174,8 +154,8 @@ export default {
 
 .product-description {
   font-family: 'Roboto', sans-serif;
-  font-weight: 100;
-  font-size: 0.9em;
+  font-weight: 300;
+  font-size: 1em;
   color: black;
 }
 

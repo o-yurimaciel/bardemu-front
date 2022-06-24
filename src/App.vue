@@ -51,7 +51,7 @@ export default {
       this.alert = alert
       setTimeout(() => {
         this.alert = false
-      }, 3000);
+      }, 5000);
     })
   }
 }

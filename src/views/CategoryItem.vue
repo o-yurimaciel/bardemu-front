@@ -81,7 +81,15 @@ export default {
       bardemu.post('/category', this.category).then((res) => {
         console.log(res)
         this.$router.push('/categorias')
+        this.$store.dispatch('openAlert', {
+          message: 'Categoria criada!',
+          type: 'success'
+        })
       }).catch((e =>  {
+        this.$store.dispatch('openAlert', {
+          message: 'Erro ao criar Categoria',
+          type: 'error'
+        })
         console.log(e.response)
       }))
     },
@@ -93,7 +101,15 @@ export default {
       }).then((res) => {
         console.log(res)
         this.$router.push('/categorias')
+        this.$store.dispatch('openAlert', {
+          message: 'Categoria atualizada!',
+          type: 'success'
+        })
       }).catch((e) => {
+        this.$store.dispatch('openAlert', {
+          message: 'Erro ao atualizar Categoria',
+          type: 'error'
+        })
         console.log(e.response)
       })
     },
@@ -107,6 +123,10 @@ export default {
         this.category = res.data
         console.log(res)
       }).catch((e) => {
+        this.$store.dispatch('openAlert', {
+          message: 'Erro ao consultar Categoria',
+          type: 'error'
+        })
         console.log(e.response)
       })
     },

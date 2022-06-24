@@ -102,8 +102,16 @@ export default {
       }).then((res) => {
         console.log(res)
         this.getProductList()
+        this.$store.dispatch('openAlert', {
+          message: 'Produto removido',
+          type: 'success'
+        })
       }).catch((e) => {
         console.log(e)
+        this.$store.dispatch('openAlert', {
+          message: 'Erro ao deletar Produto',
+          type: 'error'
+        })
       })
     },
     getProductList() {
@@ -111,6 +119,10 @@ export default {
         this.products = res.data
         console.log(res)
       }).catch((e) => {
+        this.$store.dispatch('openAlert', {
+          message: 'Erro ao consultar lista de Produtos',
+          type: 'error'
+        })
         console.log(e.response)
       })
     }
