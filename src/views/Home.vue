@@ -1,10 +1,10 @@
 <template>
-  <v-container fluid class="pa-0 ma-0">
+  <v-container fluid class="pa-0 pa-10 ma-0">
     <div class="overlay" style="z-index: 0">
       <v-col class="pa-0 d-flex justify-center pt-15 text-center">
         <span class="desc" style="color: #fff; letter-spacing: 5px">Seja bem-vindo ao BarDeMu Lanches!</span>
       </v-col>
-      <v-col class="pa-0 d-flex justify-center text-center">
+      <v-col class="pa-0 d-flex justify-center text-center pt-10 pt-lg-0">
         <span class="desc2" style="color: #fff">ACESSE O NOSSO CARDÁPIO!</span>
       </v-col>
       <v-col class="pa-0 d-flex justify-center pt-5">
@@ -51,15 +51,17 @@ export default {
 
 .desc {
   font-family: 'Kaushan Script';
-  font-size: 2.2em;
+  font-size: 2em;
   font-weight: 100;
   color: #fff;
   margin-left: 10px;
+  text-shadow: 1px 3px 3px black;
 }
 
 .desc2 {
   font-family: 'Archivo Black';
   font-size: 2.5em;
+  text-shadow: 1px 3px 3px black;
 }
 
 .cardapio {

@@ -58,6 +58,10 @@ export default {
 </script>
 
 <style>
+:root {
+  --primary-color: #e41c38;
+}
+
 @import url('../src/assets/fonts.css');
 
 .content {

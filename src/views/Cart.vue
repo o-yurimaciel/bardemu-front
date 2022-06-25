@@ -33,31 +33,41 @@
                 mdi-delete
               </v-icon>
               <v-row no-gutters>
-                <v-col cols="12" lg="2" class="pa-0 d-flex justify-center">
-                  <img :src="product.image" width="100" height="100%" alt="">
+                <v-col cols="12" lg="2" class="pa-0 d-flex justify-center align-start">
+                  <img :src="product.image" width="150px" height="150px" alt="">
                 </v-col>
-                <v-col cols="12" lg="8" class="pa-0 ml-0 ml-lg-5">
-                  <v-col cols="12" class="pa-0 d-flex justify-center justify-lg-start">
+                <v-col cols="12" lg="7" class="pa-0 ml-0 ml-lg-5 text-lg-left text-center">
+                  <v-col cols="12" class="pa-0 d-flex justify-center justify-lg-start pt-lg-0 pt-5">
                     <span class="product-title">
                       {{product.name}}
                     </span>
                   </v-col>
-                  <v-col class="pa-0 d-flex justify-center justify-lg-start">
+                  <v-col class="pa-0 d-flex justify-center justify-lg-start pt-3 text-lg-left text-center">
                     <span class="product-description">
                       {{product.description}}
                     </span>
                   </v-col>
-                  <v-col class="pa-0 d-flex justify-center justify-lg-start">
+                  <v-col class="pa-0 d-flex justify-center pt-3 justify-lg-start" v-if="product.note">
+                    <span class="product-description">
+                      Observação: {{product.note}}
+                    </span>
+                  </v-col>
+                  <v-col class="pa-0 d-flex justify-center justify-lg-start pt-3">
                     <span class="product-price">
                       {{product.price * product.quantity | currency}}
                     </span>
                   </v-col>
                 </v-col>
-                <v-col cols="6" lg="2" class="pa-0 my-auto d-flex justify-end mx-auto">
+                <v-col cols="6" lg="2" class="pa-0 my-auto d-flex justify-end mx-auto pt-lg-0 pt-5">
                   <v-row no-gutters class="d-flex align-center justify-space-between">
-                    <v-icon color="red" @click="removeItem(product)">mdi-minus</v-icon>
+                    <v-icon color="red" 
+                    :disabled="product.quantity <= 1"
+                    @click="product.quantity--"
+                    >
+                      mdi-minus
+                    </v-icon>
                     <span>{{product.quantity}}</span>
-                    <v-icon color="green" @click="addItem(product)">mdi-plus</v-icon>
+                    <v-icon color="green" @click="product.quantity++">mdi-plus</v-icon>
                   </v-row>
                 </v-col>
               </v-row>
@@ -318,20 +328,8 @@ export default {
       })
       return value
     },
-    addItem(item) {
-      item.quantity = item.quantity ? item.quantity + 1 : 1
-      this.$store.dispatch('addToCart', item).then(() => {
-        this.$forceUpdate()
-      })
-    },
     removeAllItems(item) {
       this.$store.dispatch('removeAllToCart', item).then(() => {
-        this.$forceUpdate()
-      })
-    },
-    removeItem(item) {
-      item.quantity--
-      this.$store.dispatch('removeToCart', item).then(() => {
         this.$forceUpdate()
       })
     },

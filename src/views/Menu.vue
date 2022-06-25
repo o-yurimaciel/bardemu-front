@@ -9,7 +9,15 @@
         ></v-breadcrumbs>
         <h1>Cardápio</h1>
       </v-col>
-      <v-col cols="10" lg="5" class="pa-0 pt-10 d-flex justify-center mx-auto">
+      <v-col class="pa-0 d-flex justify-center mt-15" v-if="loading">
+        <v-progress-circular
+          color="var(--primary-color)"
+          rotate="90"
+          size="200"
+          indeterminate
+        ></v-progress-circular>
+      </v-col>
+      <v-col cols="10" lg="5" class="pa-0 pt-10 d-flex justify-center mx-auto" v-else>
         <v-expansion-panels>
           <v-expansion-panel
             v-for="category in categories"
@@ -52,6 +60,76 @@
         </v-expansion-panels>
       </v-col>
     </v-col>
+    <v-dialog 
+      v-model="dialog"
+      class="dialog"
+      style="box-shadow: none!important"
+    >
+      <v-card
+      width="100%"
+      style="position: relative"
+      class="pa-5 elevation-0"
+      min-height="50vh"
+      >
+        <v-col cols="12" class="pa-5 pa-0 d-flex flex-column">
+          <v-col cols="8" class="pa-0 mx-auto d-flex justify-center">
+            <img width="200px" height="200px" class="elevation-2" :src="productSelected.image" alt="">
+          </v-col>
+          <v-col class="pa-0 pt-5">
+            <v-row no-gutters class="d-flex align-center">
+              <v-col class="pa-0" cols="10">
+                <v-col class="pa-0 d-flex justify-center justify-lg-start flex-grow-0">
+                  <span class="product-title">{{productSelected.name}}</span>
+                </v-col>
+                <v-col class="pa-0 d-flex justify-center justify-lg-start flex-grow-0">
+                  <span class="product-description">{{productSelected.description}}</span>
+                </v-col>
+                <v-col class="pa-0 d-flex justify-center flex-grow-0 justify-lg-start">
+                  <span class="product-price">
+                    {{quantity > 0 ? productSelected.price * quantity : '0' | currency}}
+                  </span>
+                </v-col>
+              </v-col>
+              <v-col class="pa-0 d-flex justify-space-between">
+                <v-icon @click="quantity > 0 ? quantity-- : null" color="var(--primary-color)">mdi-minus</v-icon>
+                <span>{{quantity}}</span>
+                <v-icon @click="quantity++" color="green">mdi-plus</v-icon>
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col class="pa-0 pt-3">
+            <label for="obs">Adicionar observação</label>
+            <v-text-field
+            outlined
+            id="obs"
+            v-model="note"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col class="pa-0 d-flex align-center justify-end flex-row">
+            <v-btn
+            :disabled="quantity <= 0"
+            @click="addToCart"
+            color="green"
+            > 
+              <v-icon class="mr-2" color="#fff">mdi-cart</v-icon>
+              <span style="color: #fff">
+                Adicionar ao carrinho
+              </span>
+            </v-btn>
+          </v-col>
+        </v-col>
+        <v-icon 
+          style="position: absolute; top: 15px; right: 15px" 
+          color="red"
+          title="Fechar"
+          size="30"
+          @click="dialog = false"
+        >
+          mdi-close-box
+        </v-icon>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -67,7 +145,12 @@ export default {
       ],
       categories: [],
       products: [],
-      list: []
+      list: [],
+      loading: true,
+      dialog: false,
+      productSelected: {},
+      quantity: 1,
+      note: ""
     }
   },
   computed: {
@@ -76,26 +159,14 @@ export default {
     })
   },
   async mounted() {
-    console.log(this.cart)
     await this.getCategories()
     await this.getProductList()
   },
-  watch: {
-    cart() {
-      this.concatCart()
-    }
-  },
   methods: {
-    concatCart() {
-      const currentCart = this.cart ? this.cart : []
-      currentCart.map((item) => {
-        this.products.map((product, index) => {
-          if(product._id === item._id) {
-            this.products[index].quantity = item.quantity ? item.quantity : 0
-            this.$forceUpdate()
-          }
-        })
-      })
+    openProduct(product) {
+      this.quantity = 1
+      this.dialog = true
+      this.productSelected = product
     },
     getCartQuantity(id) {
       const currentCart = this.cart ? this.cart : []
@@ -118,7 +189,7 @@ export default {
     getProductList() {
       bardemu.get('/product').then((res) => {
         this.products = res.data
-        this.concatCart()
+        this.loading = false
         console.log(res)
       }).catch((e) => {
         console.log(e.response)
@@ -127,8 +198,11 @@ export default {
     getList(categoryName) {
       this.list = this.products.filter((product) => product.category === categoryName)
     },
-    openProduct(product) {
-      console.log('product', product)
+    addToCart() {
+      this.productSelected.quantity = this.quantity
+      this.productSelected.note = this.note
+      this.$store.dispatch('addToCart', this.productSelected)
+      this.dialog = false
     }
   }
 }
@@ -164,5 +238,9 @@ export default {
   font-size: 1.5em;
   font-weight: 700;
   color: #e41c38;
+}
+
+.v-dialog {
+  width: 40%!important;
 }
 </style>
