@@ -7,7 +7,7 @@
         divider="/"
       ></v-breadcrumbs>
       <h1>Carrinho</h1>
-      <v-col cols="10" class="pa-0 pt-15 d-flex justify-center" v-if="cart && cart.length > 0">
+      <v-col cols="10" class="pa-0 pt-15 pb-15 d-flex justify-center" v-if="cart && cart.length > 0">
         <v-col class="pa-0" cols="12" lg="8" v-if="!userData">
           <v-card
           class="mx-auto elevation-1"
@@ -91,18 +91,25 @@
             </v-col>
           </v-card>
         </v-col>
-        <v-col class="pa-0" cols="8" v-else>
+        <v-col class="pa-0 mb-10" lg="8" cols="12" v-else>
           <v-card
           class="mx-auto elevation-1"
           height="100%"
           width="100%"
           >
-            <v-card-title class="text-center mx-auto d-flex justify-center">Estamos quase lá.. :)<br>Antes precisamos confirmar alguns dados para concluir o pedido.</v-card-title>
+            <v-card-title class="text-center mx-auto d-flex justify-center text-left text-lg-center">
+              <v-col class="pa-0 d-flex flex-column">
+                <span>
+                  Estamos quase lá.. :)<br>
+                </span>
+                <span>Antes precisamos confirmar alguns dados para concluir o pedido.</span>
+              </v-col>
+            </v-card-title>
             <hr style="width: 90%; margin:auto; opacity: 0.2;">
-            <v-col class="pa-0 pa-10">
+            <v-col class="pa-0 pa-lg-10 pa-4">
               <v-form v-model="isFormValid" @submit.prevent>
                 <v-row no-gutters>
-                  <v-col cols="6" class="pa-0 mr-2">
+                  <v-col lg="6" cols="12" class="pa-0 mr-2">
                     <label for="name">Nome</label>
                     <v-text-field
                     dense
@@ -115,7 +122,7 @@
 
                     </v-text-field>
                   </v-col>
-                  <v-col cols="4" class="pa-0">
+                  <v-col lg="4" cols="12" class="pa-0">
                     <label for="phone">Telefone</label>
                     <v-text-field
                     dense
@@ -129,7 +136,7 @@
 
                     </v-text-field>
                   </v-col>
-                  <v-col cols="6" class="pa-0 mr-2">
+                  <v-col lg="6" cols="12" class="pa-0 mr-2">
                     <label for="name">Endereço</label>
                     <v-text-field
                     dense
@@ -142,7 +149,7 @@
 
                     </v-text-field>
                   </v-col>
-                  <v-col cols="2" class="pa-0 mr-2">
+                  <v-col lg="2" cols="12" class="pa-0 mr-2">
                     <label for="number">Número</label>
                     <v-text-field
                     dense
@@ -155,7 +162,7 @@
 
                     </v-text-field>
                   </v-col>
-                  <v-col cols="3" class="pa-0 mr-2">
+                  <v-col lg="3" cols="12" class="pa-0 mr-2">
                     <label for="comp">Complemento</label>
                     <v-text-field
                     dense
@@ -168,7 +175,7 @@
 
                     </v-text-field>
                   </v-col>
-                  <v-col cols="5" class="pa-0">
+                  <v-col lg="5" cols="12" class="pa-0">
                     <label for="paymentType">Forma de Pagamento</label>
                     <v-select
                       outlined
@@ -181,7 +188,7 @@
                       >
                       </v-select>
                   </v-col>
-                  <v-col cols="3" class="pa-0 ml-2" v-if="paymentType === 'Dinheiro'">
+                  <v-col lg="3" cols="12" class="pa-0 ml-0 ml-lg-2" v-if="paymentType === 'Dinheiro'">
                     <label for="cashChange">Troco</label>
                     <v-currency-field
                     dense
@@ -192,7 +199,9 @@
                     >
                     </v-currency-field>
                   </v-col>
-                  <v-col cols="3" 
+                  <v-col 
+                  lg="3" 
+                  cols="12"
                   class="pa-0 ml-2" 
                   v-if="paymentType === 'Cartão de Débito' || paymentType === 'Cartão de Crédito'">
                     <label for="flag">Bandeira</label>
@@ -335,7 +344,7 @@ export default {
     },
     send() {
       const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido.\n\nNome: ${this.name}\nEndereço: ${this.address}\nNúmero: ${this.addressNumber}\nComplemento: ${this.addressData}\n\nPedido: ${this.getCartText()}\n\nTotal a pagar: R$${this.getTotalValue().toFixed(2)}\nForma de Pagamento: ${this.paymentType}${this.getPaymentSubType()}`)
-      const phone = "555180469344"
+      const phone = "555195058185"
       window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, "_blank")
       localStorage.setItem('bardemuClient', JSON.stringify({
         name: this.name,
