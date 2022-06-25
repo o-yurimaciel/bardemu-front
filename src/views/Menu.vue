@@ -62,22 +62,22 @@
     </v-col>
     <v-dialog 
       v-model="dialog"
-      class="dialog"
+      class="dialog ma-0"
       style="box-shadow: none!important"
     >
       <v-card
       width="100%"
       style="position: relative"
-      class="pa-5 elevation-0"
+      class="product-card pa-5 elevation-0"
       min-height="50vh"
       >
-        <v-col cols="12" class="pa-5 pa-0 d-flex flex-column">
+        <v-col cols="12" class="pa-0 d-flex flex-column">
           <v-col cols="8" class="pa-0 mx-auto d-flex justify-center">
             <img width="200px" height="200px" class="elevation-2" :src="productSelected.image" alt="">
           </v-col>
           <v-col class="pa-0 pt-5">
             <v-row no-gutters class="d-flex align-center">
-              <v-col class="pa-0" cols="10">
+              <v-col class="pa-0" cols="12" lg="10">
                 <v-col class="pa-0 d-flex justify-center justify-lg-start flex-grow-0">
                   <span class="product-title">{{productSelected.name}}</span>
                 </v-col>
@@ -90,7 +90,7 @@
                   </span>
                 </v-col>
               </v-col>
-              <v-col class="pa-0 d-flex justify-space-between">
+              <v-col class="pa-0 d-flex justify-space-around pt-5">
                 <v-icon @click="quantity > 0 ? quantity-- : null" color="var(--primary-color)">mdi-minus</v-icon>
                 <span>{{quantity}}</span>
                 <v-icon @click="quantity++" color="green">mdi-plus</v-icon>
@@ -106,7 +106,7 @@
             >
             </v-text-field>
           </v-col>
-          <v-col class="pa-0 d-flex align-center justify-end flex-row">
+          <v-col class="pa-0 d-flex align-center justify-center justify-lg-end flex-row">
             <v-btn
             :disabled="quantity <= 0"
             @click="addToCart"
@@ -242,5 +242,15 @@ export default {
 
 .v-dialog {
   width: 40%!important;
+}
+
+@media (max-width: 1024px) {
+  .v-dialog {
+    width: 100%!important;
+  }
+
+  .product-card {
+    width: 93%!important;
+  }
 }
 </style>
