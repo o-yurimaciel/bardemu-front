@@ -70,7 +70,7 @@ import { bardemu } from '../services'
     },
     methods: {
       getCategories() {
-        bardemu.get('/category')
+        bardemu.get('/categories')
         .then((res) => {
           this.categories = res.data
           console.log(res)

@@ -142,7 +142,7 @@ export default {
   },
   methods: {
     getCategories() {
-      bardemu.get('/category').then((res) => {
+      bardemu.get('/categories').then((res) => {
         console.log(res)
         const data = res.data
         data.filter((category) => {

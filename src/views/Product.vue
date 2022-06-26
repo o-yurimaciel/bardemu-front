@@ -115,7 +115,7 @@ export default {
       })
     },
     getProductList() {
-      bardemu.get('/product').then((res) => {
+      bardemu.get('/products').then((res) => {
         this.products = res.data
         console.log(res)
       }).catch((e) => {

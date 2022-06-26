@@ -178,7 +178,7 @@ export default {
       }
     },
     getCategories() {
-      bardemu.get('/category')
+      bardemu.get('/categories')
       .then((res) => {
         this.categories = res.data.sort((a, b) => a.order - b.order)
         console.log(res)
@@ -187,7 +187,7 @@ export default {
       })
     },
     getProductList() {
-      bardemu.get('/product').then((res) => {
+      bardemu.get('/products').then((res) => {
         this.products = res.data
         this.loading = false
         console.log(res)
