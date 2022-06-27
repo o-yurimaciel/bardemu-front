@@ -30,24 +30,6 @@
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <hr v-if="auth" style="opacity: 0.2;">
-        <v-list-item
-          link
-          to="/painel"
-          v-if="auth"
-        >
-          <v-list-item-icon>
-            <v-icon color="#e41c38">mdi-cog</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>
-              <span class="navigation-menu">
-                Painel
-              </span>
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
       </v-list>
     </v-navigation-drawer>
   </v-card>

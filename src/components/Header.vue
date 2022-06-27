@@ -5,21 +5,13 @@
         <v-col cols="10" class="pa-0">
           <span class="desc" style="cursor: pointer" title="Voltar ao Início" @click="goToHome">BarDeMu Lanches</span>
         </v-col>
-        <span style="font-family: Roboto; color: #fff">{{login}}</span>
-        <v-icon @click="goToLogin" :title="login ? 'Sair' : 'Login'" color="#FFF">mdi-account</v-icon>
       </v-row>
     </v-col>
   </header>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 export default {
-  computed: {
-    ...mapState({
-      login: state => state.login
-    })
-  },
   methods: {
     goToLogin() {
       if(this.login) {
