@@ -9,6 +9,7 @@ import CategoryItem from '../views/CategoryItem.vue'
 import Menu from '../views/Menu.vue'
 import Cart from '../views/Cart.vue'
 import Login from '../views/Login.vue'
+import OrderItem from '../views/OrderItem.vue'
 
 Vue.use(VueRouter)
 
@@ -53,6 +54,11 @@ const routes = [
     path: '/carrinho',
     name: 'cart',
     component: Cart
+  },
+  {
+    path: '/pedido/:id',
+    name: 'order',
+    component: OrderItem
   }
 ]
 

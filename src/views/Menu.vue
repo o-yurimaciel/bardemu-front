@@ -165,6 +165,7 @@ export default {
   methods: {
     openProduct(product) {
       this.quantity = 1
+      this.note = ""
       this.dialog = true
       this.productSelected = product
     },

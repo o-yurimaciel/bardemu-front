@@ -230,7 +230,7 @@
                 color="red"
                 :outlined="false"
                 :disabled="!isFormValid"
-                @click="send"
+                @click="createOrder"
                 >
                   <span style="color: #fff">Concluir pedido</span>
                 </v-btn>
@@ -255,6 +255,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { bardemu } from '../services'
 export default {
   data() {
     return {
@@ -342,18 +343,44 @@ export default {
         this.$forceUpdate()
       })
     },
-    send() {
-      const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido.\n\nNome: ${this.name}\nEndereço: ${this.address}\nNúmero: ${this.addressNumber}\nComplemento: ${this.addressData}\n\nPedido: ${this.getCartText()}\n\nTotal a pagar: R$${this.getTotalValue().toFixed(2)}\nForma de Pagamento: ${this.paymentType}${this.getPaymentSubType()}`)
+    createOrder() {
       const phone = "555195058185"
-      window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, "_blank")
-      localStorage.setItem('bardemuClient', JSON.stringify({
-        name: this.name,
-        phone: this.phone,
-        address: this.address,
-        addressNumber: this.addressNumber,
-        addressData: this.addressData
-      }))
-      this.$store.dispatch('resetCart')
+      const totalValue = this.getTotalValue()
+      bardemu.post('/order', {
+        totalValue,
+        clientName: this.name,
+        clientPhone: this.phone,
+        clientAddress: this.address,
+        clientAddressNumber: this.addressNumber,
+        clientAddressData: this.addressData,
+        paymentType: this.paymentType,
+        cashChange: this.cashChange,
+        cardFlag: this.flag,
+        products: this.cart
+      }).then((res) => {
+        console.log(res)
+        const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido.\nwww.bardemu.com.br/pedido/${res.data._id}`)
+        window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, "_blank")
+        localStorage.setItem('bardemuClient', JSON.stringify({
+          name: this.name,
+          phone: this.phone,
+          address: this.address,
+          addressNumber: this.addressNumber,
+          addressData: this.addressData
+        }))
+        this.$store.dispatch('resetCart')
+        this.$store.dispatch('openAlert', {
+          message: `Pedido gerado com sucesso!`,
+          type: 'success'
+        })
+        this.$router.push(`/pedido/${res.data._id}`)
+      }).catch((e) => {
+        this.$store.dispatch('openAlert', {
+          message: `Erro ao gerar o pedido. Tente novamente mais tarde.`,
+          type: 'error'
+        })
+        console.log(e.response)
+      })
     },
     getPaymentSubType() {
       switch(this.paymentType) {
