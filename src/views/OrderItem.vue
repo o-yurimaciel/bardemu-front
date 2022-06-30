@@ -122,7 +122,8 @@ const orderHistoryStatusOptions = Object.freeze({
   PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',
   OUT_FOR_DELIVERY: 'OUT_FOR_DELIVERY',
-  DELIVERED: 'DELIVERED'
+  DELIVERED: 'DELIVERED',
+  CANCELLED: 'CANCELLED'
 })
 
 export default {
@@ -152,6 +153,8 @@ export default {
           return "mdi-bike-fast"
         case orderHistoryStatusOptions.DELIVERED:
           return "mdi-check-circle"
+        case orderHistoryStatusOptions.CANCELLED:
+          return "mdi-cancel"
       }
     },
     getOrderItem() {
@@ -161,24 +164,17 @@ export default {
         }
       }).then((res) => {
         this.order = res.data
-
-        const userDetail = [
+        this.userDetails = [
           { description: 'Nome', value: this.order.clientName },
           { description: 'Telefone', value: this.order.clientPhone },
           { description: 'Tipo de Pagamento', value: this.order.paymentType },
           { description: 'Bandeira', value: this.order.flag }
         ]
-
-        const detail = [
+        this.details = [
           { description: 'Entrega', value: '0' },
           { description: 'Total a pagar', value: this.order.totalValue },
           { description: 'Troco', value: this.order.cashChange },
         ]
-
-        this.userDetails = userDetail
-
-        this.details = detail
-
         setTimeout(() => {
           if(res.data.orderStatus !== 'FINISHED') {
             this.getOrderItem()
@@ -202,6 +198,8 @@ export default {
           return "O pedido saiu para entrega"
         case orderHistoryStatusOptions.DELIVERED:
           return "O pedido foi entregue. Obrigado!"
+        case orderHistoryStatusOptions.CANCELLED:
+          return "O pedido foi cancelado"
       }
     },
     formatStatusHistory(status) {
@@ -214,6 +212,8 @@ export default {
           return "Pedido saiu para entrega"
         case orderHistoryStatusOptions.DELIVERED:
           return "Pedido foi entregue"
+        case orderHistoryStatusOptions.CANCELLED:
+          return "Pedido cancelado"
       }
     },
     formatDeliveryAt(order) {

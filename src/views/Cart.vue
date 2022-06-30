@@ -128,6 +128,7 @@
                     dense
                     v-model="phone"
                     outlined
+                    required
                     rounded
                     id="phone"
                     :error="!phone || phone.length < 19"
@@ -142,6 +143,7 @@
                     dense
                     v-model="address"
                     outlined
+                    required
                     :error="!address"
                     rounded
                     id="address"
@@ -155,6 +157,7 @@
                     dense
                     outlined
                     v-model="addressNumber"
+                    required
                     :error="!addressNumber"
                     rounded
                     id="number"
@@ -181,20 +184,25 @@
                       outlined
                       :items="paymentTypes"
                       rounded
+                      required
                       v-model="paymentType"
                       :error="!paymentType"
                       dense
+                      @change="changePaymentType"
                       id="paymentType"
                       >
                       </v-select>
                   </v-col>
                   <v-col lg="3" cols="12" class="pa-0 ml-0 ml-lg-2" v-if="paymentType === 'Dinheiro'">
-                    <label for="cashChange">Troco</label>
+                    <label for="cashChange">Troco (Total: {{getTotalValue() | currency}})</label>
                     <v-currency-field
                     dense
                     outlined
                     v-model="cashChange"
                     rounded
+                    :error="cashChange <= 0 || cashChange < getTotalValue()"
+                    required
+                    :value="getTotalValue"
                     id="cashChange"
                     >
                     </v-currency-field>
@@ -237,7 +245,7 @@
                 <v-btn
                 outlined
                 color="#fff"
-                @click="userData = false"
+                @click="back"
                 >
                   <span style="color: red">Voltar</span>
                 </v-btn>
@@ -297,6 +305,12 @@ export default {
     this.getClientByStorage()
   },
   methods: {
+    back() {
+      this.userData = false
+      this.paymentType = ""
+      this.cashChange = 0
+      this.flag = null
+    },
     getClientByStorage() {
       const client = JSON.parse(localStorage.getItem('bardemuClient'))
       if(client.name) {
