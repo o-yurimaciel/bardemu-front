@@ -25,8 +25,10 @@
           Entregar em: {{ formatDeliveryAt(order) }}
         </span>
       </v-col>
-      <v-col class="pa-0 d-flex justify-center align-center flex-column pt-5" v-if="order.feedbacks && order.feedbacks.length <= 0">
+      <v-col class="pa-0 d-flex justify-center align-center flex-column pt-5" 
+      v-if="!rated && order.orderStatus === 'DELIVERED'">
         <span>Avalie a sua experiência</span>
+        <span>Escolha de 1 a 5 estrelas para classificar</span>
         <v-rating
           v-model="rating"
           icon-label="custom icon label text {0} of {1}"
@@ -174,7 +176,8 @@ export default {
       details: [],
       userDetails: [],
       rating: 0,
-      ratingMessage: null
+      ratingMessage: null,
+      rated: false
     }
   },
   mounted() {
@@ -201,7 +204,6 @@ export default {
           _id: this.id
         }
       }).then((res) => {
-        console.log(res)
         this.order = res.data
         this.userDetails = [
           { description: 'Nome', value: this.order.clientName },
@@ -214,13 +216,26 @@ export default {
           { description: 'Total a pagar', value: this.order.totalValue },
           { description: 'Troco', value: this.order.cashChange },
         ]
-        setTimeout(() => {
-          if(res.data.orderStatus !== 'FINISHED') {
-            this.getOrderItem()
+
+        if(!this.rated) {
+          setTimeout(() => {
+            if(res.data.orderStatus !== orderHistoryStatusOptions.DELIVERED &&
+             res.data.orderStatus !== orderHistoryStatusOptions.CANCELLED) {
+              this.getOrderItem()
+            }
+          }, 3000);
+
+          if(res.data.feedback) {
+            this.rated = true
           }
-        }, 3000);
-      }).catch((e) => {
-        console.log(e.response)
+        } else {
+          this.getOrderItem()
+        }
+      }).catch(() => {
+        this.$store.dispatch('openAlert', {
+          message: 'Não foi possível carregar o pedido. Tente novamente mais tarde.',
+          type: 'error'
+        })
       })
     },
     formatDate(date) {
@@ -277,11 +292,18 @@ export default {
         orderId: this.order._id,
         message: this.ratingMessage,
         note: this.rating
-      }).then((res) => {
-        console.log(res)
+      }).then(() => {
+        this.$store.dispatch('openAlert', {
+          message: 'Avaliação enviada. Obrigado!',
+          type: 'success'
+        })
+        this.rated = true
         this.getOrderItem()
-      }).catch((e) => {
-        console.log(e.response)
+      }).catch(() => {
+        this.$store.dispatch('openAlert', {
+          message: 'Erro ao enviar avaliação. Tente novamente mais tarde.',
+          type: 'error'
+        })
       })
     }
   }

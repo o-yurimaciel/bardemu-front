@@ -182,18 +182,23 @@ export default {
       bardemu.get('/categories')
       .then((res) => {
         this.categories = res.data.sort((a, b) => a.order - b.order)
-        console.log(res)
-      }).catch((e) => {
-        console.log(e.response)
+      }).catch(() => {
+        this.$store.dispatch('openAlert', {
+          message: 'Não foi possível carregar as categorias. Tente novamente mais tarde.',
+          type: 'error'
+        })
       })
     },
     getProductList() {
       bardemu.get('/products').then((res) => {
         this.products = res.data
         this.loading = false
-        console.log(res)
       }).catch((e) => {
-        console.log(e.response)
+        console.log(e)
+        this.$store.dispatch('openAlert', {
+          message: 'Não foi possível carregar os produtos. Tente novamente mais tarde.',
+          type: 'error'
+        })
       })
     },
     getList(categoryName) {

@@ -99,15 +99,13 @@ export default {
         data: {
           _id: product._id
         }
-      }).then((res) => {
-        console.log(res)
+      }).then(() => {
         this.getProductList()
         this.$store.dispatch('openAlert', {
           message: 'Produto removido',
           type: 'success'
         })
-      }).catch((e) => {
-        console.log(e)
+      }).catch(() => {
         this.$store.dispatch('openAlert', {
           message: 'Erro ao deletar Produto',
           type: 'error'
@@ -117,13 +115,11 @@ export default {
     getProductList() {
       bardemu.get('/products').then((res) => {
         this.products = res.data
-        console.log(res)
-      }).catch((e) => {
+      }).catch(() => {
         this.$store.dispatch('openAlert', {
           message: 'Erro ao consultar lista de Produtos',
           type: 'error'
         })
-        console.log(e.response)
       })
     }
   }

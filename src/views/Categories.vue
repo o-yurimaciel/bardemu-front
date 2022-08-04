@@ -73,7 +73,6 @@ import { bardemu } from '../services'
         bardemu.get('/categories')
         .then((res) => {
           this.categories = res.data
-          console.log(res)
         }).catch((e) => {
           console.log(e.response)
         })

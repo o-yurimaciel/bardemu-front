@@ -372,7 +372,6 @@ export default {
         cardFlag: this.flag,
         products: this.cart
       }).then((res) => {
-        console.log(res)
         const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido.\nwww.bardemu.com.br/pedido/${res.data._id}`)
         window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, "_blank")
         localStorage.setItem('bardemuClient', JSON.stringify({
@@ -384,16 +383,15 @@ export default {
         }))
         this.$store.dispatch('resetCart')
         this.$store.dispatch('openAlert', {
-          message: `Pedido gerado com sucesso!`,
+          message: `Pedido efetuado com sucesso!`,
           type: 'success'
         })
         this.$router.push(`/pedido/${res.data._id}`)
-      }).catch((e) => {
+      }).catch(() => {
         this.$store.dispatch('openAlert', {
           message: `Erro ao gerar o pedido. Tente novamente mais tarde.`,
           type: 'error'
         })
-        console.log(e.response)
       })
     },
     getPaymentSubType() {
