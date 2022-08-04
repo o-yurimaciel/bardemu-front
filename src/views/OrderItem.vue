@@ -291,7 +291,7 @@ export default {
       bardemu.post('/feedback', {
         orderId: this.order._id,
         message: this.ratingMessage,
-        note: this.rating
+        rating: this.rating
       }).then(() => {
         this.$store.dispatch('openAlert', {
           message: 'Avaliação enviada. Obrigado!',
