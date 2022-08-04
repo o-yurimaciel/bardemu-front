@@ -13,11 +13,48 @@
           {{ formatStatus(order.orderStatus) }}
         </span>
       </v-col>
+      <v-col cols="10" class="pa-0 d-flex justify-center pt-3 align-center mx-auto" v-if="order.estimatedTime">
+        <v-icon color="var(--primary-color)">mdi-clock-fast</v-icon>
+        <span class="ml-2">
+          Tempo estimado para entrega: {{order.estimatedTime}}min
+        </span>
+      </v-col>
       <v-col cols="8" class="pa-0 d-flex justify-center pt-3 align-center mx-auto" v-if="order.orderStatus !== 'DELIVERED'">
         <v-icon color="var(--primary-color)">mdi-map-marker</v-icon>
         <span class="ml-2">
           Entregar em: {{ formatDeliveryAt(order) }}
         </span>
+      </v-col>
+      <v-col class="pa-0 d-flex justify-center align-center flex-column pt-5" v-if="order.feedbacks && order.feedbacks.length <= 0">
+        <span>Avalie a sua experiência</span>
+        <v-rating
+          v-model="rating"
+          icon-label="custom icon label text {0} of {1}"
+          color="yellow"
+          background-color="var(--primary-color)"
+        ></v-rating>
+        <v-textarea
+        outlined
+        autofocus
+        v-if="rating > 0"
+        flat
+        v-model="ratingMessage"
+        class="pt-2"
+        placeholder="Descreva a sua experiência aqui"
+        style="width: 20vw"
+        >
+        </v-textarea>
+        <v-col class="pa-0 pt-5 d-flex justify-center">
+          <v-btn
+          outlined
+          rounded
+          v-if="rating > 0"
+          @click="sendFeedback"
+          color="var(--primary-color)"
+          >
+            Enviar
+          </v-btn>
+        </v-col>
       </v-col>
       <v-col lg="6" cols="12" class="pa-0 mx-auto pt-10">
         <v-timeline
@@ -134,9 +171,10 @@ export default {
       ],
       id: this.$router.history.current.params.id,
       order: {},
-      detail: [],
+      details: [],
       userDetails: [],
-      rating: null
+      rating: 0,
+      ratingMessage: null
     }
   },
   mounted() {
@@ -163,6 +201,7 @@ export default {
           _id: this.id
         }
       }).then((res) => {
+        console.log(res)
         this.order = res.data
         this.userDetails = [
           { description: 'Nome', value: this.order.clientName },
@@ -228,10 +267,22 @@ export default {
       }
 
       if(order.clientAddressData) {
-        string = string.concat(" Complemento: " + order.clientAddressData)
+        string = string.concat(" Comp: " + order.clientAddressData)
       }
 
       return string
+    },
+    sendFeedback() {
+      bardemu.post('/feedback', {
+        orderId: this.order._id,
+        message: this.ratingMessage,
+        note: this.rating
+      }).then((res) => {
+        console.log(res)
+        this.getOrderItem()
+      }).catch((e) => {
+        console.log(e.response)
+      })
     }
   }
 }
