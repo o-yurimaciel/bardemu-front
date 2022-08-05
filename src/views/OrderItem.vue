@@ -223,7 +223,7 @@ export default {
              res.data.orderStatus !== orderHistoryStatusOptions.CANCELLED) {
               this.getOrderItem()
             }
-          }, 3000);
+          }, 5000);
 
           if(res.data.feedback) {
             this.rated = true

@@ -17,11 +17,12 @@
           :key="item.title"
           link
           :to="item.to"
+          :title="item.title"
         >
-          <v-list-item-icon>
+          <v-list-item-icon style="position: relative">
             <v-icon color="#e41c38">{{ item.icon }}</v-icon>
+            <span v-if="item.icon === 'mdi-cart'" class="cart-qtd" style="right: -20px; top: 10%; position: absolute; color: black">{{cartQuantity}}</span>
           </v-list-item-icon>
-
           <v-list-item-content>
             <v-list-item-title>
               <span class="navigation-menu">
@@ -45,7 +46,7 @@ import { EventBus } from '../EventBus'
       items: [
         { icon: 'mdi-home', title: 'Inicio', to: '/' },
         { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
-        { icon: 'mdi-cart', title: 'Carrinho (0)', to: '/carrinho' },
+        { icon: 'mdi-cart', title: 'Carrinho', to: '/carrinho' },
       ],
     }),
     computed: {
@@ -78,7 +79,7 @@ import { EventBus } from '../EventBus'
           this.cartTotalValue = 0
         }
 
-        this.items[2].title = `Carrinho (${this.cartQuantity}) - ${this.currency(this.cartTotalValue)}`
+        this.items[2].title = `Carrinho (${this.currency(this.cartTotalValue)})`
       } 
     },
     watch: {
@@ -94,5 +95,17 @@ import { EventBus } from '../EventBus'
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 1.1em;
   color: #707070;
+}
+
+.cart-qtd {
+  font-size: 0.8em;
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  background-color: var(--primary-color);
+  border-radius: 20px;
+  color: white!important;
 }
 </style>

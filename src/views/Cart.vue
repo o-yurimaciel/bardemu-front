@@ -7,7 +7,7 @@
         divider="/"
       ></v-breadcrumbs>
       <h1>Carrinho</h1>
-      <v-col cols="10" class="pa-0 pt-15 pb-15 d-flex justify-center" v-if="cart && cart.length > 0">
+      <v-col cols="11" class="pa-0 pt-15 pb-15 d-flex justify-center" v-if="cart && cart.length > 0">
         <v-col class="pa-0" cols="12" lg="8" v-if="!userData">
           <v-card
           class="mx-auto elevation-1"
@@ -102,7 +102,7 @@
                 <span>
                   Estamos quase lá.. :)<br>
                 </span>
-                <span>Antes precisamos confirmar alguns dados para concluir o pedido.</span>
+                <span style="word-break: normal">Antes precisamos confirmar alguns dados para concluir o pedido.</span>
               </v-col>
             </v-card-title>
             <hr style="width: 90%; margin:auto; opacity: 0.2;">
@@ -228,10 +228,7 @@
                 </v-row>
               </v-form>
               <v-col class="pa-0">
-                <span>Observação: Após concluir, será solicitado o envio do Pedido via WhatsApp para confirmação.</span>
-              </v-col>
-              <v-col class="pa-0" v-if="paymentType === 'PIX'">
-                <span>Observação: O pagamento por PIX deve ser combinado com o Restaurante via WhatsApp.</span>
+                <span style="word-break: normal">Observação: Após concluir, será solicitado o envio do Pedido via WhatsApp para confirmação.</span>
               </v-col>
               <v-col class="pa-0 d-flex flex-column mx-auto pt-10">
               <v-btn 
@@ -360,6 +357,11 @@ export default {
     createOrder() {
       const phone = "555195058185"
       const totalValue = this.getTotalValue()
+      
+      this.cart.filter((item) => {
+        item.image = null
+      })
+
       bardemu.post('/order', {
         totalValue,
         clientName: this.name,
