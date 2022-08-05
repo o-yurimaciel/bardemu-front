@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="pa-0 ma-0">
-    <v-col class="pa-0 pt-10 d-flex flex-column" offset="1">
+    <v-col class="pa-0 pt-10 d-flex flex-column" cols="11" offset="1">
       <v-breadcrumbs
         class="pa-0"
         :items="items"

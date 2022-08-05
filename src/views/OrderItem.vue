@@ -1,7 +1,7 @@
 <template>
   <v-container class="ma-0 pa-0">
     <v-col class="pa-0 d-flex flex-column pt-10 pb-10">
-      <v-col offset="1" class="pa-0">
+      <v-col cols="11" offset="1" class="pa-0">
         <v-breadcrumbs
           class="pa-0"
           :items="items"
