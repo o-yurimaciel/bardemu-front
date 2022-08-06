@@ -66,7 +66,7 @@
       style="box-shadow: none!important"
     >
       <v-card
-      width="100%"
+      width="100%!important"
       style="position: relative"
       class="product-card pa-5 elevation-0"
       min-height="50vh"
@@ -98,13 +98,13 @@
             </v-row>
           </v-col>
           <v-col class="pa-0 pt-3">
-            <label for="obs">Adicionar observação</label>
-            <v-text-field
+            <label for="obs">Adicione uma observação</label>
+            <v-textarea
             outlined
             id="obs"
             v-model="note"
             >
-            </v-text-field>
+            </v-textarea>
           </v-col>
           <v-col class="pa-0 d-flex align-center justify-center justify-lg-end flex-row">
             <v-btn
