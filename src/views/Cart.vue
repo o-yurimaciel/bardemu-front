@@ -8,7 +8,7 @@
       ></v-breadcrumbs>
       <h1>Carrinho</h1>
       <v-col cols="11" class="pa-0 pt-15 pb-15 d-flex justify-center" v-if="cart && cart.length > 0">
-        <v-col class="pa-0" cols="12" lg="8" v-if="!userData">
+        <v-col class="pa-0" cols="12" xl="8" v-if="!userData">
           <v-card
           class="mx-auto elevation-1"
           height="100%"
@@ -25,7 +25,7 @@
               </v-row>
             </v-card-title>
             <hr style="width: 95%;margin:auto; opacity: 0.2;">
-            <v-col class="pa-0 pt-3 pl-0 pr-0 pl-lg-5 pr-lg-5" style="position: relative" v-for="product in cart" :key="product._id">
+            <v-col class="pa-0 pt-3 pl-0 pr-0 pl-lg-5 pr-lg-5" style="position: relative" v-for="(product, index) in cart" :key="`productCart${index}`">
               <v-icon 
               color="red" 
               style="position: absolute; top: 15px; right: 20px;" 
@@ -271,11 +271,8 @@ export default {
         { text: 'Cardápio', href: '/menu' }
       ],
       paymentTypes: [
-        "Dinheiro",
         "Cartão de Crédito",
-        "Cartão de Débito",
-        "PIX",
-        "Outro"
+        "PIX"
       ],
       flagTypes: [
         "Visa",
@@ -299,6 +296,7 @@ export default {
     })
   },
   mounted() {
+    console.log(this.cart)
     this.getClientByStorage()
   },
   methods: {
@@ -310,27 +308,30 @@ export default {
     },
     getClientByStorage() {
       const client = JSON.parse(localStorage.getItem('bardemuClient'))
-      if(client.name) {
-        this.name = client.name
-      }
 
-      if(client.phone) {
-        this.phone = client.phone
+      if(client) {
+        if(client.name) {
+          this.name = client.name
+        }
+  
+        if(client.phone) {
+          this.phone = client.phone
+        }
+  
+        if(client.address) {
+          this.address = client.address
+        }
+  
+        if(client.addressNumber) {
+          this.addressNumber = client.addressNumber
+        }
+  
+        if(client.addressData) {
+          this.addressData = client.addressData
+        }
+  
+        this.$forceUpdate()
       }
-
-      if(client.address) {
-        this.address = client.address
-      }
-
-      if(client.addressNumber) {
-        this.addressNumber = client.addressNumber
-      }
-
-      if(client.addressData) {
-        this.addressData = client.addressData
-      }
-
-      this.$forceUpdate()
     },
     goToMenu() {
       this.$router.push('/menu')

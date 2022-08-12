@@ -17,19 +17,18 @@
           indeterminate
         ></v-progress-circular>
       </v-col>
-      <v-col cols="10" lg="5" class="pa-0 pt-10 d-flex justify-center mx-auto" v-else>
+      <v-col cols="10" lg="6" md="8" class="pa-0 pt-10 d-flex justify-center mx-auto" v-else>
         <v-expansion-panels>
           <v-expansion-panel
             v-for="category in categories"
             :key="category._id"
-            @click="getList(category.name)"
           >
-            <v-expansion-panel-header>
+            <v-expansion-panel-header v-if="category.products && category.products.length > 0">
               {{category.name}}
             </v-expansion-panel-header>
-            <v-expansion-panel-content>
+            <v-expansion-panel-content v-if="category.products && category.products.length > 0">
               <v-col class="pa-0 pb-5" 
-              v-for="(product) in list" 
+              v-for="(product) in category.products" 
               :key="product.id" 
               style="cursor: pointer"
               title="Ver produto"
@@ -71,7 +70,7 @@
       class="product-card pa-5 elevation-0"
       min-height="50vh"
       >
-        <v-col cols="12" class="pa-0 d-flex flex-column">
+        <v-col cols="12" lg="6" class="pa-0 d-flex flex-column mx-auto">
           <v-col cols="8" class="pa-0 mx-auto d-flex justify-center">
             <img width="200px" height="200px" class="elevation-2" :src="productSelected.image" alt="">
           </v-col>
@@ -106,7 +105,7 @@
             >
             </v-textarea>
           </v-col>
-          <v-col class="pa-0 d-flex align-center justify-center justify-lg-end flex-row">
+          <v-col class="pa-0 d-flex align-center justify-center flex-row">
             <v-btn
             :disabled="quantity <= 0"
             @click="addToCart"
@@ -160,7 +159,6 @@ export default {
   },
   async mounted() {
     await this.getCategories()
-    await this.getProductList()
   },
   methods: {
     openProduct(product) {
@@ -182,6 +180,10 @@ export default {
       bardemu.get('/categories')
       .then((res) => {
         this.categories = res.data.sort((a, b) => a.order - b.order)
+        this.categories.filter((category) => {
+          category.products = []
+        })
+        this.getProductList()
       }).catch(() => {
         this.$store.dispatch('openAlert', {
           message: 'Não foi possível carregar as categorias. Tente novamente mais tarde.',
@@ -191,8 +193,14 @@ export default {
     },
     getProductList() {
       bardemu.get('/products').then((res) => {
-        this.products = res.data
         this.loading = false
+        this.categories.filter((category) => {
+          res.data.filter((product) => {
+            if(product.category === category.name) {
+              category.products.push(product)
+            }
+          })
+        })
       }).catch((e) => {
         console.log(e)
         this.$store.dispatch('openAlert', {
@@ -200,9 +208,6 @@ export default {
           type: 'error'
         })
       })
-    },
-    getList(categoryName) {
-      this.list = this.products.filter((product) => product.category === categoryName)
     },
     addToCart() {
       this.productSelected.quantity = this.quantity
@@ -247,7 +252,7 @@ export default {
 }
 
 .v-dialog {
-  width: 40%!important;
+  width: 50%!important;
 }
 
 @media (max-width: 1024px) {

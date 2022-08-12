@@ -42,7 +42,6 @@ import { EventBus } from '../EventBus'
   export default {
     data: () => ({
       cartQuantity: 0,
-      cartTotalValue: 0,
       items: [
         { icon: 'mdi-home', title: 'Inicio', to: '/' },
         { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
@@ -61,25 +60,16 @@ import { EventBus } from '../EventBus'
       })
     },
     methods: {
-      currency(value) {
-        return this.$options.filters.currency(value) ? this.$options.filters.currency(value) : "R$ 0,00"
-      },
       syncCart(cart) {
         if(cart) {
           this.cartQuantity = 0
-          this.cartTotalValue = 0
-
           const currentCart = cart ? cart : []
           currentCart.filter((product) => {
             this.cartQuantity = this.cartQuantity + product.quantity
-            this.cartTotalValue = this.cartTotalValue + product.price * product.quantity
           })
         } else {
           this.cartQuantity = 0
-          this.cartTotalValue = 0
         }
-
-        this.items[2].title = `Carrinho (${this.currency(this.cartTotalValue)})`
       } 
     },
     watch: {

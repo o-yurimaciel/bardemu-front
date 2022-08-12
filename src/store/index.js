@@ -6,8 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    cart: [],
-    cartTotalValue: '',
+    cart: null,
     auth: false,
     login: ''
   },
@@ -36,8 +35,8 @@ export default new Vuex.Store({
   },
   actions: {
     resetCart(context) {
-      context.commit('setCart', [])
-      localStorage.setItem('bardemuCart', JSON.stringify([]))
+      context.commit('setCart', null)
+      localStorage.setItem('bardemuCart', null)
     },
     addToCart(context, item) {
       let cart = this.state.cart ? this.state.cart : []
@@ -48,6 +47,8 @@ export default new Vuex.Store({
         message: `"${item.name} (${item.quantity})" foi adicionado ao carrinho`,
         type: 'success'
       })
+
+      context.commit('setCart', cart)
 
       localStorage.setItem('bardemuCart', JSON.stringify(cart))
     },

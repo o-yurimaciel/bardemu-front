@@ -10,9 +10,9 @@
           <v-col class="pa-0 content" style="min-height: 100vh">
             <v-alert 
             v-if="alert" 
-            style="position: absolute"
-            max-width="400px"
+            style="position: fixed; z-index: 100;"
             :type="alert.type"
+            max-width="70%"
             class="alert">
               {{alert.message}}
             </v-alert>
@@ -69,7 +69,6 @@ export default {
 }
 
 .alert {
-  position: absolute;
   top: 10px;
   right: 10px;
 }
