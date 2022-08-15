@@ -20,7 +20,7 @@
           </v-col>
         </v-col>
       </v-row>
-      <v-col class="pa-0 d-flex flex-column pt-10" v-if="addresses && addresses.length > 0">
+      <v-col class="pa-0 d-flex flex-column pt-lg-10 pt-3" v-if="addresses && addresses.length > 0">
         <v-col lg="8" cols="12" class="pa-0">
           <v-row no-gutters>
             <v-col cols="12" class="pa-0 mt-5" v-for="address in addresses" :key="address._id">
