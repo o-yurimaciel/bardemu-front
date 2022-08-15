@@ -104,7 +104,7 @@ export default {
         password: this.password
       }).then((res) => {
         this.handlingh = false
-        this.$store.commit('setAuth', true)
+        this.$store.commit('setAuth', res.data.token)
         this.$store.commit('setUserId', res.data._id)
         this.$store.commit('setLogin', res.data.email)
         this.$router.push('/menu')

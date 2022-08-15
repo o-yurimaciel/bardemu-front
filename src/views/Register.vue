@@ -226,7 +226,7 @@ export default {
           message: `Seja bem-vindo ao BarDeMuLanches, ${this.name}!`,
           type: 'success'
         })
-        this.$store.commit('setAuth', true)
+        this.$store.commit('setAuth', res.data.token)
         this.$store.commit('setUserId', res.data._id)
         this.$store.commit('setLogin', res.data.email)
         this.$router.push('/menu')

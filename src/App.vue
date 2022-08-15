@@ -45,7 +45,7 @@ export default {
     const userId = localStorage.getItem(constants.bardemuUserId)
 
     if(auth) {
-      this.$store.commit('setAuth', true)
+      this.$store.commit('setAuth', auth)
     }
 
     if(userId) {

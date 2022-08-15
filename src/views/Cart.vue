@@ -312,7 +312,8 @@ export default {
       if(this.auth) {
         bardemu.get('/user', {
           params: {
-            _id: this.$store.state.userId
+            _id: this.$store.state.userId,
+            token: this.$store.state.auth
           }
         }).then((res) => {
           if(res.addresses && res.adresses.length > 0) {

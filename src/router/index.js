@@ -12,6 +12,10 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import OrderItem from '../views/OrderItem.vue'
 import TermsOfUse from '../views/TermsOfUse.vue'
+import MyAccount from '../views/MyAccount.vue'
+import MyOrders from '../views/MyOrders.vue'
+import PersonalData from '../views/PersonalData.vue'
+import Addresses from '../views/Addresses.vue'
 
 Vue.use(VueRouter)
 
@@ -20,6 +24,26 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: "/minha-conta",
+    name: "my-account",
+    component: MyAccount
+  },
+  {
+    path: "/minha-conta/dados-pessoais",
+    name: "personal-data",
+    component: PersonalData
+  },
+  {
+    path: "/minha-conta/enderecos",
+    name: "addresses",
+    component: Addresses
+  },
+  {
+    path: "/meus-pedidos",
+    name: "my-orders",
+    component: MyOrders
   },
   {
     path: '/login',
