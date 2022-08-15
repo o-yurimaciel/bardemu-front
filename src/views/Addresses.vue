@@ -2,7 +2,7 @@
   <v-container fluid class="pa-0 ma-0">
     <v-col offset="1" cols="10" class="pa-0 d-flex justify-center flex-column mx-auto pt-10">
       <v-row no-gutters>
-        <v-col cols="12" class="pa-0 d-flex flex-column">
+        <v-col cols="11" class="pa-0 d-flex flex-column">
           <v-breadcrumbs
             class="pa-0"
             :items="items"

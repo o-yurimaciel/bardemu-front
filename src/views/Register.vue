@@ -1,6 +1,6 @@
 <template>
   <v-container class="pa-0 ma-0">
-    <v-col offset="1" class="pa-0 pt-5 d-flex flex-column">
+    <v-col cols="10" offset="1" class="pa-0 pt-5 d-flex flex-column">
       <v-breadcrumbs
         class="pa-0"
         :items="items"
@@ -10,7 +10,7 @@
         Cadastro
       </h1>
     </v-col>
-    <v-col lg="8" cols="11" class="pa-0 mx-auto pt-10">
+    <v-col lg="8" cols="11" class="pa-0 mx-auto pt-5 pt-lg-10">
       <v-stepper
         v-model="step"
         vertical
@@ -27,7 +27,7 @@
           <v-col class="pa-0">
             <v-form v-model="personalDataIsValid" @submit.prevent>
               <v-row no-gutters>
-                <v-col cols="6" class="pa-0 pr-4">
+                <v-col lg="6" cols="12" class="pa-0 pr-0 pr-lg-4">
                   <v-text-field
                   outlined
                   placeholder="Nome"
@@ -39,7 +39,7 @@
 
                   </v-text-field>
                 </v-col>
-                <v-col cols="6" class="pa-0">
+                <v-col lg="6" cols="12" class="pa-0">
                   <v-text-field
                   outlined
                   v-model="lastName"
@@ -50,7 +50,7 @@
 
                   </v-text-field>
                 </v-col>
-                <v-col cols="6" class="pa-0 pr-4">
+                <v-col lg="6" cols="12" class="pa-0 pr-lg-0 pr-lg-4">
                   <v-text-field
                   outlined
                   v-model="email"
@@ -61,7 +61,7 @@
 
                   </v-text-field>
                 </v-col>
-                <v-col cols="6" class="pa-0">
+                <v-col lg="6" cols="12" class="pa-0">
                   <v-text-field
                   outlined
                   v-model="phone"
@@ -76,7 +76,7 @@
               </v-row>
             </v-form>
           </v-col>
-          <v-col class="pa-0 pt-5">
+          <v-col class="pa-0 pt-2">
             <v-btn
               color="var(--primary-color)"
               @click="step++"
@@ -86,7 +86,7 @@
             </v-btn>
             <v-btn 
             text
-            class="ml-2"
+            class="ml-0 ml-lg-2 pt-lg-0 mt-2"
             color="var(--primary-color)"
             style="font-weight: bold"
             outlined
@@ -107,7 +107,7 @@
           <v-col class="pa-0">
             <v-form v-model="passwordDataIsValid" @submit.prevent>
               <v-row no-gutters>
-                <v-col cols="6" class="pa-0 pr-4">
+                <v-col lg="6" cols="12" class="pa-0 pr-0 pr-lg-4">
                   <v-text-field
                   outlined
                   placeholder="Senha"
@@ -120,7 +120,7 @@
 
                   </v-text-field>
                 </v-col>
-                <v-col cols="6" class="pa-0">
+                <v-col lg="6" cols="12" class="pa-0">
                   <v-text-field
                   outlined
                   type="password"
