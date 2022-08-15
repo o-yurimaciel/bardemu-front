@@ -12,9 +12,8 @@
             v-if="alert" 
             style="position: fixed; z-index: 100;"
             :type="alert.type"
-            max-width="70%"
             class="alert">
-              {{alert.message}}
+              <span style="word-break: break-word">{{alert.message}}</span>
             </v-alert>
             <router-view></router-view>
           </v-col>
@@ -27,6 +26,7 @@
 <script>
 import Header from './components/Header.vue'
 import Navigation from './components/Navigation.vue'
+import constants from './constants'
 const EventBus = require('../src/EventBus').EventBus
 
 export default {
@@ -40,10 +40,18 @@ export default {
     }
   },
   mounted() {
-    const auth = localStorage.getItem('bardemuAuth')
-    const cart = localStorage.getItem('bardemuCart')
+    const auth = localStorage.getItem(constants.bardemuAuth)
+    const cart = localStorage.getItem(constants.bardemuCart)
+    const userId = localStorage.getItem(constants.bardemuUserId)
 
-    this.$store.commit('setAuth', auth === 'false' ? false : true)
+    if(auth) {
+      this.$store.commit('setAuth', true)
+    }
+
+    if(userId) {
+      this.$store.commit('setUserId', userId)
+    }
+
     this.$store.commit('setCart', JSON.parse(cart))
     
     EventBus.$on('alert', (alert) => {

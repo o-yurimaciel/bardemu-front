@@ -41,12 +41,15 @@
     },
     "extends": [
       "plugin:vue/essential",
-      "eslint:recommended"
+      "eslint:recommended",
+      "strict/es5"
     ],
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "no-irregular-whitespace": 0
+    }
   },
   "browserslist": [
     "> 1%",

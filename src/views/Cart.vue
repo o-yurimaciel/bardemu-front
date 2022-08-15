@@ -77,7 +77,7 @@
               <v-btn 
               color="red"
               :outlined="false"
-              @click="userData = true"
+              @click="goToLogin"
               >
                 <span style="color: #fff">Continuar</span>
               </v-btn>
@@ -91,7 +91,7 @@
             </v-col>
           </v-card>
         </v-col>
-        <v-col class="pa-0 mb-10" lg="8" cols="12" v-else>
+        <v-col class="pa-0 mb-10" lg="8" cols="12" v-if="userData">
           <v-card
           class="mx-auto elevation-1"
           height="100%"
@@ -250,6 +250,9 @@
             </v-col>
           </v-card>
         </v-col>
+        <v-col class="pa-0" v-if="noAddresses">
+
+        </v-col>
       </v-col>
       <v-col cols="10" class="pa-0 d-flex justify-center pt-10" v-else>
         <span class="product-title">Não há nenhum produto no carrinho.</span>
@@ -261,11 +264,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import { bardemu } from '../services'
+
 export default {
   data() {
     return {
       isFormValid: false,
       userData: false,
+      noAddresses: false,
       items: [
         { text: 'Início', href: '/' },
         { text: 'Cardápio', href: '/menu' }
@@ -292,12 +297,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      cart: 'getCart'
+      cart: 'getCart',
+      auth: 'getAuth'
     })
-  },
-  mounted() {
-    console.log(this.cart)
-    this.getClientByStorage()
   },
   methods: {
     back() {
@@ -306,31 +308,23 @@ export default {
       this.cashChange = 0
       this.flag = null
     },
-    getClientByStorage() {
-      const client = JSON.parse(localStorage.getItem('bardemuClient'))
-
-      if(client) {
-        if(client.name) {
-          this.name = client.name
-        }
-  
-        if(client.phone) {
-          this.phone = client.phone
-        }
-  
-        if(client.address) {
-          this.address = client.address
-        }
-  
-        if(client.addressNumber) {
-          this.addressNumber = client.addressNumber
-        }
-  
-        if(client.addressData) {
-          this.addressData = client.addressData
-        }
-  
-        this.$forceUpdate()
+    goToLogin() {
+      if(this.auth) {
+        bardemu.get('/user', {
+          params: {
+            _id: this.$store.state.userId
+          }
+        }).then((res) => {
+          if(res.addresses && res.adresses.length > 0) {
+            this.userData = true
+          } else {
+            this.noAddresses = true
+          }
+        }).catch((e) => {
+          console.log(e.response)
+        })
+      } else {
+        this.$router.push('/login')
       }
     },
     goToMenu() {
@@ -377,13 +371,6 @@ export default {
       }).then((res) => {
         const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido.\nwww.bardemu.com.br/pedido/${res.data._id}`)
         window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, "_blank")
-        localStorage.setItem('bardemuClient', JSON.stringify({
-          name: this.name,
-          phone: this.phone,
-          address: this.address,
-          addressNumber: this.addressNumber,
-          addressData: this.addressData
-        }))
         this.$store.dispatch('resetCart')
         this.$store.dispatch('openAlert', {
           message: `Pedido efetuado com sucesso!`,

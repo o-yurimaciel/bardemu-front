@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import constants from '../constants'
 const EventBus = require('../EventBus').EventBus
 
 Vue.use(Vuex)
@@ -8,7 +9,8 @@ export default new Vuex.Store({
   state: {
     cart: null,
     auth: false,
-    login: ''
+    login: '',
+    userId: ""
   },
   mutations: {
     setCart(state, cart) {
@@ -16,13 +18,17 @@ export default new Vuex.Store({
     },
     setLogin(state, login) {
       if(login) {
-        localStorage.setItem('bardemuLogin', login)
+        localStorage.setItem(constants.bardemuLogin, login)
       }
       state.login = login
     },
     setAuth(state, auth) {
       state.auth = auth
-      localStorage.setItem('bardemuAuth', auth)
+      localStorage.setItem(constants.bardemuAuth, auth)
+    },
+    setUserId(state, userId) {
+      state.userId = userId
+      localStorage.setItem(constants.bardemuUserId, userId)
     }
   },
   getters: {
@@ -31,12 +37,15 @@ export default new Vuex.Store({
     },
     getAuth(state) {
       return state.auth
+    },
+    getLogin(state) {
+      return state.login
     }
   },
   actions: {
     resetCart(context) {
       context.commit('setCart', null)
-      localStorage.setItem('bardemuCart', null)
+      localStorage.setItem(constants.bardemuCart, null)
     },
     addToCart(context, item) {
       let cart = this.state.cart ? this.state.cart : []
@@ -50,7 +59,7 @@ export default new Vuex.Store({
 
       context.commit('setCart', cart)
 
-      localStorage.setItem('bardemuCart', JSON.stringify(cart))
+      localStorage.setItem(constants.bardemuCart, JSON.stringify(cart))
     },
     removeAllToCart(context, item) {
       let cart = this.state.cart ? this.state.cart : []
@@ -68,7 +77,7 @@ export default new Vuex.Store({
 
       context.commit('setCart', cart)
 
-      localStorage.setItem('bardemuCart', JSON.stringify(cart))
+      localStorage.setItem(constants.bardemuCart, JSON.stringify(cart))
     },
     removeToCart(context, item) {
       let cart = this.state.cart ? this.state.cart : []
@@ -89,7 +98,7 @@ export default new Vuex.Store({
           }
         }
       })
-      localStorage.setItem('bardemuCart', JSON.stringify(cart))
+      localStorage.setItem(constants.bardemuCart, JSON.stringify(cart))
     },
     openAlert(context, alert) {
       EventBus.$emit('alert', alert)

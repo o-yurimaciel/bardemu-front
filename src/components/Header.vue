@@ -1,8 +1,8 @@
 <template>
   <header>
-    <v-col cols="11" class="pa-0">
+    <v-col cols="12" class="pa-0">
       <v-row no-gutters class="d-flex align-center justify-space-between ml-5">
-        <v-col cols="10" class="pa-0">
+        <v-col cols="12" lg="10" class="pa-0">
           <span class="desc" style="cursor: pointer" title="Voltar ao Início" @click="goToHome">BarDeMu Lanches</span>
         </v-col>
       </v-row>
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   methods: {
     goToLogin() {
@@ -25,7 +26,17 @@ export default {
     },
     goToPainel() {
       this.$router.push('/painel')
+    },
+    logout() {
+      this.$store.commit('setAuth', false)
+      this.$store.commit('setLogin', null)
+      this.$router.push('/login')
     }
+  },
+  computed: {
+    ...mapGetters({
+      auth: 'getAuth'
+    })
   }
 }
 </script>
@@ -44,6 +55,7 @@ header {
   background-color: #fff;
   display: flex;
   align-content: center;
+  position: relative;
   box-shadow: 0px 3px 6px #00000029;
   background-color: #3f0d12;
   background-image: linear-gradient(90deg, #a41629 0, #e41c38);

@@ -7,49 +7,67 @@
         divider="/"
       ></v-breadcrumbs>
       <h1>
-        Login
+        Acesse sua conta
       </h1>
       <v-col cols="10" class="pa-0 pt-15 d-flex justify-center">
-        <v-col cols="12" lg="8" class="pa-0">
+        <v-col cols="12" lg="6" class="pa-0">
           <v-card
           height="100%"
           width="100%"
           class="mx-auto pt-10 pb-15"
           >
-            <v-col cols="10" lg="6" class="pa-0 mx-auto" style="line-height: 1">
-              <label for="login">Usuário</label>
+            <v-col cols="10" lg="8" class="pa-0 mx-auto" style="line-height: 1">
               <v-text-field
-              rounded
               id="login"
               v-model="login"
+              placeholder="E-mail"
               :autofocus="!login"
+              color="var(--primary-color)"
               outlined  
-              dense
               >
               </v-text-field>
             </v-col>
-            <v-col cols="10" lg="6" class="pa-0 mx-auto">
-              <label for="password">Senha</label>
+            <v-col cols="10" lg="8" class="pa-0 mx-auto">
               <v-text-field
-              rounded
               id="password"
+              placeholder="Senha"
+              color="var(--primary-color)"
               outlined
               :autofocus="login ? true : false"
               v-model="password"
               type="password"
-              dense
+              @keyup.enter.native="getLogin"
               >
-
               </v-text-field>
             </v-col>
-            <v-col class="pa-0 d-flex justify-center">
+            <v-col cols="10" lg="8" class="pa-0 d-flex justify-center mx-auto">
               <v-btn
               dense
-              rounded
-              color="green"
-              @click="sendLogin"
+              width="100%"
+              color="var(--primary-color)"
+              @click="getLogin"
               >
-                <span style="color: #fff">Entrar</span>
+                <span style="color: #fff" v-if="!handlingh">Entrar</span>
+                <v-progress-circular
+                v-else
+                indeterminate
+                size="25"
+                color="#fff"
+              ></v-progress-circular>
+              </v-btn>
+            </v-col>
+            <v-col class="pa-0 d-flex justify-center pt-10 pb-3">
+              <span style="color: var(--primary-color); font-weight: bold">Não tem uma conta?</span>
+              <v-icon size="25" color="var(--primary-color)">mdi-hand-pointing-down</v-icon>
+            </v-col>
+            <v-col cols="10" lg="8" class="pa-0 d-flex justify-center mx-auto">
+              <v-btn
+              dense
+              width="100%"
+              color="#fff"
+              @click="getRegister"
+              >
+                <span style="color: var(--primary-color); font-weight: bold">Cadastre-se</span>
               </v-btn>
             </v-col>
           </v-card>
@@ -61,6 +79,8 @@
 
 <script>
 import { bardemu } from '../services'
+import constants from '../constants'
+
 export default {
   data() {
     return {
@@ -68,32 +88,36 @@ export default {
         { text: 'Início', href: '/' }
       ],
       login: "",
-      password: ""
+      password: "",
+      handlingh: false
     }
   },
   mounted() {
-    const login = localStorage.getItem('bardemuLogin')
+    const login = localStorage.getItem(constants.bardemuLogin)
     this.login = login
   },
   methods: {
-    sendLogin() {
+    getLogin() {
+      this.handlingh = true
       bardemu.post('/login', {
-        login: this.login,
+        email: this.login,
         password: this.password
       }).then((res) => {
+        this.handlingh = false
         this.$store.commit('setAuth', true)
-        this.$store.commit('setLogin', res.data.login)
-        this.$router.push('/painel')
+        this.$store.commit('setUserId', res.data._id)
+        this.$store.commit('setLogin', res.data.email)
+        this.$router.push('/menu')
+      }).catch((e) => {
+        this.handlingh = false
         this.$store.dispatch('openAlert', {
-          message: `Bem-vindo!`,
-          type: 'success'
-        })
-      }).catch(() => {
-        this.$store.dispatch('openAlert', {
-          message: `Credenciais inválidas.`,
+          message: e.response.data.message,
           type: 'error'
         })
       })
+    },
+    getRegister() {
+      this.$router.push('/cadastro')
     }
   }
 }

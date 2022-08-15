@@ -9,7 +9,9 @@ import CategoryItem from '../views/CategoryItem.vue'
 import Menu from '../views/Menu.vue'
 import Cart from '../views/Cart.vue'
 import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
 import OrderItem from '../views/OrderItem.vue'
+import TermsOfUse from '../views/TermsOfUse.vue'
 
 Vue.use(VueRouter)
 
@@ -23,6 +25,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/cadastro',
+    name: 'register',
+    component: Register
   },
   {
     path: '/menu',
@@ -59,6 +66,11 @@ const routes = [
     path: '/pedido/:id',
     name: 'order',
     component: OrderItem
+  },
+  {
+    path: "/termos",
+    name: "terms",
+    component: TermsOfUse
   }
 ]
 

@@ -16,12 +16,14 @@
           v-for="item in items"
           :key="item.title"
           link
-          :to="item.to"
+          :to="item.to ? item.to : null"
+          @click="item.method ? navigationClick(item) : null"
           :title="item.title"
         >
           <v-list-item-icon style="position: relative">
             <v-icon color="#e41c38">{{ item.icon }}</v-icon>
             <span v-if="item.icon === 'mdi-cart'" class="cart-qtd" style="right: -20px; top: 10%; position: absolute; color: black">{{cartQuantity}}</span>
+            <v-icon></v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>
@@ -45,7 +47,7 @@ import { EventBus } from '../EventBus'
       items: [
         { icon: 'mdi-home', title: 'Inicio', to: '/' },
         { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
-        { icon: 'mdi-cart', title: 'Carrinho', to: '/carrinho' },
+        { icon: 'mdi-cart', title: 'Carrinho', to: '/carrinho' }
       ],
     }),
     computed: {
@@ -58,6 +60,26 @@ import { EventBus } from '../EventBus'
       EventBus.$on('update-cart', (cart) => {
         this.syncCart(cart)
       })
+
+      if(this.auth) {
+        this.items = [
+          { icon: 'mdi-home', title: 'Inicio', to: '/' },
+          { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
+          { icon: 'mdi-cart', title: 'Carrinho', to: '/carrinho' }
+        ]
+        
+        this.items.push({ icon: 'mdi-account', title: 'Minha conta', to: '/minha-conta' })
+        this.items.push({ icon: 'mdi-clipboard-check-multiple', title: 'Meus pedidos', to: '/meus-pedidos' })
+        this.items.push({ icon: 'mdi-exit-to-app', title: 'Sair', method: "logout" })
+      } else {
+        this.items = [
+          { icon: 'mdi-home', title: 'Inicio', to: '/' },
+          { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
+          { icon: 'mdi-cart', title: 'Carrinho', to: '/carrinho' }
+        ]
+
+        this.items.push({ icon: 'mdi-account', title: 'Entrar', to: '/login' })
+      }
     },
     methods: {
       syncCart(cart) {
@@ -70,9 +92,37 @@ import { EventBus } from '../EventBus'
         } else {
           this.cartQuantity = 0
         }
-      } 
+      },
+      logout() {
+        this.$store.commit('setAuth', false)
+        this.$store.commit('setLogin', null)
+        this.$router.push('/login')
+      },
+      navigationClick(item) {
+        this[item.method]()
+      }
     },
     watch: {
+      auth(newState) {
+        if(!newState) {
+          this.items = [
+            { icon: 'mdi-home', title: 'Inicio', to: '/' },
+            { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
+            { icon: 'mdi-cart', title: 'Carrinho', to: '/carrinho' },
+            { icon: 'mdi-account', title: 'Entrar', to: '/login' }
+          ]
+        } else {
+          this.items = [
+            { icon: 'mdi-home', title: 'Inicio', to: '/' },
+            { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
+            { icon: 'mdi-cart', title: 'Carrinho', to: '/carrinho' }
+          ]
+
+          this.items.push({ icon: 'mdi-account', title: 'Minha conta', to: '/minha-conta' })
+          this.items.push({ icon: 'mdi-clipboard-check-multiple', title: 'Meus pedidos', to: '/meus-pedidos' })
+          this.items.push({ icon: 'mdi-exit-to-app', title: 'Sair', method: "logout" })
+        }
+      },
       cart(cart) {
         this.syncCart(cart)
       }
