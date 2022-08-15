@@ -13,10 +13,10 @@
       </v-row>
       <v-col class="pa-0 d-flex flex-column pt-10">
         <v-col lg="3" class="pa-0">
-          <label for="name" class="mb-1">Nome</label>
           <v-text-field
           outlined
           dense
+          label="Nome"
           readonly
           color="var(--primary-color)"
           id="name"
@@ -26,9 +26,9 @@
           </v-text-field>
         </v-col>
         <v-col lg="3" class="pa-0">
-          <label for="email" class="mb-1">E-mail</label>
           <v-text-field
           outlined
+          label="E-mail"
           color="var(--primary-color)"
           dense
           readonly
@@ -39,9 +39,9 @@
           </v-text-field>
         </v-col>
         <v-col lg="3" class="pa-0">
-          <label for="phone" class="mb-1">Celular</label>
           <v-text-field
           outlined
+          label="Celular"
           color="var(--primary-color)"
           dense
           readonly

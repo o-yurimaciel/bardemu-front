@@ -1,11 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Painel from '../views/Painel.vue'
-import Product from '../views/Product.vue'
-import ProductItem from '../views/ProductItem.vue'
-import Categories from '../views/Categories.vue'
-import CategoryItem from '../views/CategoryItem.vue'
 import Menu from '../views/Menu.vue'
 import Cart from '../views/Cart.vue'
 import Login from '../views/Login.vue'
@@ -16,8 +11,26 @@ import MyAccount from '../views/MyAccount.vue'
 import MyOrders from '../views/MyOrders.vue'
 import PersonalData from '../views/PersonalData.vue'
 import Addresses from '../views/Addresses.vue'
+import store from '../store'
 
 Vue.use(VueRouter)
+
+function auth(to, from, next) {
+  const auth = store.state.auth
+
+  if(auth) {
+    next()
+  } else {
+    store.commit('setAuth', null)
+    store.commit('setLogin', null)
+    store.commit('setUserId', null)
+    store.dispatch('openAlert', {
+      message: 'Usuário não autenticado',
+      type: 'error'
+    })
+    next('/login')
+  }
+}
 
 const routes = [
   {
@@ -28,22 +41,26 @@ const routes = [
   {
     path: "/minha-conta",
     name: "my-account",
-    component: MyAccount
+    component: MyAccount,
+    beforeEnter: auth
   },
   {
     path: "/minha-conta/dados-pessoais",
     name: "personal-data",
-    component: PersonalData
+    component: PersonalData,
+    beforeEnter: auth
   },
   {
     path: "/minha-conta/enderecos",
     name: "addresses",
-    component: Addresses
+    component: Addresses,
+    beforeEnter: auth
   },
   {
     path: "/meus-pedidos",
     name: "my-orders",
-    component: MyOrders
+    component: MyOrders,
+    beforeEnter: auth
   },
   {
     path: '/login',
@@ -60,28 +77,6 @@ const routes = [
     component: Menu
   },
   {
-    path: '/painel',
-    component: Painel
-  },
-  {
-    path: '/produtos',
-    component: Product
-  },
-  {
-    path: '/produto/:id',
-    name: 'product-item',
-    component: ProductItem
-  }, {
-    path: '/categorias',
-    name: 'categories',
-    component: Categories
-  },
-  {
-    path: '/categoria/:id',
-    name: 'category-item',
-    component: CategoryItem
-  },
-  {
     path: '/carrinho',
     name: 'cart',
     component: Cart
@@ -89,7 +84,8 @@ const routes = [
   {
     path: '/pedido/:id',
     name: 'order',
-    component: OrderItem
+    component: OrderItem,
+    beforeEnter: auth
   },
   {
     path: "/termos",

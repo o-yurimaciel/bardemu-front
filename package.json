@@ -41,8 +41,7 @@
     },
     "extends": [
       "plugin:vue/essential",
-      "eslint:recommended",
-      "strict/es5"
+      "eslint:recommended"
     ],
     "parserOptions": {
       "parser": "babel-eslint"

@@ -90,7 +90,7 @@
             color="var(--primary-color)"
             style="font-weight: bold"
             outlined
-
+            @click="goToLogin"
             >
               Voltar
             </v-btn>
@@ -213,7 +213,12 @@ export default {
     }
   },
   methods: {
+    goToLogin() {
+      this.$router.push('/login')
+    },
     register() {
+      const cart = this.$store.state.cart
+      
       bardemu.post('/register', {
         firstName: this.name,
         lastName: this.lastName,
@@ -229,7 +234,12 @@ export default {
         this.$store.commit('setAuth', res.data.token)
         this.$store.commit('setUserId', res.data._id)
         this.$store.commit('setLogin', res.data.email)
-        this.$router.push('/menu')
+
+        if(cart && cart.length > 0) {
+          this.$router.push('/carrinho')
+        } else {
+          this.$router.push('/menu')
+        }
       }).catch((e) => {
         this.$store.dispatch('openAlert', {
           message: e.response.data.message,

@@ -42,7 +42,7 @@
         </v-col>
       </v-col>
       <v-col class="pa-0 pt-10" v-else>
-        <span>Não há nenhum endereço cadastrado.</span>
+        <span style="fontSize: 1.2em; font-weight: bold">Não há nenhum endereço cadastrado.</span>
       </v-col>
     </v-col>
     <v-dialog v-model="dialog">
@@ -56,10 +56,10 @@
           </v-col>
           <v-form v-model="isFormValid" @submit.prevent>
             <v-col class="pa-0">
-              <label for="">CEP</label>
               <v-text-field
               dense
               outlined
+              label="CEP"
               v-model="cep"
               autofocus
               v-mask="['#####-###']"
@@ -68,9 +68,9 @@
               </v-text-field>
             </v-col>
             <v-col class="pa-0">
-              <label for="">Endereço</label>
               <v-text-field
               dense
+              label="Endereço"
               outlined
               v-model="address"
               >
@@ -78,9 +78,9 @@
               </v-text-field>
             </v-col>
             <v-col class="pa-0">
-              <label for="">Bairro</label>
               <v-text-field
               dense
+              label="Bairro"
               outlined
               v-model="district"
               >
@@ -88,9 +88,9 @@
               </v-text-field>
             </v-col>
             <v-col class="pa-0">
-              <label for="">Número</label>
               <v-text-field
               v-model="number"
+              label="Número"
               dense
               outlined
               >
@@ -98,9 +98,9 @@
               </v-text-field>
             </v-col>
             <v-col class="pa-0">
-              <label for="">Complemento</label>
               <v-text-field
               dense
+              label="Complemento"
               v-model="comp"
               outlined
               >

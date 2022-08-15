@@ -201,7 +201,8 @@ export default {
     getOrderItem() {
       bardemu.get('/order', {
         params: {
-          _id: this.id
+          _id: this.id,
+          token: this.$store.state.auth
         }
       }).then((res) => {
         this.order = res.data
@@ -292,6 +293,10 @@ export default {
         orderId: this.order._id,
         message: this.ratingMessage,
         rating: this.rating
+      }, {
+        headers: {
+          "x-access-token": this.$store.state.auth
+        }
       }).then(() => {
         this.$store.dispatch('openAlert', {
           message: 'Avaliação enviada. Obrigado!',

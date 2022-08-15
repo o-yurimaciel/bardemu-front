@@ -99,6 +99,8 @@ export default {
   methods: {
     getLogin() {
       this.handlingh = true
+      const cart = this.$store.state.cart
+
       bardemu.post('/login', {
         email: this.login,
         password: this.password
@@ -107,7 +109,12 @@ export default {
         this.$store.commit('setAuth', res.data.token)
         this.$store.commit('setUserId', res.data._id)
         this.$store.commit('setLogin', res.data.email)
-        this.$router.push('/menu')
+
+        if(cart && cart.length > 0) {
+          this.$router.push('/carrinho')
+        } else {
+          this.$router.push('/menu')
+        }
       }).catch((e) => {
         this.handlingh = false
         this.$store.dispatch('openAlert', {

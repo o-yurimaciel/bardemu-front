@@ -98,9 +98,9 @@
           width="100%"
           >
             <v-card-title class="text-center mx-auto d-flex justify-center text-left text-lg-center">
-              <v-col class="pa-0 d-flex flex-column">
-                <span>
-                  Estamos quase lá.. :)<br>
+              <v-col class="pa-0 d-flex flex-column align-center">
+                <span class="d-flex align-center">
+                  Estamos quase lá... <v-icon color="#000">mdi-emoticon-cool-outline</v-icon><br>
                 </span>
                 <span style="word-break: normal">Antes precisamos confirmar alguns dados para concluir o pedido.</span>
               </v-col>
@@ -109,96 +109,60 @@
             <v-col class="pa-0 pa-lg-10 pa-4">
               <v-form v-model="isFormValid" @submit.prevent>
                 <v-row no-gutters>
-                  <v-col lg="6" cols="12" class="pa-0 mr-2">
-                    <label for="name">Nome</label>
-                    <v-text-field
-                    dense
-                    outlined
-                    :error="!name"
-                    rounded
-                    v-model="name"
-                    id="name"
-                    >
-
-                    </v-text-field>
+                  <v-col cols="12" class="pa-0">
+                    <span style="fontSize: 1.2em">Nome: <span style="font-weight: bold;color: var(--primary-color)">{{name}}</span></span>
                   </v-col>
-                  <v-col lg="4" cols="12" class="pa-0">
-                    <label for="phone">Telefone</label>
-                    <v-text-field
-                    dense
-                    v-model="phone"
-                    outlined
-                    required
-                    rounded
-                    id="phone"
-                    :error="!phone || phone.length < 19"
-                    v-mask="'+55 (##) #####-####'"
-                    >
-
-                    </v-text-field>
+                  <v-col cols="12" class="pa-0">
+                    <span style="fontSize: 1.2em">Celular: <span style="font-weight: bold;color: var(--primary-color)">{{phone}}</span></span>
                   </v-col>
-                  <v-col lg="6" cols="12" class="pa-0 mr-2">
-                    <label for="name">Endereço</label>
-                    <v-text-field
-                    dense
-                    v-model="address"
-                    outlined
-                    required
-                    :error="!address"
-                    rounded
+                  <v-col lg="12" cols="12" class="pa-0 pt-10">
+                    <v-select
+                    rounded 
                     id="address"
-                    >
-
-                    </v-text-field>
-                  </v-col>
-                  <v-col lg="2" cols="12" class="pa-0 mr-2">
-                    <label for="number">Número</label>
-                    <v-text-field
-                    dense
+                    no-data-text="Você não tem nenhum endereço cadastrado."
                     outlined
-                    v-model="addressNumber"
-                    required
-                    :error="!addressNumber"
-                    rounded
-                    id="number"
-                    >
-
-                    </v-text-field>
-                  </v-col>
-                  <v-col lg="3" cols="12" class="pa-0 mr-2">
-                    <label for="comp">Complemento</label>
-                    <v-text-field
+                    v-model="address"
+                    label="Endereço"
+                    placeholder="Escolha um endereço"
+                    :error="!address"
                     dense
-                    outlined
-                    v-model="addressData"
-                    :error="!addressData"
-                    rounded
-                    id="comp"
-                    >
-
-                    </v-text-field>
+                    color="var(--primary-color)"
+                    :items="addresses">
+                      <template slot="selection" slot-scope="data">
+                        <span class="select-selection">
+                          {{data.item.name.concat(", ").concat(data.item.number).concat(` - ${data.item.district}`)}}
+                        </span>
+                      </template>
+                      <template slot="item" slot-scope="data">
+                        <span class="select-item">
+                          {{data.item.name.concat(", ").concat(data.item.number).concat(` - ${data.item.district}`)}}
+                        </span>
+                      </template>
+                    </v-select>
                   </v-col>
-                  <v-col lg="5" cols="12" class="pa-0">
-                    <label for="paymentType">Forma de Pagamento</label>
+                  <v-col lg="6" cols="12" class="pa-0">
                     <v-select
                       outlined
                       :items="paymentTypes"
+                      label="Forma de pagamento"
+                      placeholder="Escolha um forma de pagamento"
                       rounded
                       required
                       v-model="paymentType"
+                      color="var(--primary-color)"
                       :error="!paymentType"
                       dense
-                      @change="changePaymentType"
                       id="paymentType"
                       >
                       </v-select>
                   </v-col>
-                  <v-col lg="3" cols="12" class="pa-0 ml-0 ml-lg-2" v-if="paymentType === 'Dinheiro'">
+                  <v-col lg="6" cols="12" class="pa-0 pl-0 pl-lg-2" v-if="paymentType === 'Dinheiro'">
                     <label for="cashChange">Troco (Total: {{getTotalValue() | currency}})</label>
                     <v-currency-field
                     dense
                     outlined
                     v-model="cashChange"
+                    color="var(--primary-color)"
                     rounded
                     :error="cashChange <= 0 || cashChange < getTotalValue()"
                     required
@@ -208,16 +172,18 @@
                     </v-currency-field>
                   </v-col>
                   <v-col 
-                  lg="3" 
+                  lg="6" 
                   cols="12"
-                  class="pa-0 ml-2" 
+                  class="pa-0 pl-0 pl-lg-2" 
                   v-if="paymentType === 'Cartão de Débito' || paymentType === 'Cartão de Crédito'">
-                    <label for="flag">Bandeira</label>
                     <v-select
                     dense
                     outlined
                     v-model="flag"
+                    label="Bandeira"
+                    placeholder="Escolha uma bandeira"
                     :items="flagTypes"
+                    color="var(--primary-color)"
                     :error="!flag"
                     rounded
                     id="flag"
@@ -250,14 +216,25 @@
             </v-col>
           </v-card>
         </v-col>
-        <v-col class="pa-0" v-if="noAddresses">
-
-        </v-col>
       </v-col>
       <v-col cols="10" class="pa-0 d-flex justify-center pt-10" v-else>
         <span class="product-title">Não há nenhum produto no carrinho.</span>
       </v-col>
     </v-col>
+    <v-dialog v-model="dialog">
+      <v-card
+      width="100%"
+      height="100%"
+      >
+        <v-col lg="6" class="pa-0 d-flex flex-column justify-center mx-auto text-center pa-10">
+          <v-icon size="100" color="var(--primary-color)">
+            mdi-emoticon-sad-outline
+          </v-icon>
+          <span class="pt-5" style="fontSize: 1.5em; font-weight: bold">Você não tem nenhum endereço cadastrado.</span>
+          <span class="pt-3">Não se preocupe. Você pode cadastrar um novo endereço <a @click="goToAddresses">aqui</a></span>
+        </v-col>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -270,7 +247,7 @@ export default {
     return {
       isFormValid: false,
       userData: false,
-      noAddresses: false,
+      addresses: [],
       items: [
         { text: 'Início', href: '/' },
         { text: 'Cardápio', href: '/menu' }
@@ -288,11 +265,10 @@ export default {
       name: "",
       phone: "",
       address: "",
-      addressNumber: "",
-      addressData: "",
       paymentType: null,
       cashChange: 0,
-      flag: null
+      flag: null,
+      dialog: false
     }
   },
   computed: {
@@ -302,31 +278,37 @@ export default {
     })
   },
   methods: {
+    goToAddresses() {
+      this.$router.push('/minha-conta/enderecos')
+    },
     back() {
       this.userData = false
+      this.address = false
       this.paymentType = ""
       this.cashChange = 0
       this.flag = null
     },
     goToLogin() {
-      if(this.auth) {
-        bardemu.get('/user', {
-          params: {
-            _id: this.$store.state.userId,
-            token: this.$store.state.auth
+      bardemu.get('/user', {
+        params: {
+          _id: this.$store.state.userId,
+          token: this.$store.state.auth
+        }
+      }).then((res) => {
+        if(res.data.address && res.data.address.length > 0) {
+          this.name = res.data.firstName.concat(" ").concat(res.data.lastName)
+          this.phone = res.data.phone
+          this.addresses = res.data.address
+          if(res.data.address.length === 1) {
+            this.address = res.data.address[0]
           }
-        }).then((res) => {
-          if(res.addresses && res.adresses.length > 0) {
-            this.userData = true
-          } else {
-            this.noAddresses = true
-          }
-        }).catch((e) => {
-          console.log(e.response)
-        })
-      } else {
-        this.$router.push('/login')
-      }
+          this.userData = true
+        } else {
+          this.dialog = true
+        }
+      }).catch((e) => {
+        console.log(e.response)
+      })
     },
     goToMenu() {
       this.$router.push('/menu')
@@ -362,13 +344,18 @@ export default {
         totalValue,
         clientName: this.name,
         clientPhone: this.phone,
-        clientAddress: this.address,
-        clientAddressNumber: this.addressNumber,
-        clientAddressData: this.addressData,
+        clientAddress: this.address.name,
+        clientAddressNumber: this.address.number,
+        clientAddressData: this.address.comp,
         paymentType: this.paymentType,
         cashChange: this.cashChange,
         cardFlag: this.flag,
-        products: this.cart
+        products: this.cart,
+        userId: this.$store.state.userId
+      }, {
+        headers: {
+          "x-access-token": this.$store.state.auth
+        }
       }).then((res) => {
         const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido.\nwww.bardemu.com.br/pedido/${res.data._id}`)
         window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, "_blank")
@@ -407,6 +394,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.theme--light >>> .v-select .v-text-field input {
+  display: none!important;
+}
 </style>
