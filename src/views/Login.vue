@@ -117,10 +117,12 @@ export default {
         }
       }).catch((e) => {
         this.handlingh = false
-        this.$store.dispatch('openAlert', {
-          message: e.response.data.message,
-          type: 'error'
-        })
+        if(e.response && e.response.data) {
+          this.$store.dispatch('openAlert', {
+            message: e.response.data.message,
+            type: 'error'
+          })
+        }
       })
     },
     getRegister() {

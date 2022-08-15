@@ -77,11 +77,15 @@ export default {
           token: this.$store.state.auth
         }
       }).then((res) => {
-        console.log(res)
         this.user = res.data
         this.user.name = this.user.firstName.concat(" ").concat(this.user.lastName)
       }).catch((e) => {
-        console.log(e.response)
+        if(e.response && e.response.data) {
+          this.$store.dispatch('openAlert', {
+            message: e.response.data.message,
+            type: 'error'
+          })
+        }
       })
     }
   }

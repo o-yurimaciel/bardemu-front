@@ -232,11 +232,13 @@ export default {
         } else {
           this.getOrderItem()
         }
-      }).catch(() => {
-        this.$store.dispatch('openAlert', {
-          message: 'Não foi possível carregar o pedido. Tente novamente mais tarde.',
-          type: 'error'
-        })
+      }).catch((e) => {
+        if(e.response && e.response.data) {
+          this.$store.dispatch('openAlert', {
+            message: e.response.data.message,
+            type: 'error'
+          })
+        }
       })
     },
     formatDate(date) {
@@ -304,11 +306,13 @@ export default {
         })
         this.rated = true
         this.getOrderItem()
-      }).catch(() => {
-        this.$store.dispatch('openAlert', {
-          message: 'Erro ao enviar avaliação. Tente novamente mais tarde.',
-          type: 'error'
-        })
+      }).catch((e) => {
+        if(e.response && e.response.data) {
+          this.$store.dispatch('openAlert', {
+            message: e.response.data.message,
+            type: 'error'
+          })
+        }
       })
     }
   }

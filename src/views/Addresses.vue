@@ -175,7 +175,13 @@ export default {
         this.getUser()
         this.resetFields()
       }).catch((e) => {
-        console.log(e.response)
+        this.resetFields()
+        if(e.response && e.response.data) {
+          this.$store.dispatch('openAlert', {
+            message: e.response.data.message,
+            type: 'error'
+          })
+        }
       })
     },
     getUser() {
@@ -185,10 +191,14 @@ export default {
           token: this.$store.state.auth
         }
       }).then((res) => {
-        console.log(res)
         this.addresses = res.data.address
       }).catch((e) => {
-        console.log(e.response)
+        if(e.response && e.response.data) {
+          this.$store.dispatch('openAlert', {
+            message: e.response.data.message,
+            type: 'error'
+          })
+        }
       })
     },
     zipCodeChange() {
@@ -205,8 +215,11 @@ export default {
         if(data.logradouro) {
           this.address = data.logradouro
         }
-      }).catch((e) => {
-        console.log(e.response)
+      }).catch(() => {
+        this.$store.dispatch('openAlert', {
+          message: `Ocorreu um problema ao consultar o CEP. Tente novamente mais tarde.`,
+          type: 'error'
+        })
       })
     }
   }

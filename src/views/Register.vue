@@ -241,11 +241,12 @@ export default {
           this.$router.push('/menu')
         }
       }).catch((e) => {
-        this.$store.dispatch('openAlert', {
-          message: e.response.data.message,
-          type: 'error'
-        })
-        console.log(e.response)
+        if(e.response && e.response.data) {
+          this.$store.dispatch('openAlert', {
+            message: e.response.data.message,
+            type: 'error'
+          })
+        }
       })
     }
   }

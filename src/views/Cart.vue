@@ -114,6 +114,7 @@
                   </v-col>
                   <v-col cols="12" class="pa-0">
                     <span style="fontSize: 1.2em">Celular: <span style="font-weight: bold;color: var(--primary-color)">{{phone}}</span></span>
+                    <a @click="goToPersonalData" class="pl-2">Alterar?</a>
                   </v-col>
                   <v-col lg="12" cols="12" class="pa-0 pt-10">
                     <v-select
@@ -278,6 +279,9 @@ export default {
     })
   },
   methods: {
+    goToPersonalData() {
+      this.$router.push('/minha-conta/dados-pessoais')
+    },
     goToAddresses() {
       this.$router.push('/minha-conta/enderecos')
     },
@@ -307,7 +311,12 @@ export default {
           this.dialog = true
         }
       }).catch((e) => {
-        console.log(e.response)
+        if(e.response && e.response.data) {
+          this.$store.dispatch('openAlert', {
+            message: e.response.data.message,
+            type: 'error'
+          })
+        }
       })
     },
     goToMenu() {
@@ -365,11 +374,13 @@ export default {
           type: 'success'
         })
         this.$router.push(`/pedido/${res.data._id}`)
-      }).catch(() => {
-        this.$store.dispatch('openAlert', {
-          message: `Erro ao gerar o pedido. Tente novamente mais tarde.`,
-          type: 'error'
-        })
+      }).catch((e) => {
+        if(e.response && e.response.data) {
+          this.$store.dispatch('openAlert', {
+            message: e.response.data.message,
+            type: 'error'
+          })
+        }
       })
     },
     getPaymentSubType() {
@@ -395,7 +406,7 @@ export default {
 </script>
 
 <style scoped>
-.theme--light >>> .v-select .v-text-field input {
+.theme--light >>> .v-input input {
   display: none!important;
 }
 </style>
