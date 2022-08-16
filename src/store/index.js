@@ -25,7 +25,6 @@ export default new Vuex.Store({
       state.login = login
     },
     setAuth(state, auth) {
-      console.log('ue', auth)
       if(auth) {
         localStorage.setItem(constants.bardemuAuth, auth)
       } else {

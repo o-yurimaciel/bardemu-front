@@ -227,7 +227,6 @@ export default {
         password: this.password,
         phone: this.phone
       }).then((res) => {
-        console.log(res)
         this.$store.dispatch('openAlert', {
           message: `Seja bem-vindo ao BarDeMuLanches, ${this.name}!`,
           type: 'success'

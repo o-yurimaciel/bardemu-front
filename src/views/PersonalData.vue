@@ -11,7 +11,7 @@
           <h1>Dados Pessoais</h1>
         </v-col>
       </v-row>
-      <v-col class="pa-0 d-flex flex-column pt-10">
+      <v-col class="pa-0 d-flex flex-column pt-10" v-if="user">
         <v-col lg="3" class="pa-0">
           <v-text-field
           outlined
@@ -20,7 +20,7 @@
           readonly
           color="var(--primary-color)"
           id="name"
-          :value="user.name"
+          v-model="user.name"
           >
 
           </v-text-field>
@@ -33,7 +33,7 @@
           dense
           readonly
           id="email"
-          :value="user.email"
+          v-model="user.email"
           >
 
           </v-text-field>
@@ -46,11 +46,49 @@
           dense
           readonly
           id="phone"
-          :value="user.phone"
+          v-model="user.phone"
           >
 
           </v-text-field>
         </v-col>
+      </v-col>
+      <v-col lg="6" cols="12" class="pa-0 pt-15">
+        <v-expansion-panels>
+          <v-expansion-panel
+          >
+            <v-expansion-panel-header>
+              Atualizar Celular
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-col class="pa-0 d-flex flex-column">
+                <v-col lg="6" cols="12" class="pa-0 mx-auto">
+                  <v-form v-model="newPhoneIsValid" @submit.prevent>
+                    <v-text-field
+                    outlined
+                    autofocus
+                    label="Novo celular"
+                    color="var(--primary-color)"
+                    v-model="newPhone"
+                    :rules="[rules.required, rules.phone]"
+                    v-mask="'+55 (##) #####-####'"
+                    >
+                    </v-text-field>
+                  </v-form>
+                </v-col>
+                <v-col class="pa-0 d-flex justify-center">
+                  <v-btn
+                  outlined
+                  color="green"
+                  :disabled="!newPhoneIsValid"
+                  @click="updatePhone"
+                  >
+                    Atualizar
+                  </v-btn>
+                </v-col>
+              </v-col>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
       </v-col>
     </v-col>
   </v-container>
@@ -65,7 +103,23 @@ export default {
       { text: 'Início', href: '/' },
       { text: 'Minha conta', href: '/minha-conta' },
     ],
-    user: null
+    user: null,
+    newPhone: "",
+    newPhoneIsValid: false,
+    rules: {
+      required: field => !!field || "*Campo obrigatório.",
+      phone: value => {
+        if(value) {
+          if(value.length < 19) {
+            return "*Celular inválido"
+          } else {
+            return true
+          }
+        } else {
+          return "*Celular inválido"
+        }
+      },
+    }
   }),
   mounted() {
     this.getUser()
@@ -80,6 +134,27 @@ export default {
       }).then((res) => {
         this.user = res.data
         this.user.name = this.user.firstName.concat(" ").concat(this.user.lastName)
+      }).catch((e) => {
+        if(e.response && e.response.data) {
+          this.$store.dispatch('openAlert', {
+            message: e.response.data.message,
+            type: 'error'
+          })
+        }
+      })
+    },
+    updatePhone() {
+      bardemu.put('/user/phone', {
+        _id: localStorage.getItem(constants.bardemuUserId),
+        token: localStorage.getItem(constants.bardemuAuth),
+        phone: this.newPhone
+      }).then(() => {
+        this.getUser()
+        this.newPhone = ""
+        this.$store.dispatch('openAlert', {
+          message: "O celular foi atualizado com sucesso!",
+          type: 'success'
+        })
       }).catch((e) => {
         if(e.response && e.response.data) {
           this.$store.dispatch('openAlert', {

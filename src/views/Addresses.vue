@@ -173,8 +173,7 @@ export default {
           number: this.number,
           comp: this.comp
         }
-      }).then((res) => {
-        console.log(res)
+      }).then(() => {
         this.dialog = false
         this.getUser()
         this.resetFields()

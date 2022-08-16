@@ -97,11 +97,13 @@
             </v-row>
           </v-col>
           <v-col class="pa-0 pt-3">
-            <label for="obs">Adicione uma observação</label>
             <v-textarea
             outlined
+            label="Observação"
+            placeholder="Ex: Sem salada, sem ovo e etc.."
             id="obs"
             v-model="note"
+            color="var(--primary-color)"
             >
             </v-textarea>
           </v-col>
@@ -201,8 +203,7 @@ export default {
             }
           })
         })
-      }).catch((e) => {
-        console.log(e)
+      }).catch(() => {
         this.$store.dispatch('openAlert', {
           message: 'Não foi possível carregar os produtos. Tente novamente mais tarde.',
           type: 'error'
