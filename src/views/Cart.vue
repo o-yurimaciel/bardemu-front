@@ -244,6 +244,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import constants from '../constants'
 import { bardemu } from '../services'
 
 export default {
@@ -298,8 +299,8 @@ export default {
     goToLogin() {
       bardemu.get('/user', {
         params: {
-          _id: this.$store.state.userId,
-          token: this.$store.state.auth
+          _id: localStorage.getItem(constants.bardemuUserId),
+          token: localStorage.getItem(constants.bardemuAuth)
         }
       }).then((res) => {
         if(res.data.address && res.data.address.length > 0) {
@@ -363,10 +364,10 @@ export default {
         cashChange: this.cashChange,
         cardFlag: this.flag,
         products: this.cart,
-        userId: this.$store.state.userId
+        userId: localStorage.getItem(constants.bardemuUserId)
       }, {
         headers: {
-          "x-access-token": this.$store.state.auth
+          "x-access-token": localStorage.getItem(constants.bardemuAuth)
         }
       }).then((res) => {
         const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido.\nwww.bardemu.com.br/pedido/${res.data._id}`)

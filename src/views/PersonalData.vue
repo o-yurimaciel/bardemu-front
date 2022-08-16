@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import constants from '../constants'
 import { bardemu } from '../services'
 export default {
   data: () => ({
@@ -73,8 +74,8 @@ export default {
     getUser() {
       bardemu.get('/user', {
         params: {
-          _id: this.$store.state.userId,
-          token: this.$store.state.auth
+          _id: localStorage.getItem(constants.bardemuUserId),
+          token: localStorage.getItem(constants.bardemuAuth)
         }
       }).then((res) => {
         this.user = res.data

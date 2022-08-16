@@ -155,6 +155,7 @@
 </template>
 
 <script>
+import constants from '../constants'
 import { bardemu } from '../services'
 
 const orderHistoryStatusOptions = Object.freeze({
@@ -202,7 +203,7 @@ export default {
       bardemu.get('/order', {
         params: {
           _id: this.id,
-          token: this.$store.state.auth
+          token: localStorage.getItem(constants.bardemuAuth)
         }
       }).then((res) => {
         this.order = res.data
@@ -297,7 +298,7 @@ export default {
         rating: this.rating
       }, {
         headers: {
-          "x-access-token": this.$store.state.auth
+          "x-access-token": localStorage.getItem(constants.bardemuAuth)
         }
       }).then(() => {
         this.$store.dispatch('openAlert', {

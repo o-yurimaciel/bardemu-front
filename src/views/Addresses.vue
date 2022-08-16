@@ -127,6 +127,7 @@
 </template>
 
 <script>
+import constants from '../constants'
 import { bardemu } from '../services'
 export default {
   data: () => ({
@@ -163,8 +164,8 @@ export default {
     },
     addAddress() {
       bardemu.post('/user/address', {
-        _id: this.$store.state.userId,
-        token: this.$store.state.auth,
+        _id: localStorage.getItem(constants.bardemuUserId),
+        token: localStorage.getItem(constants.bardemuAuth),
         address: {
           cep: this.cep,
           name: this.address,
@@ -190,8 +191,8 @@ export default {
     getUser() {
       bardemu.get('/user', {
         params: {
-          _id: this.$store.state.userId,
-          token: this.$store.state.auth
+          _id: localStorage.getItem(constants.bardemuUserId),
+          token: localStorage.getItem(constants.bardemuAuth)
         }
       }).then((res) => {
         this.addresses = res.data.address

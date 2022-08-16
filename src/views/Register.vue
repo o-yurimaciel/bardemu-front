@@ -173,6 +173,7 @@
 </template>
 
 <script>
+import constants from '../constants';
 import { bardemu } from '../services';
 
 export default {
@@ -217,7 +218,7 @@ export default {
       this.$router.push('/login')
     },
     register() {
-      const cart = this.$store.state.cart
+      const cart = JSON.parse(localStorage.getItem(constants.bardemuCart))
       
       bardemu.post('/register', {
         firstName: this.name,

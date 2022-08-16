@@ -80,4 +80,20 @@ export default {
   top: 10px;
   right: 10px;
 }
+
+.slide-leave-active {
+  transition: 0.2s;
+}
+
+.slide-enter-active {
+  transition: 0.2s;
+}
+
+.slide-enter {
+  transform: translate(100%, 0);
+}
+
+.slide-leave-to {
+  transform: translate(300%, 0);
+}
 </style>

@@ -19,16 +19,28 @@ export default new Vuex.Store({
     setLogin(state, login) {
       if(login) {
         localStorage.setItem(constants.bardemuLogin, login)
+      } else {
+        localStorage.removeItem(constants.bardemuLogin)
       }
       state.login = login
     },
     setAuth(state, auth) {
+      console.log('ue', auth)
+      if(auth) {
+        localStorage.setItem(constants.bardemuAuth, auth)
+      } else {
+        localStorage.removeItem(constants.bardemuAuth)
+      }
       state.auth = auth
-      localStorage.setItem(constants.bardemuAuth, auth)
     },
     setUserId(state, userId) {
       state.userId = userId
-      localStorage.setItem(constants.bardemuUserId, userId)
+
+      if(userId) {
+        localStorage.setItem(constants.bardemuUserId, userId)
+      } else {
+        localStorage.removeItem(constants.bardemuUserId)
+      }
     }
   },
   getters: {
@@ -45,7 +57,7 @@ export default new Vuex.Store({
   actions: {
     resetCart(context) {
       context.commit('setCart', null)
-      localStorage.setItem(constants.bardemuCart, null)
+      localStorage.removeItem(constants.bardemuCart)
     },
     addToCart(context, item) {
       let cart = this.state.cart ? this.state.cart : []

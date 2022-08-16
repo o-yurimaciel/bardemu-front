@@ -12,11 +12,12 @@ import MyOrders from '../views/MyOrders.vue'
 import PersonalData from '../views/PersonalData.vue'
 import Addresses from '../views/Addresses.vue'
 import store from '../store'
+import constants from '../constants'
 
 Vue.use(VueRouter)
 
 function auth(to, from, next) {
-  const auth = store.state.auth
+  const auth = localStorage.getItem(constants.bardemuAuth)
 
   if(auth) {
     next()

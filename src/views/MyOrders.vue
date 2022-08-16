@@ -26,7 +26,7 @@
             >
               <v-card-title class="text-h5">
                 <v-icon class="mr-2" color="var(--primary-color)">{{getOrderIcon(order.orderStatus)}}</v-icon>
-                <span style="fontSize: 1em">{{formatStatus(order.orderStatus)}}</span>
+                <span style="fontSize: 1em; word-break: break-word">{{formatStatus(order.orderStatus)}}</span>
               </v-card-title>
               <hr class="mt-2 mb-5 mx-auto" style="width: 98%; opacity: .5">
               <v-col
@@ -80,6 +80,7 @@
 </template>
 
 <script>
+import constants from '../constants'
 const orderHistoryStatusOptions = Object.freeze({
   PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',
@@ -110,8 +111,8 @@ export default {
     getOrders() {
       bardemu.get('/user/orders', {
         params: {
-          userId: this.$store.state.userId,
-          token: this.$store.state.auth
+          userId: localStorage.getItem(constants.bardemuUserId),
+          token: localStorage.getItem(constants.bardemuAuth)
         }
       }).then((res) => {
         this.orders = res.data.sort((a, b) => {

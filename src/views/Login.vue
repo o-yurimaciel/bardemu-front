@@ -102,7 +102,7 @@ export default {
   methods: {
     getLogin() {
       this.handlingh = true
-      const cart = this.$store.state.cart
+      const cart = JSON.parse(localStorage.getItem(constants.bardemuCart))
 
       bardemu.post('/login', {
         email: this.login,
