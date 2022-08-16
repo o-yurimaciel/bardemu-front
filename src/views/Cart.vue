@@ -7,7 +7,7 @@
         divider="/"
       ></v-breadcrumbs>
       <h1>Carrinho</h1>
-      <v-col class="pa-0 pt-15 pb-15 d-flex justify-center" v-if="cart && cart.length > 0">
+      <v-col cols="11" class="pa-0 pt-15 pb-15 d-flex justify-center" v-if="cart && cart.length > 0">
         <v-col class="pa-0" cols="12" xl="8" v-if="!userData">
           <v-card
           class="mx-auto elevation-1"
