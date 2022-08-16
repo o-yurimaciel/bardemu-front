@@ -68,9 +68,8 @@ import { EventBus } from '../EventBus'
           { icon: 'mdi-cart', title: 'Carrinho', to: '/carrinho' }
         ]
         
-        this.items.push({ icon: 'mdi-account', title: 'Minha conta', to: '/minha-conta' })
         this.items.push({ icon: 'mdi-clipboard-check-multiple', title: 'Meus pedidos', to: '/meus-pedidos' })
-        this.items.push({ icon: 'mdi-exit-to-app', title: 'Sair', method: "logout" })
+        this.items.push({ icon: 'mdi-account', title: 'Minha conta', to: '/minha-conta' })
       } else {
         this.items = [
           { icon: 'mdi-home', title: 'Inicio', to: '/' },
@@ -118,9 +117,8 @@ import { EventBus } from '../EventBus'
             { icon: 'mdi-cart', title: 'Carrinho', to: '/carrinho' }
           ]
 
-          this.items.push({ icon: 'mdi-account', title: 'Minha conta', to: '/minha-conta' })
           this.items.push({ icon: 'mdi-clipboard-check-multiple', title: 'Meus pedidos', to: '/meus-pedidos' })
-          this.items.push({ icon: 'mdi-exit-to-app', title: 'Sair', method: "logout" })
+          this.items.push({ icon: 'mdi-account', title: 'Minha conta', to: '/minha-conta' })
         }
       },
       cart(cart) {

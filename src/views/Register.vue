@@ -86,7 +86,7 @@
             </v-btn>
             <v-btn 
             text
-            class="ml-0 ml-lg-2 pt-lg-0 mt-2"
+            class="ml-0 ml-lg-2 pt-lg-0 mt-2 mt-lg-0"
             color="var(--primary-color)"
             style="font-weight: bold"
             outlined

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="pa-0 ma-0">
-    <v-col offset="1" cols="10" class="pa-0 d-flex justify-center flex-column mx-auto pt-10">
+    <v-col offset="1" cols="11" class="pa-0 d-flex justify-center flex-column pt-10">
       <v-row no-gutters>
         <v-col cols="11" class="pa-0 d-flex flex-column">
           <v-breadcrumbs
@@ -41,8 +41,11 @@
           </v-row>
         </v-col>
       </v-col>
-      <v-col class="pa-0 pt-10" v-else>
-        <span style="fontSize: 1.2em; font-weight: bold">Não há nenhum endereço cadastrado.</span>
+      <v-col cols="11" class="pa-0 text-center pt-10" v-else>
+        <v-col class="pa-0 pb-2">
+          <v-icon color="var(--primary-color)" size="100">mdi-emoticon-sad</v-icon>
+        </v-col>
+        <span class="product-title">Não há nenhum endereço cadastrado.</span>
       </v-col>
     </v-col>
     <v-dialog v-model="dialog">

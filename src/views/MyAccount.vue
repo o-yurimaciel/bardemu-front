@@ -39,7 +39,8 @@ export default {
     ],
     elements: [
       { icon: "mdi-account", title: "Dados pessoais", description: "Minhas informações da conta", to: '/minha-conta/dados-pessoais' },
-      { icon: "mdi-map-marker", title: "Endereços", description: "Meus endereços de entrega", to: '/minha-conta/enderecos' }
+      { icon: "mdi-map-marker", title: "Endereços", description: "Meus endereços de entrega", to: '/minha-conta/enderecos' },
+      { icon: "mdi-exit-to-app", title: "Sair", description: "Sair da conta", to: '/login' }
     ]
   }),
 }

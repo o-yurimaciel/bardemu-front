@@ -93,6 +93,9 @@ export default {
     }
   },
   mounted() {
+    this.$store.commit('setAuth', null)
+    this.$store.commit('setLogin', null)
+    this.$store.commit('setUserId', null)
     const login = localStorage.getItem(constants.bardemuLogin)
     this.login = login
   },

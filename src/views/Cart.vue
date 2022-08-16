@@ -1,13 +1,13 @@
 <template>
   <v-container fluid class="pa-0 ma-0">
-    <v-col class="pa-0 pt-10 d-flex flex-column" cols="11" offset="1">
+    <v-col offset="1" cols="11" class="pa-0 pt-10 d-flex flex-column">
       <v-breadcrumbs
         class="pa-0"
         :items="items"
         divider="/"
       ></v-breadcrumbs>
       <h1>Carrinho</h1>
-      <v-col cols="11" class="pa-0 pt-15 pb-15 d-flex justify-center" v-if="cart && cart.length > 0">
+      <v-col class="pa-0 pt-15 pb-15 d-flex justify-center" v-if="cart && cart.length > 0">
         <v-col class="pa-0" cols="12" xl="8" v-if="!userData">
           <v-card
           class="mx-auto elevation-1"
@@ -218,7 +218,10 @@
           </v-card>
         </v-col>
       </v-col>
-      <v-col cols="10" class="pa-0 d-flex justify-center pt-10" v-else>
+      <v-col cols="11" class="pa-0 text-center pt-10" v-else>
+        <v-col class="pa-0 pb-2">
+          <v-icon color="var(--primary-color)" size="100">mdi-emoticon-sad</v-icon>
+        </v-col>
         <span class="product-title">Não há nenhum produto no carrinho.</span>
       </v-col>
     </v-col>
