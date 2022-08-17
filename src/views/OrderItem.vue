@@ -219,7 +219,7 @@ export default {
           { description: 'Bandeira', value: this.order.flag }
         ]
         this.details = [
-          { description: 'Entrega', value: '0' },
+          { description: 'Entrega', value: this.order.deliveryPrice },
           { description: 'Total a pagar', value: this.order.totalValue },
           { description: 'Troco', value: this.order.cashChange },
         ]

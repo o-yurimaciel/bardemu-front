@@ -7,7 +7,7 @@
         divider="/"
       ></v-breadcrumbs>
       <h1>Carrinho</h1>
-      <v-col cols="11" class="pa-0 pt-15 pb-15 d-flex justify-center" v-if="cart && cart.length > 0">
+      <v-col cols="11" class="pa-0 pt-2 pt-lg-15 pb-15 d-flex justify-center" v-if="cart && cart.length > 0">
         <v-col class="pa-0" cols="12" xl="8" v-if="!userData">
           <v-card
           class="mx-auto elevation-1"
@@ -124,6 +124,7 @@
                     outlined
                     v-model="address"
                     label="Endereço"
+                    @change="getDeliveryPrice"
                     placeholder="Escolha um endereço"
                     :error="!address"
                     dense
@@ -192,16 +193,25 @@
 
                     </v-select>
                   </v-col>
+                  <v-col cols="12" class="pa-0" v-if="address">
+                    <span style="fontSize: 1.2em">Pedido: <span style="font-weight: bold;color: var(--primary-color)">{{ getTotalValue() | currency}}</span></span>
+                  </v-col>
+                  <v-col cols="12" class="pa-0" v-if="address">
+                    <span style="fontSize: 1.2em">Entrega: <span style="font-weight: bold;color: var(--primary-color)">{{ deliveryPrice ? deliveryPrice : '0' | currency}}</span></span>
+                  </v-col>
+                  <v-col cols="12" class="pa-0">
+                    <span style="fontSize: 1.2em">Total a pagar: <span style="font-weight: bold;color: var(--primary-color)">{{getTotalValue() + deliveryPrice | currency}}</span></span>
+                  </v-col>
                 </v-row>
               </v-form>
-              <v-col class="pa-0">
+              <v-col class="pa-0 pt-5">
                 <span style="word-break: normal">Observação: Após concluir, será solicitado o envio do Pedido via WhatsApp para confirmação.</span>
               </v-col>
               <v-col class="pa-0 d-flex flex-column mx-auto pt-10">
               <v-btn 
                 color="red"
                 :outlined="false"
-                :disabled="!isFormValid"
+                :disabled="!isFormValid && !!deliveryPrice"
                 @click="createOrder"
                 >
                   <span style="color: #fff">Concluir pedido</span>
@@ -272,6 +282,7 @@ export default {
       address: "",
       paymentType: null,
       cashChange: 0,
+      deliveryPrice: null,
       flag: null,
       dialog: false
     }
@@ -283,6 +294,24 @@ export default {
     })
   },
   methods: {
+    getDeliveryPrice() {
+      bardemu.get('/district/name', {
+        params: {
+          value: this.address.district
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+        },
+        headers: {
+          "x-access-token": localStorage.getItem(constants.bardemuAuth)
+        }
+      }).then((res) => {
+        if(res.data.price) {
+          this.deliveryPrice = res.data.price
+        }
+      }).catch(() => {
+        this.deliveryPrice = 10
+      })
+    },
     goToPersonalData() {
       this.$router.push('/minha-conta/dados-pessoais')
     },
@@ -354,7 +383,8 @@ export default {
       })
 
       bardemu.post('/order', {
-        totalValue,
+        totalValue: totalValue + this.deliveryPrice,
+        deliveryPrice: this.deliveryPrice,
         clientName: this.name,
         clientPhone: this.phone,
         clientAddress: this.address.name,
