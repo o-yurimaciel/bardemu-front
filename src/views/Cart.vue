@@ -114,7 +114,7 @@
                   </v-col>
                   <v-col cols="12" class="pa-0">
                     <span style="fontSize: 1.2em">Celular: <span style="font-weight: bold;color: var(--primary-color)">{{phone}}</span></span>
-                    <a @click="goToPersonalData" class="pl-2">Alterar?</a>
+                    <a @click="goToPersonalData" class="pl-2">Atualizar?</a>
                   </v-col>
                   <v-col lg="12" cols="12" class="pa-0 pt-10">
                     <v-select
