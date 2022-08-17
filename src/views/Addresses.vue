@@ -64,6 +64,7 @@
               outlined
               label="CEP"
               v-model="cep"
+              :error="!cep"
               autofocus
               v-mask="['#####-###']"
               >
@@ -73,6 +74,7 @@
             <v-col class="pa-0">
               <v-text-field
               dense
+              :error="!address"
               label="Endereço"
               outlined
               v-model="address"
@@ -84,6 +86,7 @@
               <v-text-field
               dense
               label="Bairro"
+              :error="!district"
               outlined
               v-model="district"
               >
@@ -94,6 +97,7 @@
               <v-text-field
               v-model="number"
               label="Número"
+              :error="!number"
               dense
               outlined
               >

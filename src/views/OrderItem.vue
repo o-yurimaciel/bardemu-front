@@ -13,7 +13,7 @@
           {{ formatStatus(order.orderStatus) }}
         </span>
       </v-col>
-      <v-col cols="10" class="pa-0 d-flex justify-center pt-3 align-center mx-auto" v-if="order.estimatedTime">
+      <v-col cols="10" class="pa-0 d-flex justify-center pt-3 align-center mx-auto" v-if="order.estimatedTime && order.orderStatus === 'CONFIRMED' || order.orderStatus === 'OUT_FOR_DELIVERY'">
         <v-icon color="var(--primary-color)">mdi-clock-fast</v-icon>
         <span class="ml-2">
           Tempo estimado para entrega: {{order.estimatedTime}}min
@@ -25,27 +25,32 @@
           Entregar em: {{ formatDeliveryAt(order) }}
         </span>
       </v-col>
-      <v-col class="pa-0 d-flex justify-center align-center flex-column pt-5" 
-      v-if="!rated && order.orderStatus === 'DELIVERED'">
-        <span>Avalie a sua experiência</span>
-        <span>Escolha de 1 a 5 estrelas para classificar</span>
-        <v-rating
-          v-model="rating"
-          icon-label="custom icon label text {0} of {1}"
-          color="yellow"
-          background-color="var(--primary-color)"
-        ></v-rating>
-        <v-textarea
-        outlined
-        autofocus
-        v-if="rating > 0"
-        flat
-        v-model="ratingMessage"
-        class="pt-2"
-        placeholder="Descreva a sua experiência aqui"
-        style="width: 20vw"
-        >
-        </v-textarea>
+      <v-col cols="12" class="pa-0 d-flex justify-center flex-column pt-5" 
+      v-if="!rated && order.orderStatus === 'DELIVERED'"
+      >
+        <v-col class="pa-0 mx-auto d-flex flex-column text-center">
+          <span>Avalie a sua experiência</span>
+          <span>Escolha de 1 a 5 estrelas para classificar</span>
+        </v-col>
+        <v-col class="pa-0 d-flex justify-center">
+          <v-rating
+            v-model="rating"
+            icon-label="custom icon label text {0} of {1}"
+            color="yellow"
+            background-color="var(--primary-color)"
+          ></v-rating>
+        </v-col>
+        <v-col lg="3" cols="10" class="pa-0 d-flex mx-auto">
+          <v-textarea
+          outlined
+          autofocus
+          v-if="rating > 0"
+          v-model="ratingMessage"
+          class="pt-2"
+          placeholder="Descreva a sua experiência aqui"
+          >
+          </v-textarea>
+        </v-col>
         <v-col class="pa-0 pt-5 d-flex justify-center">
           <v-btn
           outlined
