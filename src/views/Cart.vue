@@ -211,7 +211,7 @@
               <v-btn 
                 color="red"
                 :outlined="false"
-                :disabled="!isFormValid && !!deliveryPrice"
+                :disabled="!isFormValid"
                 @click="createOrder"
                 >
                   <span style="color: #fff">Concluir pedido</span>
@@ -377,45 +377,47 @@ export default {
     createOrder() {
       const phone = "555195058185"
       const totalValue = this.getTotalValue()
-      
-      this.cart.filter((item) => {
-        item.image = null
-      })
 
-      bardemu.post('/order', {
-        totalValue: totalValue + this.deliveryPrice,
-        deliveryPrice: this.deliveryPrice,
-        clientName: this.name,
-        clientPhone: this.phone,
-        clientAddress: this.address.name,
-        clientAddressNumber: this.address.number,
-        clientAddressData: this.address.comp,
-        paymentType: this.paymentType,
-        cashChange: this.cashChange,
-        cardFlag: this.flag,
-        products: this.cart,
-        userId: localStorage.getItem(constants.bardemuUserId)
-      }, {
-        headers: {
-          "x-access-token": localStorage.getItem(constants.bardemuAuth)
-        }
-      }).then((res) => {
-        const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido.\nwww.bardemu.com.br/pedido/${res.data._id}`)
-        window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, "_blank")
-        this.$store.dispatch('resetCart')
-        this.$store.dispatch('openAlert', {
-          message: `Pedido efetuado com sucesso!`,
-          type: 'success'
+      if(this.deliveryPrice) {
+        this.cart.filter((item) => {
+          item.image = null
         })
-        this.$router.push(`/pedido/${res.data._id}`)
-      }).catch((e) => {
-        if(e.response && e.response.data) {
+  
+        bardemu.post('/order', {
+          totalValue: totalValue + this.deliveryPrice,
+          deliveryPrice: this.deliveryPrice,
+          clientName: this.name,
+          clientPhone: this.phone,
+          clientAddress: this.address.name,
+          clientAddressNumber: this.address.number,
+          clientAddressData: this.address.comp,
+          paymentType: this.paymentType,
+          cashChange: this.cashChange,
+          cardFlag: this.flag,
+          products: this.cart,
+          userId: localStorage.getItem(constants.bardemuUserId)
+        }, {
+          headers: {
+            "x-access-token": localStorage.getItem(constants.bardemuAuth)
+          }
+        }).then((res) => {
+          const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido.\nwww.bardemu.com.br/pedido/${res.data._id}`)
+          window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, "_blank")
+          this.$store.dispatch('resetCart')
           this.$store.dispatch('openAlert', {
-            message: e.response.data.message,
-            type: 'error'
+            message: `Pedido efetuado com sucesso!`,
+            type: 'success'
           })
-        }
-      })
+          this.$router.push(`/pedido/${res.data._id}`)
+        }).catch((e) => {
+          if(e.response && e.response.data) {
+            this.$store.dispatch('openAlert', {
+              message: e.response.data.message,
+              type: 'error'
+            })
+          }
+        })
+      }
     },
     getPaymentSubType() {
       switch(this.paymentType) {
