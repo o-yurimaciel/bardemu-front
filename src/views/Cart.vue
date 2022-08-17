@@ -48,7 +48,7 @@
                     </span>
                   </v-col>
                   <v-col class="pa-0 d-flex justify-center pt-3 justify-lg-start" v-if="product.note">
-                    <span class="product-description">
+                    <span class="product-description" style="white-space: pre-line">
                       Observação: {{product.note}}
                     </span>
                   </v-col>
