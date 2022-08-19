@@ -77,7 +77,7 @@
               <v-btn 
               color="red"
               :outlined="false"
-              @click="goToLogin"
+              @click="goToDetail"
               >
                 <span style="color: #fff">Continuar</span>
               </v-btn>
@@ -233,6 +233,15 @@
           <v-icon color="var(--primary-color)" size="100">mdi-emoticon-sad</v-icon>
         </v-col>
         <span class="product-title">Não há nenhum produto no carrinho.</span>
+        <v-col class="pa-0 pt-5">
+          <v-btn
+          outlined
+          to="/cardapio"
+          color="var(--primary-color)"
+          >
+            Ir para o Cardápio
+          </v-btn>
+        </v-col>
       </v-col>
     </v-col>
     <v-dialog v-model="dialog">
@@ -265,7 +274,7 @@ export default {
       addresses: [],
       items: [
         { text: 'Início', href: '/' },
-        { text: 'Cardápio', href: '/menu' }
+        { text: 'Cardápio', href: '/cardapio' }
       ],
       paymentTypes: [
         "Cartão de Crédito",
@@ -325,7 +334,7 @@ export default {
       this.cashChange = 0
       this.flag = null
     },
-    goToLogin() {
+    goToDetail() {
       bardemu.get('/user', {
         params: {
           _id: localStorage.getItem(constants.bardemuUserId),
@@ -338,6 +347,7 @@ export default {
           this.addresses = res.data.address
           if(res.data.address.length === 1) {
             this.address = res.data.address[0]
+            this.getDeliveryPrice()
           }
           this.userData = true
         } else {
@@ -353,7 +363,7 @@ export default {
       })
     },
     goToMenu() {
-      this.$router.push('/menu')
+      this.$router.push('/cardapio')
     },
     getTotalQuantity() {
       let quantity = 0

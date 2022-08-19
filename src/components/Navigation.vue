@@ -46,7 +46,7 @@ import { EventBus } from '../EventBus'
       cartQuantity: 0,
       items: [
         { icon: 'mdi-home', title: 'Inicio', to: '/' },
-        { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
+        { icon: 'mdi-food', title: 'Cardápio', to: '/cardapio' },
         { icon: 'mdi-cart', title: 'Carrinho', to: '/carrinho' }
       ],
     }),
@@ -64,7 +64,7 @@ import { EventBus } from '../EventBus'
       if(this.auth) {
         this.items = [
           { icon: 'mdi-home', title: 'Inicio', to: '/' },
-          { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
+          { icon: 'mdi-food', title: 'Cardápio', to: '/cardapio' },
           { icon: 'mdi-cart', title: 'Carrinho', to: '/carrinho' }
         ]
         
@@ -73,7 +73,7 @@ import { EventBus } from '../EventBus'
       } else {
         this.items = [
           { icon: 'mdi-home', title: 'Inicio', to: '/' },
-          { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
+          { icon: 'mdi-food', title: 'Cardápio', to: '/cardapio' },
           { icon: 'mdi-cart', title: 'Carrinho', to: '/carrinho' }
         ]
 
@@ -106,14 +106,14 @@ import { EventBus } from '../EventBus'
         if(!newState) {
           this.items = [
             { icon: 'mdi-home', title: 'Inicio', to: '/' },
-            { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
+            { icon: 'mdi-food', title: 'Cardápio', to: '/cardapio' },
             { icon: 'mdi-cart', title: 'Carrinho', to: '/carrinho' },
             { icon: 'mdi-account', title: 'Entrar', to: '/login' }
           ]
         } else {
           this.items = [
             { icon: 'mdi-home', title: 'Inicio', to: '/' },
-            { icon: 'mdi-food', title: 'Cardápio', to: '/menu' },
+            { icon: 'mdi-food', title: 'Cardápio', to: '/cardapio' },
             { icon: 'mdi-cart', title: 'Carrinho', to: '/carrinho' }
           ]
 

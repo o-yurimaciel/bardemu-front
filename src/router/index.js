@@ -74,7 +74,7 @@ const routes = [
     component: Register
   },
   {
-    path: '/menu',
+    path: '/cardapio',
     component: Menu
   },
   {

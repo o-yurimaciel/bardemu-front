@@ -115,7 +115,7 @@ export default {
         if(cart && cart.length > 0) {
           this.$router.push('/carrinho')
         } else {
-          this.$router.push('/menu')
+          this.$router.push('/cardapio')
         }
       }).catch((e) => {
         this.handlingh = false
