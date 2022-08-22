@@ -19,6 +19,28 @@
           </v-col>
         </v-col>
       </v-row>
+      <v-btn 
+      rounded
+      color="var(--primary-color)"
+      dense
+      v-if="isMobile"
+      width="5em"
+      title="Subir página"
+      height="3em"
+      @click="scrollTop"
+      style="z-index: 99;position: fixed; bottom: 57px; right: 10px;">
+        <v-icon size="2em" color="#fff">mdi-chevron-up</v-icon>
+      </v-btn>
+      <v-btn 
+      rounded
+      color="green"
+      width="5em"
+      height="3em"
+      title="Fale conosco"
+      @click="openWhatsapp"
+      style="z-index: 99;position: fixed; bottom: 10px; right: 10px;">
+        <v-icon size="2em" color="#fff">mdi-whatsapp</v-icon>
+      </v-btn>
     </v-main>
   </v-app>
 </template>
@@ -29,6 +51,8 @@ import Navigation from './components/Navigation.vue'
 import constants from './constants'
 const EventBus = require('../src/EventBus').EventBus
 
+window.innerWidth
+
 export default {
   components: {
     Header,
@@ -36,10 +60,14 @@ export default {
   },
   data() {
     return {
-      alert: false
+      alert: false,
+      showUpButton: false,
+      isMobile: false
     }
   },
   mounted() {
+    window.addEventListener('resize', this.checkMobile);
+
     const auth = localStorage.getItem(constants.bardemuAuth)
     const cart = localStorage.getItem(constants.bardemuCart)
     const userId = localStorage.getItem(constants.bardemuUserId)
@@ -53,6 +81,7 @@ export default {
     }
 
     this.$store.commit('setCart', JSON.parse(cart))
+    this.checkMobile()
     
     EventBus.$on('alert', (alert) => {
       this.alert = false
@@ -61,6 +90,26 @@ export default {
         this.alert = false
       }, 5000);
     })
+  },
+  methods: {
+    openWhatsapp() {
+      const phone = "555195058185"
+      window.open(`https://api.whatsapp.com/send?phone=${phone}`, "_blank")
+    },
+    scrollTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
+    },
+    checkMobile() {
+      if(screen.width <= 1024) {
+        this.isMobile = true;
+      }
+      else {
+        this.isMobile = false;
+      }
+    }
   }
 }
 </script>
