@@ -40,6 +40,12 @@
               >
               </v-text-field>
             </v-col>
+            <v-col cols="10" lg="8" class="pa-0 d-flex justify-end mx-auto pb-3">
+              <a @click="forgotPassword" style="margin-right: 2px;color: #707070; font-weight: bold">
+                Esqueci a senha
+                <v-icon size="20" color="#707070">mdi-help-circle</v-icon>
+              </a>
+            </v-col>
             <v-col cols="10" lg="8" class="pa-0 d-flex justify-center mx-auto">
               <v-btn
               dense
@@ -129,6 +135,9 @@ export default {
     },
     getRegister() {
       this.$router.push('/cadastro')
+    },
+    forgotPassword() {
+      this.$router.push('/recuperar-senha')
     }
   }
 }

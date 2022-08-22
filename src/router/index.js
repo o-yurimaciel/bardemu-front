@@ -13,6 +13,7 @@ import PersonalData from '../views/PersonalData.vue'
 import Addresses from '../views/Addresses.vue'
 import store from '../store'
 import constants from '../constants'
+import ForgotPassword from '../views/ForgotPassword.vue'
 
 Vue.use(VueRouter)
 
@@ -67,6 +68,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/recuperar-senha',
+    name: 'senha',
+    component: ForgotPassword
   },
   {
     path: '/cadastro',
