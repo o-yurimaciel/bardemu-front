@@ -72,7 +72,7 @@ export default new Vuex.Store({
 
       localStorage.setItem(constants.bardemuCart, JSON.stringify(cart))
     },
-    removeAllToCart(context, item) {
+    removeInCart(context, item) {
       let cart = this.state.cart ? this.state.cart : []
 
       context.dispatch('openAlert', {

@@ -36,6 +36,9 @@
                     <br>Comp: {{address.comp}}
                   </span>
                 </v-card-subtitle>
+                <div @click="deleteAddress(address)" title="Remover endereço" style="position: absolute; top: 10px; right: 10px">
+                  <v-icon color="red">mdi-delete</v-icon>
+                </div>
               </v-card>
             </v-col>
           </v-row>
@@ -133,6 +136,7 @@
 <script>
 import constants from '../constants'
 import { bardemu } from '../services'
+import showDialog from '../utils/dialog'
 export default {
   data: () => ({
     items: [
@@ -227,6 +231,36 @@ export default {
           message: `Ocorreu um problema ao consultar o CEP. Tente novamente mais tarde.`,
           type: 'error'
         })
+      })
+    },
+    deleteAddress(address) {
+      showDialog({
+        title: `Tem certeza que deseja remover o endereço "${address.name}"?`,
+        icon: "mdi-delete-alert",
+        options: ["Sim", "Não"]
+      }).then((res) => {
+        if(res == "Sim") {
+          bardemu.delete('/user/address', {
+            data: {
+              _id: localStorage.getItem(constants.bardemuUserId),
+              token: localStorage.getItem(constants.bardemuAuth),
+              addressId: address._id,
+            }
+          }).then(() => {
+            this.getUser()
+            this.$store.dispatch('openAlert', {
+              message: 'Endereço removido',
+              type: 'success'
+            })
+          }).catch((e) => {
+            if(e.response && e.response.data) {
+              this.$store.dispatch('openAlert', {
+                message: e.response.data.message,
+                type: 'error'
+              })
+            }
+          })
+        }
       })
     }
   }

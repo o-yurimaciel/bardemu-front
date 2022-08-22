@@ -29,7 +29,7 @@
               <v-icon 
               color="red" 
               style="position: absolute; top: 15px; right: 20px;" 
-              @click="removeAllItems(product)">
+              @click="removeItem(product)">
                 mdi-delete
               </v-icon>
               <v-row no-gutters>
@@ -62,12 +62,12 @@
                   <v-row no-gutters class="d-flex align-center justify-space-between">
                     <v-icon color="red" 
                     :disabled="product.quantity <= 1"
-                    @click="product.quantity--"
+                    @click="decreaseProduct(product)"
                     >
                       mdi-minus
                     </v-icon>
                     <span>{{product.quantity}}</span>
-                    <v-icon color="green" @click="product.quantity++">mdi-plus</v-icon>
+                    <v-icon @click="increaseProduct(product)" color="green">mdi-plus</v-icon>
                   </v-row>
                 </v-col>
               </v-row>
@@ -265,6 +265,7 @@
 import { mapGetters } from 'vuex'
 import constants from '../constants'
 import { bardemu } from '../services'
+import showDialog from '../utils/dialog'
 
 export default {
   data() {
@@ -335,31 +336,75 @@ export default {
       this.flag = null
     },
     goToDetail() {
-      bardemu.get('/user', {
-        params: {
-          _id: localStorage.getItem(constants.bardemuUserId),
-          token: localStorage.getItem(constants.bardemuAuth)
-        }
-      }).then((res) => {
-        if(res.data.address && res.data.address.length > 0) {
-          this.name = res.data.firstName.concat(" ").concat(res.data.lastName)
-          this.phone = res.data.phone
-          this.addresses = res.data.address
-          if(res.data.address.length === 1) {
-            this.address = res.data.address[0]
-            this.getDeliveryPrice()
+      this.isOpen().then(() => {
+        bardemu.get('/user', {
+          params: {
+            _id: localStorage.getItem(constants.bardemuUserId),
+            token: localStorage.getItem(constants.bardemuAuth)
           }
-          this.userData = true
-        } else {
-          this.dialog = true
-        }
+        }).then((res) => {
+          if(res.data.address && res.data.address.length > 0) {
+            this.name = res.data.firstName.concat(" ").concat(res.data.lastName)
+            this.phone = res.data.phone
+            this.addresses = res.data.address
+            if(res.data.address.length === 1) {
+              this.address = res.data.address[0]
+              this.getDeliveryPrice()
+            }
+            this.userData = true
+          } else {
+            this.dialog = true
+          }
+        }).catch((e) => {
+          if(e.response && e.response.data) {
+            this.$store.dispatch('openAlert', {
+              message: e.response.data.message,
+              type: 'error'
+            })
+          }
+        })
       }).catch((e) => {
-        if(e.response && e.response.data) {
-          this.$store.dispatch('openAlert', {
-            message: e.response.data.message,
-            type: 'error'
+        if(e.start && e.end) {
+          showDialog({
+            title: `Estamos fechados. Horário de atendimento (${e.start}h - ${e.end}h). Por favor, volte mais tarde.`,
+            icon: "mdi-store-clock",
+            options: ["Voltar"]
           })
         }
+      })
+    },
+    isOpen() {
+      const now = new Date()
+
+      console.log(now.getHours())
+
+      return new Promise((resolve, reject) => {
+        bardemu.get('/configs').then((res) => {
+          const start = res.data.opening.start.split(":")
+          const end = res.data.opening.end.split(":")
+          const startHour = parseInt(start[0])
+          const startMinute = parseInt(start[1])
+          const endHour = parseInt(end[0])
+          const endMinute = parseInt(end[1])
+          const nowHour = now.getHours()
+          const nowMinutes = now.getMinutes()
+    
+          if(nowHour >= startHour) {
+            if(nowMinutes >= startMinute) {
+              resolve()
+            } else {
+              reject(res.data.opening)
+            }
+          } else {
+            if(nowHour === endHour && nowMinutes <= endMinute) {
+              resolve()
+              return
+            }
+            reject(res.data.opening)
+          }
+        }).catch((e) => {
+          reject(e)
+        })
       })
     },
     goToMenu() {
@@ -379,9 +424,17 @@ export default {
       })
       return value
     },
-    removeAllItems(item) {
-      this.$store.dispatch('removeAllToCart', item).then(() => {
-        this.$forceUpdate()
+    removeItem(item) {
+      showDialog({
+        title: `Tem certeza que deseja remover "${item.name}" do carrinho?`,
+        icon: "mdi-delete-alert",
+        options: ["Sim", "Não"]
+      }).then((res) => {
+        if(res === "Sim") {
+          this.$store.dispatch('removeInCart', item).then(() => {
+            this.$forceUpdate()
+          })
+        }
       })
     },
     createOrder() {
@@ -446,6 +499,12 @@ export default {
         }
       })
       return text
+    },
+    increaseProduct(product) {
+      product.quantity = product.quantity + 1
+    },
+    decreaseProduct(product) {
+      product.quantity = product.quantity - 1
     }
   }
 }

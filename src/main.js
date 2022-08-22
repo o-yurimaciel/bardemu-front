@@ -42,3 +42,9 @@ bardemu.interceptors.response.use(
     throw err
   }
 )
+
+bardemu.get('/configs').then((res) => {
+  console.log(res)
+}).catch((e) => {
+  console.log(e.response)
+})

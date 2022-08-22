@@ -23,7 +23,7 @@
       rounded
       color="var(--primary-color)"
       dense
-      v-if="isMobile"
+      v-if="showUpButton"
       width="5em"
       title="Subir página"
       height="3em"
@@ -50,8 +50,7 @@ import Header from './components/Header.vue'
 import Navigation from './components/Navigation.vue'
 import constants from './constants'
 const EventBus = require('../src/EventBus').EventBus
-
-window.innerWidth
+import showDialog from './utils/dialog'
 
 export default {
   components: {
@@ -66,7 +65,8 @@ export default {
     }
   },
   mounted() {
-    window.addEventListener('resize', this.checkMobile);
+    window.addEventListener('resize', this.checkMobile)
+    window.addEventListener('scroll', this.checkScroll)
 
     const auth = localStorage.getItem(constants.bardemuAuth)
     const cart = localStorage.getItem(constants.bardemuCart)
@@ -94,13 +94,28 @@ export default {
   methods: {
     openWhatsapp() {
       const phone = "555195058185"
-      window.open(`https://api.whatsapp.com/send?phone=${phone}`, "_blank")
+      showDialog({
+        title: "Você será redirecionado(a) para o nosso WhatsApp. Deseja continuar?",
+        options: ["Sim", "Não"]
+      }).then((res) => {
+        console.log(res)
+        if(res === "Sim") {
+          window.open(`https://api.whatsapp.com/send?phone=${phone}`, "_blank")
+        }
+      })
     },
     scrollTop() {
       window.scrollTo({
         top: 0,
         behavior: 'smooth'
       })
+    },
+    checkScroll() {
+      if (window.scrollY > 0) {
+        this.showUpButton = true
+      } else {
+        this.showUpButton = false
+      }
     },
     checkMobile() {
       if(screen.width <= 1024) {
