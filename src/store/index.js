@@ -63,22 +63,12 @@ export default new Vuex.Store({
 
       cart.push(item)
 
-      context.dispatch('openAlert', {
-        message: `"${item.name} (${item.quantity})" foi adicionado ao carrinho`,
-        type: 'success'
-      })
-
       context.commit('setCart', cart)
 
       localStorage.setItem(constants.bardemuCart, JSON.stringify(cart))
     },
     removeInCart(context, item) {
       let cart = this.state.cart ? this.state.cart : []
-
-      context.dispatch('openAlert', {
-        message: `"${item.name}" foi removido do carrinho`,
-        type: 'success'
-      })
 
       cart.filter((product, index) => {
         if(product._id === item._id) {

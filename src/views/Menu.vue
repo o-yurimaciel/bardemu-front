@@ -17,7 +17,7 @@
           indeterminate
         ></v-progress-circular>
       </v-col>
-      <v-col cols="10" lg="6" md="8" class="pa-0 pt-10 d-flex justify-center mx-auto" v-else>
+      <v-col cols="10" lg="6" md="8" class="pa-0 pt-10 d-flex justify-center mx-auto" v-if="!loading && categories.length > 0">
         <v-expansion-panels>
           <v-expansion-panel
             v-for="category in categories"
@@ -57,6 +57,12 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
+      </v-col>
+      <v-col cols="11" class="pa-0 mx-auto text-center pt-10" v-if="categories.length <=0 && !loading">
+        <v-col class="pa-0 pb-2">
+          <v-icon color="var(--primary-color)" size="100">mdi-emoticon-sad</v-icon>
+        </v-col>
+        <span class="product-title">Não foi possível carregar os produtos.</span>
       </v-col>
     </v-col>
     <v-dialog 
@@ -179,14 +185,21 @@ export default {
       }
     },
     getCategories() {
-      bardemu.get('/categories')
+      this.loading = true
+      bardemu.get('/categories', {
+        headers: {
+          'only-actives': true
+        }
+      })
       .then((res) => {
+        this.loading = false
         this.categories = res.data.sort((a, b) => a.order - b.order)
         this.categories.filter((category) => {
           category.products = []
         })
         this.getProductList()
       }).catch(() => {
+        this.loading = false
         this.$store.dispatch('openAlert', {
           message: 'Não foi possível carregar as categorias. Tente novamente mais tarde.',
           type: 'error'
@@ -194,7 +207,11 @@ export default {
       })
     },
     getProductList() {
-      bardemu.get('/products').then((res) => {
+      bardemu.get('/products', {
+        headers: {
+          'only-actives': true
+        }
+      }).then((res) => {
         this.loading = false
         this.categories.filter((category) => {
           res.data.filter((product) => {
@@ -204,6 +221,7 @@ export default {
           })
         })
       }).catch(() => {
+        this.loading = false
         this.$store.dispatch('openAlert', {
           message: 'Não foi possível carregar os produtos. Tente novamente mais tarde.',
           type: 'error'

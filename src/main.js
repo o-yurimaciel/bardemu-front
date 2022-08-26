@@ -21,7 +21,7 @@ bardemu.interceptors.response.use(
   res => res,
   err => {
     const statusCode = err.response.status
-    if (statusCode === 401 || statusCode === 403) {
+    if (statusCode === 401) {
       store.commit('setAuth', null)
       store.dispatch('openAlert', {
         message: 'A autenticação falhou. Por favor, faça o login.',
@@ -42,9 +42,3 @@ bardemu.interceptors.response.use(
     throw err
   }
 )
-
-bardemu.get('/configs').then((res) => {
-  console.log(res)
-}).catch((e) => {
-  console.log(e.response)
-})

@@ -248,10 +248,6 @@ export default {
             }
           }).then(() => {
             this.getUser()
-            this.$store.dispatch('openAlert', {
-              message: 'Endereço removido',
-              type: 'success'
-            })
           }).catch((e) => {
             if(e.response && e.response.data) {
               this.$store.dispatch('openAlert', {

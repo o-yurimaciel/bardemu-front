@@ -77,9 +77,7 @@ export default {
   },
   methods: {
     createCategory() {
-      console.log(this.category)
       bardemu.post('/category', this.category).then((res) => {
-        console.log(res)
         this.$router.push('/categorias')
         this.$store.dispatch('openAlert', {
           message: 'Categoria criada!',

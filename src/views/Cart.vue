@@ -20,7 +20,7 @@
                   {{getTotalQuantity()}} 
                 </span>
                 <span v-if="cart.length > 0">
-                  Total: {{getTotalValue() | currency}}
+                  Total: {{getOrderValue() | currency}}
                 </span>
               </v-row>
             </v-card-title>
@@ -110,13 +110,12 @@
               <v-form v-model="isFormValid" @submit.prevent>
                 <v-row no-gutters>
                   <v-col cols="12" class="pa-0">
-                    <span style="fontSize: 1.2em">Nome: <span style="font-weight: bold;color: var(--primary-color)">{{name}}</span></span>
+                    <span style="fontSize: 1.2em">Nome: <p style="font-weight: bold;color: var(--primary-color)">{{name}}</p></span>
                   </v-col>
                   <v-col cols="12" class="pa-0">
-                    <span style="fontSize: 1.2em">Celular: <span style="font-weight: bold;color: var(--primary-color)">{{phone}}</span></span>
-                    <a @click="goToPersonalData" class="pl-2">Atualizar?</a>
+                    <span style="fontSize: 1.2em">Celular: <p style="font-weight: bold;color: var(--primary-color)">{{phone}}</p></span>
                   </v-col>
-                  <v-col lg="12" cols="12" class="pa-0 pt-10">
+                  <v-col lg="12" cols="12" class="pa-0 pt-lg-10 pt-2">
                     <v-select
                     rounded 
                     id="address"
@@ -124,6 +123,7 @@
                     outlined
                     v-model="address"
                     label="Endereço"
+                    class="address"
                     @change="getDeliveryPrice"
                     placeholder="Escolha um endereço"
                     :error="!address"
@@ -142,7 +142,7 @@
                       </template>
                     </v-select>
                   </v-col>
-                  <v-col lg="6" cols="12" class="pa-0">
+                  <v-col lg="6" cols="12" class="pa-0" v-if="address">
                     <v-select
                       outlined
                       :items="paymentTypes"
@@ -158,49 +158,35 @@
                       >
                       </v-select>
                   </v-col>
-                  <v-col lg="6" cols="12" class="pa-0 pl-0 pl-lg-2" v-if="paymentType === 'Dinheiro'">
-                    <label for="cashChange">Troco (Total: {{getTotalValue() | currency}})</label>
-                    <v-currency-field
-                    dense
-                    outlined
-                    v-model="cashChange"
-                    color="var(--primary-color)"
-                    rounded
-                    :error="cashChange <= 0 || cashChange < getTotalValue()"
-                    required
-                    :value="getTotalValue"
-                    id="cashChange"
-                    >
-                    </v-currency-field>
+                  <v-col lg="6" cols="12" class="pa-0 pl-0 pl-lg-2" v-if="address && paymentType">
+                    <v-text-field
+                      outlined
+                      label="Cupom de desconto"
+                      rounded
+                      v-model="coupon"
+                      :persistent-hint="true"
+                      :hint="couponHint"
+                      color="var(--primary-color)"
+                      dense
+                      @change="changeCoupon"
+                      id="coupon"
+                      >
+                    </v-text-field>
                   </v-col>
-                  <v-col 
-                  lg="6" 
-                  cols="12"
-                  class="pa-0 pl-0 pl-lg-2" 
-                  v-if="paymentType === 'Cartão de Débito' || paymentType === 'Cartão de Crédito'">
-                    <v-select
-                    dense
-                    outlined
-                    v-model="flag"
-                    label="Bandeira"
-                    placeholder="Escolha uma bandeira"
-                    :items="flagTypes"
-                    color="var(--primary-color)"
-                    :error="!flag"
-                    rounded
-                    id="flag"
-                    >
-
-                    </v-select>
+                  <v-col cols="12" class="pa-0 pt-lg-0 pt-3">
+                    <span style="fontSize: 1.2em">Pedido: <span style="font-weight: bold;color: var(--primary-color)">{{ getOrderValue() | currency}}</span></span>
                   </v-col>
                   <v-col cols="12" class="pa-0" v-if="address">
-                    <span style="fontSize: 1.2em">Pedido: <span style="font-weight: bold;color: var(--primary-color)">{{ getTotalValue() | currency}}</span></span>
+                    <span style="fontSize: 1.2em">Entrega: <span style="font-weight: bold;color: var(--primary-color)"> + {{ deliveryPrice ? deliveryPrice : '0' | currency}}</span></span>
                   </v-col>
-                  <v-col cols="12" class="pa-0" v-if="address">
-                    <span style="fontSize: 1.2em">Entrega: <span style="font-weight: bold;color: var(--primary-color)">{{ deliveryPrice ? deliveryPrice : '0' | currency}}</span></span>
+                  <v-col cols="12" class="pa-0" v-if="discountCoupon">
+                    <v-row no-gutters class="d-flex align-center">
+                      <span class="mr-1" style="fontSize: 1.2em">Desconto:</span>
+                      <span style="fontSize: 1.2em;font-weight: bold;color: var(--primary-color)"> - {{ discountValue ? discountValue : '0' | currency}}</span>
+                    </v-row>
                   </v-col>
                   <v-col cols="12" class="pa-0">
-                    <span style="fontSize: 1.2em">Total a pagar: <span style="font-weight: bold;color: var(--primary-color)">{{getTotalValue() + deliveryPrice | currency}}</span></span>
+                    <span style="fontSize: 1.2em">Total a pagar: <span style="font-weight: bold;color: var(--primary-color)">{{ getTotalValue() | currency}}</span></span>
                   </v-col>
                 </v-row>
               </v-form>
@@ -211,7 +197,7 @@
               <v-btn 
                 color="red"
                 :outlined="false"
-                :disabled="!isFormValid"
+                :disabled="!isFormValid || handlingh"
                 @click="createOrder"
                 >
                   <span style="color: #fff">Concluir pedido</span>
@@ -294,7 +280,12 @@ export default {
       cashChange: 0,
       deliveryPrice: null,
       flag: null,
-      dialog: false
+      dialog: false,
+      coupon: "",
+      discountCoupon: null,
+      couponHint: "",
+      handlingh: false,
+      discountValue: 0
     }
   },
   computed: {
@@ -304,7 +295,64 @@ export default {
     })
   },
   methods: {
+    changeCoupon(e) {
+      this.handlingh = true
+
+      bardemu.get(`/coupon`, {
+        params: {
+          name: e
+        },
+        headers: {
+          "x-access-token": localStorage.getItem(constants.bardemuAuth)
+        }
+      }).then((res) => {
+        if(res.data.active) {
+          this.discountCoupon = res.data
+          this.discountValue = this.getDiscountValue(res.data)
+          this.couponHint = this.getDiscountText(res.data)
+          this.handlingh = false
+        } else {
+          this.couponHint = "Cupom de desconto inativo"
+          this.handlingh = false
+        }
+      }).catch(() => {
+        this.discountCoupon = null
+        this.discountValue = 0
+        this.couponHint = "Cupom de desconto inválido"
+        this.handlingh = false
+      })
+    },
+    getDiscountValue(discount) {
+      switch(discount.field) {
+        case "totalValue":
+          this.discountValue = this.getTotalValue() * discount.percent / 100
+          break
+        case "deliveryPrice":
+          this.discountValue = this.deliveryPrice * discount.percent / 100
+          break
+        case "orderValue":
+          this.discountValue = this.getOrderValue() * discount.percent / 100
+          break
+        default:
+          this.discountValue = 0
+      }
+
+      return this.discountValue
+    },
+    getDiscountText(discount) {
+      switch(discount.field) {
+        case "totalValue":
+          return `Adicionado ${discount.percent}% de desconto no total a pagar`
+        case "deliveryPrice":
+          return `Adicionado ${discount.percent}% de desconto no valor da entrega`
+        case "orderValue":
+          return `Adicionado ${discount.percent}% de desconto no valor do pedido`
+        default:
+          return ""
+      }
+    },
     getDeliveryPrice() {
+      this.handlingh = true
       bardemu.get('/district/name', {
         params: {
           value: this.address.district
@@ -315,10 +363,16 @@ export default {
           "x-access-token": localStorage.getItem(constants.bardemuAuth)
         }
       }).then((res) => {
+        this.handlingh = false
         if(res.data.price) {
           this.deliveryPrice = res.data.price
         }
+
+        if(this.coupon) {
+          this.getDiscountValue(this.discountCoupon)
+        }
       }).catch(() => {
+        this.handlingh = false
         this.deliveryPrice = 10
       })
     },
@@ -334,6 +388,7 @@ export default {
       this.paymentType = ""
       this.cashChange = 0
       this.flag = null
+      this.coupon = null
     },
     goToDetail() {
       this.isOpen().then(() => {
@@ -376,35 +431,37 @@ export default {
     isOpen() {
       const now = new Date()
 
-      console.log(now.getHours())
-
       return new Promise((resolve, reject) => {
-        bardemu.get('/configs').then((res) => {
-          const start = res.data.opening.start.split(":")
-          const end = res.data.opening.end.split(":")
-          const startHour = parseInt(start[0])
-          const startMinute = parseInt(start[1])
-          const endHour = parseInt(end[0])
-          const endMinute = parseInt(end[1])
-          const nowHour = now.getHours()
-          const nowMinutes = now.getMinutes()
-    
-          if(nowHour >= startHour) {
-            if(nowMinutes >= startMinute) {
-              resolve()
+        if(process.env.NODE_ENV === 'development') {
+          resolve()
+        } else {
+          bardemu.get('/configs').then((res) => {
+            const start = res.data.opening.start.split(":")
+            const end = res.data.opening.end.split(":")
+            const startHour = parseInt(start[0])
+            const startMinute = parseInt(start[1])
+            const endHour = parseInt(end[0])
+            const endMinute = parseInt(end[1])
+            const nowHour = now.getHours()
+            const nowMinutes = now.getMinutes()
+      
+            if(nowHour >= startHour) {
+              if(nowMinutes >= startMinute) {
+                resolve()
+              } else {
+                reject(res.data.opening)
+              }
             } else {
+              if(nowHour === endHour && nowMinutes <= endMinute) {
+                resolve()
+                return
+              }
               reject(res.data.opening)
             }
-          } else {
-            if(nowHour === endHour && nowMinutes <= endMinute) {
-              resolve()
-              return
-            }
-            reject(res.data.opening)
-          }
-        }).catch((e) => {
-          reject(e)
-        })
+          }).catch((e) => {
+            reject(e)
+          })
+        }
       })
     },
     goToMenu() {
@@ -417,12 +474,15 @@ export default {
       })
       return quantity > 1 ? `${quantity} produtos no carrinho` : '1 produto no carrinho'
     },
-    getTotalValue() {
+    getOrderValue() {
       let value = 0
       this.cart.filter((product) => {
         value = value + parseFloat(product.price * product.quantity)
       })
       return value
+    },
+    getTotalValue() {
+      return this.getOrderValue() + this.deliveryPrice - this.discountValue
     },
     removeItem(item) {
       showDialog({
@@ -439,7 +499,7 @@ export default {
     },
     createOrder() {
       const phone = "555195058185"
-      const totalValue = this.getTotalValue()
+      const totalValue = this.getOrderValue()
 
       if(this.deliveryPrice) {
         this.cart.filter((item) => {
@@ -467,10 +527,6 @@ export default {
           const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido.\nwww.bardemu.com.br/pedido/${res.data._id}`)
           window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, "_blank")
           this.$store.dispatch('resetCart')
-          this.$store.dispatch('openAlert', {
-            message: `Pedido efetuado com sucesso!`,
-            type: 'success'
-          })
           this.$router.push(`/pedido/${res.data._id}`)
         }).catch((e) => {
           if(e.response && e.response.data) {
@@ -511,7 +567,7 @@ export default {
 </script>
 
 <style scoped>
-.theme--light >>> .v-input input {
+.theme--light >>> .v-select .v-select__selections input {
   display: none!important;
 }
 </style>
