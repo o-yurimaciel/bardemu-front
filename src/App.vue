@@ -135,6 +135,7 @@ export default {
 }
 
 @import url('../src/assets/fonts.css');
+@import url('../src/assets/global.css');
 
 .content {
   position: relative;

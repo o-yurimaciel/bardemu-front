@@ -17,7 +17,7 @@
           indeterminate
         ></v-progress-circular>
       </v-col>
-      <v-col cols="10" lg="6" md="8" class="pa-0 pt-10 d-flex justify-center mx-auto" v-if="!loading && categories.length > 0">
+      <v-col cols="10" lg="6" md="8" class="pa-0 pt-10 d-flex justify-center mx-auto" v-if="!loading">
         <v-expansion-panels>
           <v-expansion-panel
             v-for="category in categories"
@@ -192,7 +192,6 @@ export default {
         }
       })
       .then((res) => {
-        this.loading = false
         this.categories = res.data.sort((a, b) => a.order - b.order)
         this.categories.filter((category) => {
           category.products = []
@@ -212,7 +211,6 @@ export default {
           'only-actives': true
         }
       }).then((res) => {
-        this.loading = false
         this.categories.filter((category) => {
           res.data.filter((product) => {
             if(product.category === category.name) {
@@ -220,6 +218,7 @@ export default {
             }
           })
         })
+        this.loading = false
       }).catch(() => {
         this.loading = false
         this.$store.dispatch('openAlert', {

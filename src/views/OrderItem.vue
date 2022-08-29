@@ -8,7 +8,7 @@
           divider="/"
         ></v-breadcrumbs>
       </v-col>
-      <v-col class="pa-0 d-flex justify-center mt-15" v-if="loading">
+      <v-col class="pa-0 d-flex justify-center mt-15" v-if="loading && !order">
         <v-progress-circular
           color="var(--primary-color)"
           rotate="90"
@@ -22,16 +22,16 @@
             {{ formatStatus(order.orderStatus) }}
           </span>
         </v-col>
-        <v-col cols="10" class="pa-0 d-flex justify-center pt-3 align-center mx-auto" v-if="order.estimatedTime && order.orderStatus === 'CONFIRMED' || order.orderStatus === 'OUT_FOR_DELIVERY'">
+        <v-col cols="10" class="pa-0 d-flex justify-center pt-3 align-center mx-auto" v-if="order.estimatedTime">
           <v-icon color="var(--primary-color)">mdi-clock-fast</v-icon>
           <span class="ml-2">
             Tempo estimado para entrega: {{order.estimatedTime}}min
           </span>
         </v-col>
-        <v-col cols="8" class="pa-0 d-flex justify-center pt-3 align-center mx-auto" v-if="order.orderStatus !== 'DELIVERED'">
+        <v-col cols="8" class="pa-0 d-flex justify-center pt-3 align-center mx-auto">
           <v-icon color="var(--primary-color)">mdi-map-marker</v-icon>
           <span class="ml-2">
-            Entregar em: {{ formatDeliveryAt(order) }}
+            {{ formatDeliveryAt(order) }}
           </span>
         </v-col>
         <v-col cols="12" class="pa-0 d-flex justify-center flex-column pt-5" 
@@ -222,7 +222,9 @@ export default {
       }
     },
     getOrderItem() {
-      this.loading = true
+      if(!this.order) {
+        this.loading = true
+      }
 
       bardemu.get('/order', {
         params: {
@@ -237,10 +239,13 @@ export default {
           { description: 'Nome', value: this.order.clientName },
           { description: 'Telefone', value: this.order.clientPhone },
           { description: 'Tipo de Pagamento', value: this.order.paymentType },
-          { description: 'Bandeira', value: this.order.flag }
+          { description: 'Bandeira', value: this.order.flag },
+          { description: 'Cupom de desconto', value: this.order.coupon }
         ]
         this.details = [
+          { description: 'Pedido', value: this.order.orderValue },
           { description: 'Entrega', value: this.order.deliveryPrice },
+          { description: 'Desconto', value: this.order.discountValue },
           { description: 'Total a pagar', value: this.order.totalValue },
           { description: 'Troco', value: this.order.cashChange },
         ]
