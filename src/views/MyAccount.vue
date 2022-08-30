@@ -9,6 +9,7 @@
             divider="/"
           ></v-breadcrumbs>
           <h1>Minha conta</h1>
+          <h3 class="pt-5">Olá, {{user.fullName}}!</h3>
         </v-col>
       </v-row>
       <v-col lg="8" cols="12" class="pa-0 pt-5">
@@ -32,6 +33,8 @@
 </template>
 
 <script>
+import constants from '../constants'
+import { bardemu } from '../services'
 export default {
   data: () => ({
     items: [
@@ -41,8 +44,31 @@ export default {
       { icon: "mdi-account", title: "Dados pessoais", description: "Minhas informações da conta", to: '/minha-conta/dados-pessoais' },
       { icon: "mdi-map-marker", title: "Endereços", description: "Meus endereços de entrega", to: '/minha-conta/enderecos' },
       { icon: "mdi-exit-to-app", title: "Sair", description: "Sair da conta", to: '/login' }
-    ]
+    ],
+    user: ""
   }),
+  mounted() {
+    this.getUser()
+  },
+  methods: {
+    getUser() {
+      bardemu.get('/user', {
+        params: {
+          _id: localStorage.getItem(constants.bardemuUserId),
+          token: localStorage.getItem(constants.bardemuAuth)
+        }
+      }).then((res) => {
+        this.user = res.data
+      }).catch((e) => {
+        if(e.response && e.response.data) {
+          this.$store.dispatch('openAlert', {
+            message: e.response.data.message,
+            type: 'error'
+          })
+        }
+      })
+    },
+  }
 }
 </script>
 

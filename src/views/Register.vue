@@ -67,7 +67,9 @@
                   v-model="phone"
                   :rules="[rules.required, rules.phone]"
                   color="var(--primary-color)"
-                  placeholder="Celular"
+                  placeholder="Celular (WhatsApp)"
+                  persistent-hint
+                  hint="Insira o WhatsApp para contato com o restaurante"
                   v-mask="'+55 (##) #####-####'"
                   >
 

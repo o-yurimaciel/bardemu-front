@@ -25,8 +25,8 @@
             class="elevation-1 pa-2 mt-3 pb-5"
             >
               <v-card-title class="text-h5">
-                <v-icon class="mr-2" color="var(--primary-color)">{{getOrderIcon(order.orderStatus)}}</v-icon>
-                <span style="fontSize: 1em; word-break: break-word">{{formatStatus(order.orderStatus)}}</span>
+                <span style="fontSize: 1em; word-break: break-word">Pedido #{{order.orderNumber}}</span>
+                <span class="ml-1" style="fontSize: 1em; word-break: break-word">- {{formatStatus(order.orderStatus)}}</span>
               </v-card-title>
               <hr class="mt-2 mb-5 mx-auto" style="width: 98%; opacity: .5">
               <v-col
@@ -53,17 +53,22 @@
                 </v-row>
               </v-col>
               <hr class="mt-5 mb-5 mx-auto" style="width: 98%; opacity: .5">
-              <v-col class="pa-0 d-flex justify-center pt-2">
-                <v-btn
-                outlined
-                color="var(--primary-color)"
-                @click="goToOrder(order._id)"
-                >
-                <span class="d-flex align-center">
-                  <v-icon class="mr-1">mdi-plus-thick</v-icon>
-                  Detalhes
-                </span>
-                </v-btn>
+              <v-col cols="5" class="pa-0 mx-auto">
+                <v-row no-gutters>
+                  <v-col class="pa-0 d-flex justify-center">
+                    <v-btn
+                    outlined
+                    color="var(--primary-color)"
+                    @click="goToOrder(order._id)"
+                    width="170"
+                    >
+                      <span class="d-flex align-center">
+                        <v-icon class="mr-1">mdi-plus-thick</v-icon>
+                        Detalhes
+                      </span>
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-card>
           </v-col>

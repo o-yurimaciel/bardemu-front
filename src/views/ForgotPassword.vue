@@ -7,7 +7,7 @@
         divider="/"
       ></v-breadcrumbs>
       <h1>
-        Recupere sua senha
+        Esqueci a senha
       </h1>
       <v-col cols="10" class="pa-0 pt-15 d-flex justify-center" v-if="waitCode">
         <v-col cols="12" lg="6" class="pa-0">
@@ -17,7 +17,7 @@
           class="mx-auto pt-10 pb-15"
           >
             <v-col cols="10" lg="8" class="pa-0 mx-auto text-center pb-5">
-              <h3 style="font-weight: bold">Digite o e-mail cadastrado. Após isso, você receberá e-mail com as instruções para recuperar a sua conta.</h3>
+              <h3>Digite o e-mail cadastrado. Após isso, você receberá e-mail com as instruções para recuperar a sua conta.</h3>
             </v-col>
             <v-col cols="10" lg="8" class="pa-0 mx-auto" style="line-height: 1">
               <v-text-field
@@ -58,7 +58,7 @@
           class="mx-auto pt-10 pb-15"
           >
             <v-col cols="10" lg="8" class="pa-0 mx-auto text-center pb-5">
-              <h3 style="font-weight: bold">Digite o código recebido no e-mail e a nova senha</h3>
+              <h3>Digite o código recebido no e-mail e a nova senha</h3>
             </v-col>
             <v-form v-model="isFormValid" @submit.prevent>
               <v-col cols="10" lg="8" class="pa-0 mx-auto" style="line-height: 1">

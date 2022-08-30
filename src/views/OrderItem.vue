@@ -19,12 +19,17 @@
       <v-col class="pa-0" v-if="!loading && order">
         <v-col class="pa-0 d-flex justify-center pt-10">
           <span class="orderStatus text-center">
+            Pedido #{{order.orderNumber}}
+          </span>
+        </v-col>
+        <v-col class="pa-0 d-flex justify-center pb-lg-10 pb-4">
+          <span class="orderStatus text-center">
             {{ formatStatus(order.orderStatus) }}
           </span>
         </v-col>
-        <v-col cols="10" class="pa-0 d-flex justify-center pt-3 align-center mx-auto" v-if="order.estimatedTime">
+        <v-col cols="10" class="pa-0 d-flex justify-center align-center mx-auto" v-if="order.estimatedTime && order.orderStatus !== 'CANCELLED'">
           <v-icon color="var(--primary-color)">mdi-clock-fast</v-icon>
-          <span class="ml-2">
+          <span class="ml-2 text-center">
             Tempo estimado para entrega: {{order.estimatedTime}}min
           </span>
         </v-col>

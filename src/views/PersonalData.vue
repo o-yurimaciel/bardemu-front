@@ -20,7 +20,7 @@
           readonly
           color="var(--primary-color)"
           id="name"
-          v-model="user.name"
+          v-model="user.fullName"
           >
 
           </v-text-field>
@@ -133,7 +133,6 @@ export default {
         }
       }).then((res) => {
         this.user = res.data
-        this.user.name = this.user.firstName.concat(" ").concat(this.user.lastName)
       }).catch((e) => {
         if(e.response && e.response.data) {
           this.$store.dispatch('openAlert', {

@@ -532,7 +532,7 @@ export default {
           "x-access-token": localStorage.getItem(constants.bardemuAuth)
         }
       }).then((res) => {
-        const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido.\nwww.bardemu.com.br/pedido/${res.data._id}`)
+        const message = encodeURIComponent(`Olá, BarDeMu Lanches! Acabei de fazer um pedido (#${res.data.orderNumber})\n`)
         window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, "_blank")
         this.$store.dispatch('resetCart')
         this.$router.push(`/pedido/${res.data._id}`)
@@ -565,10 +565,12 @@ export default {
     },
     increaseProduct(product) {
       product.quantity = product.quantity + 1
+      this.$forceUpdate()
     },
     decreaseProduct(product) {
       product.quantity = product.quantity - 1
-    }
+      this.$forceUpdate()
+    },
   }
 }
 </script>
