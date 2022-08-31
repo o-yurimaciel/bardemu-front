@@ -31,6 +31,7 @@
                     v-model="feedback.rating"
                     icon-label="custom icon label text {0} of {1}"
                     color="yellow"
+                    readonly
                     class="shake"
                     background-color="var(--primary-color)"
                   ></v-rating>
