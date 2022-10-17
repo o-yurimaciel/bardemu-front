@@ -427,8 +427,13 @@ export default {
         })
       }).catch((e) => {
         if(e.start && e.end) {
+          // showDialog({
+          //   title: `Estamos fechados. Horário de atendimento (${e.start}h - ${e.end}h). Por favor, volte mais tarde.`,
+          //   icon: "mdi-store-clock",
+          //   options: ["Voltar"]
+          // })
           showDialog({
-            title: `Estamos fechados. Horário de atendimento (${e.start}h - ${e.end}h). Por favor, volte mais tarde.`,
+            title: `Estamos trabalhando em melhorias, nossas atividades estão suspensas temporariamente. Em breve voltaremos com novidades.`,
             icon: "mdi-store-clock",
             options: ["Voltar"]
           })
